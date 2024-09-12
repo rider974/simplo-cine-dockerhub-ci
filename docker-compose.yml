@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Service Nginx
@@ -17,10 +17,8 @@ services:
       - search-service
       - sessions-service
       - users-service
-      
-      
-     
-    
+    networks:
+      - simplo-cine-network
 
   # Service Frontend (Next.js)
   front:
@@ -30,46 +28,82 @@ services:
     volumes:
       - ./front:/app
     command: npm run dev
+    networks:
+      - simplo-cine-network
 
   # Service de gestion des films
   movies-service:
     build: ./micro-services/movies-service
     ports:
       - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - DATABASE_URL=postgres://user:password@postgres-db:5432/movies_db
+    networks:
+      - simplo-cine-network
 
   # Service de notifications
   notifications-service:
     build: ./micro-services/notifications-service
     ports:
       - "3003:3000"
-
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - REDIS_URL=redis://redis:6379/0
+    networks:
+      - simplo-cine-network
 
   # Service de gestion des salles
   rooms-service:
     build: ./micro-services/rooms-service
     ports:
       - "3004:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - DATABASE_URL=postgres://user:password@postgres-db:5432/rooms_db
+    networks:
+      - simplo-cine-network
 
   # Service de recherche
   search-service:
     build: ./micro-services/search-service
     ports:
       - "3005:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - DATABASE_URL=postgres://user:password@postgres-db:5432/search_db
+    networks:
+      - simplo-cine-network
 
   # Service de gestion des sessions
   sessions-service:
     build: ./micro-services/sessions-service
     ports:
       - "3006:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - DATABASE_URL=postgres://user:password@postgres-db:5432/sessions_db
+    networks:
+      - simplo-cine-network
 
   # Service de gestion des utilisateurs
   users-service:
     build: ./micro-services/users-service
     ports:
       - "3007:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajoutez ici les variables d'environnement nécessaires sans les secrets pour l'instant
+      - DATABASE_URL=postgres://user:password@postgres-db:5432/users_db
+    networks:
+      - simplo-cine-network
 
-
-
-
-
-
+# Réseau personnalisé pour simplo-cine
+networks:
+  simplo-cine-network:
+    driver: bridge
