@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+# Déclenche le workflow lors des push ou pull requests sur la branche main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Variables d'environnement globales
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # Job de test et build
+  build:
+
+    # Exécute sur la dernière version d'Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # Vérifie le code en le clonant
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Configure la version de Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Installe les dépendances
+      - name: Install dependencies
+        run: npm install
+
+      # Exécute les tests
+      - name: Run tests
+        run: npm test
+
+      # Vérifie les règles de linting
+      - name: Lint code
+        run: npm run lint
+
+      # Compile ou build le projet (si nécessaire)
+      - name: Build project
+        run: npm run build
+        if: success() # Cette étape ne se déclenche que si les précédentes réussissent
