@@ -20,6 +20,7 @@ services:
     networks:
       - simplo-cine-network
 
+
   # Service Frontend (Next.js)
   front:
     build: ./front
@@ -107,3 +108,4 @@ services:
 networks:
   simplo-cine-network:
     driver: bridge
+
