@@ -17,10 +17,6 @@ services:
       - search-service
       - sessions-service
       - users-service
-      
-      
-     
-    
 
   # Service Frontend (Next.js)
   front:
@@ -42,7 +38,6 @@ services:
     build: ./micro-services/notifications-service
     ports:
       - "3003:3000"
-
 
   # Service de gestion des salles
   rooms-service:
@@ -67,9 +62,3 @@ services:
     build: ./micro-services/users-service
     ports:
       - "3007:3000"
-
-
-
-
-
-
