@@ -6,6 +6,8 @@
 
 ## Code quality control
 
+- [Code Quality Control](./code-quality-control/code-quality.md)
+
 ## Dictionnaire de données
 
 - [Movies-service](./data-dictionary/bdd-movies-service.md)
