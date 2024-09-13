@@ -1,0 +1,27 @@
+{
+  "name": "simplo-cine",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test:front": "cd front && npm test",
+    "prepare": "husky install",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "*.(js|ts|tsx|html|css)": [
+      "prettier --write"
+    ],
+    "*.js": [
+      "eslint --fix"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.11",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^8.0.0",
+    "prettier": "^3.3.3",
+    "typescript": "5.4"
+  }
+}
