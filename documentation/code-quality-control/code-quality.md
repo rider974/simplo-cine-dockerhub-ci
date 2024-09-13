@@ -56,6 +56,108 @@ SonarCloud est notre outil de référence pour l'analyse approfondie de la quali
 - **Tableaux de bord** : Les résultats de SonarCloud sont accessibles via des tableaux de bord en ligne, des alertes et des liens accessibles des logs, permettant de suivre la qualité du code en continu et de prioriser les actions correctives.  
   SonarCloud intègre également des indicateurs de qualité qui aident à maintenir un haut niveau de rigueur dans le développement.
 
+### Installation
+
+1. Créer un compte SonarCloud et lier notre projet
+
+   1. Inscription : compte GitHub.
+   2. Lier le projet à SonarCloud.
+
+2. Configurer SonarCloud dans notre projet
+
+SonarCloud nécessite l’ajout d’une configuration spécifique dans notre projet pour exécuter l’analyse statique. Il y a deux principales méthodes : via un fichier de configuration (sonar-project.properties) ou directement via notre pipeline CI.
+
+**Option 1** : Configuration via sonar-project.properties
+
+1. Ajouter le fichier sonar-project.properties :
+   Création du fichier **sonar-project.properties** à la racine de notre projet avec le contenu suivant :
+
+```sh
+# Clé unique du projet dans SonarQube
+sonar.projectKey=Florence-Martin_projet-code-quality
+
+# Nom de votre organisation dans SonarQube
+sonar.organization=florence-martin
+
+# Répertoires contenant le code source principal du projet
+# On inclut `app/components`, `app/fonts` et `pages/api`
+sonar.sources=app/components,app/fonts,pages/api
+
+# Répertoire contenant les fichiers de tests unitaires
+# Les tests sont situés dans le répertoire `__tests__` sous `app`
+sonar.tests=app/__tests__
+
+# Exclusion de certains répertoires et fichiers de l'analyse
+# On exclut `node_modules` pour éviter d'analyser les dépendances
+sonar.exclusions=**/node_modules/**, **/*.spec.tsx
+
+# Chemin vers le fichier de couverture de code TypeScript généré par lcov
+sonar.typescript.lcov.reportPaths=coverage/lcov.info
+```
+
+**Option 1** : Intégration via le pipeline CI (recommandée)
+
+Exemple de configuration pour GitHub Actions (.github/workflows/ci.yml):
+
+```yml
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Run SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npx sonarscanner \
+            -Dsonar.projectKey=your_project_key \
+            -Dsonar.organization=your_organization_name \
+            -Dsonar.sources=./src \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
+```
+
+Remplacez your_project_key et your_organization_name par les valeurs appropriées pour notre projet.
+
+3. Ajouter le secret SONAR_TOKEN :
+   • Dans les paramètres de notre dépôt GitHub, ajoutez un secret nommé SONAR_TOKEN avec la valeur de votre jeton d’autorisation SonarCloud.
+   • Ce jeton peut être généré dans notre compte SonarCloud sous la section “My Account” -> “Security” -> “Generate Tokens”.
+
+4. Exécuter l’analyse
+
+   • Via le pipeline CI : À chaque push ou pull request, l’analyse SonarCloud sera automatiquement exécutée.
+   • Manuellement : Nous pouvons également exécuter l’analyse manuellement avec la commande suivante dans notre terminal, si nous utilisons le fichier **sonar-project.properties** :
+
+```sh
+npx sonarscanner
+```
+
+5. Vérification des résultats
+
+   • Accéder à SonarCloud :  
+   Via :
+
+   - lien dans les logs du workflow
+   - alerte
+   - vérifier les résultats de l’analyse directement sur le tableau de bord de SonarCloud
+
 ### 4. **Husky + Lint-Staged**
 
 Husky et Lint-Staged sont utilisés pour renforcer les bonnes pratiques dès la phase de développement locale.

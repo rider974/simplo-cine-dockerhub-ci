@@ -1,3 +1,59 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "root": true,
+  // "extends" permet d'étendre des configurations ESLint prédéfinies
+  "extends": [
+    "next/core-web-vitals", // Recommandations spécifiques pour Next.js Core Web Vitals
+    "next", // Configuration de base de Next.js pour ESLint
+    "plugin:@typescript-eslint/recommended", // Règles spécifiques à TypeScript pour garantir une bonne qualité de code
+    "plugin:react-hooks/recommended", // Recommandations pour l'utilisation correcte des hooks React
+    "plugin:import/errors", // Règles pour gérer les erreurs d'importation
+    "plugin:import/warnings", // Avertissements sur les importations incorrectes
+    "plugin:import/typescript", // Règles spécifiques pour les importations dans les fichiers TypeScript
+    "plugin:prettier/recommended", // Intègre Prettier dans ESLint pour formater le code automatiquement
+    "prettier"
+  ],
+
+  // "rules" permet de personnaliser les règles ESLint
+  "rules": {
+    "prettier/prettier": "off",
+    // Désactive l'avertissement de React pour l'importation de React dans les fichiers JSX/TSX,
+    // car ce n'est pas nécessaire dans un projet Next.js.
+    "react/react-in-jsx-scope": "off",
+
+    // Désactive l'obligation de définir explicitement les types de retour des fonctions dans TypeScript,
+    // utile pour éviter la surcharge des définitions de type dans certains cas.
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    // Affiche un avertissement si le type `any` est utilisé,
+    // ce qui encourage à utiliser des types plus spécifiques pour une meilleure sécurité de type.
+    "@typescript-eslint/no-explicit-any": "warn",
+
+    // Règle pour imposer un ordre cohérent des imports, en les classant par type (intégré, externe, interne).
+    // Cela améliore la lisibilité et la maintenance du code.
+    "import/order": [
+      "error", // Définit l'importance de la règle comme une erreur
+      {
+        "groups": ["builtin", "external", "internal"], // Groupes d'importation à organiser
+        "pathGroups": [
+          {
+            "pattern": "~/**", // Modèle pour les imports internes, ici représenté par `~`
+            "group": "internal" // Ces imports sont classés comme internes
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"], // Exclut les imports intégrés de l'ordre alphabétique
+        "newlines-between": "always", // Force une ligne vide entre les groupes d'importation
+        "alphabetize": {
+          "order": "asc", // Ordonne les imports par ordre alphabétique
+          "caseInsensitive": true // Ignore la casse lors de l'ordonnancement
+        }
+      }
+    ]
+  },
+
+  // "settings" permet de configurer des options spécifiques pour les plugins ESLint
+  "settings": {
+    "import/resolver": {
+      "typescript": {} // Permet à ESLint de comprendre les alias de chemin et les résolutions spécifiques à TypeScript
+    }
+  }
 }
