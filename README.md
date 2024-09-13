@@ -8,23 +8,23 @@ La structure du projet est organisée comme suit :
 
 ### Répertoires
 
-- [**api/**](./api/) : Contient les configurations pour l’API Gateway Nginx qui agit en tant que point d’entrée unique pour toutes les requêtes vers les différents micro-services. Ce répertoire inclut les fichiers de configuration Nginx nécessaires pour le routage, le load balancing, et la gestion des certificats SSL.
+- [**api/**](./api/ReadMe.md) : Contient les configurations pour l’API Gateway Nginx qui agit en tant que point d’entrée unique pour toutes les requêtes vers les différents micro-services. Ce répertoire inclut les fichiers de configuration Nginx nécessaires pour le routage, le load balancing, et la gestion des certificats SSL.
 
-- [**ci-cd/**](./ci-cd/) : Contient les configurations pour l'intégration et le déploiement continus (CI/CD). Le sous-répertoire `.github/workflows/` contient les workflows GitHub Actions pour l'automatisation des tests, du formatage du code, et du déploiement.
+- [**ci-cd/**](./ci-cd/ReadMe.md) : Contient les configurations pour l'intégration et le déploiement continus (CI/CD). Le sous-répertoire `.github/workflows/` contient les workflows GitHub Actions pour l'automatisation des tests, du formatage du code, et du déploiement.
 
-- [**documentation/**](./documentation/) : Ce répertoire contient la documentation technique et fonctionnelle du projet.
+- [**documentation/**](./documentation/ReadMe.md) : Ce répertoire contient la documentation technique et fonctionnelle du projet.
 
-- [**front/**](./front/) : Contient le code source de l'interface utilisateur de l'application (frontend).
+- [**front/**](./front/README.md) : Contient le code source de l'interface utilisateur de l'application (frontend).
 
-- [**global-tests/**](./global-tests/) : Répertoire dédié aux tests globaux qui couvrent l'ensemble du système.
+- [**global-tests/**](./global-tests/ReadMe.md) : Répertoire dédié aux tests globaux qui couvrent l'ensemble du système.
 
-- [**micro-services/**](./micro-services/): Contient les différents micro-services de l'application, tels que `movies-service`, `sessions-service`, `rooms-service`, etc.
+- [**micro-services/**](./micro-services/ReadMe.md): Contient les différents micro-services de l'application, tels que `movies-service`, `sessions-service`, `rooms-service`, etc.
 
-- [**monitoring/**](./monitoring/) : Contient les configurations pour le monitoring de l'application et de l'infrastructure, par exemple avec Prometheus et Grafana.
+- [**monitoring/**](./monitoring/ReadMe.md) : Contient les configurations pour le monitoring de l'application et de l'infrastructure, par exemple avec Prometheus et Grafana.
 
-- [**quality-config/**](./quality-config/) : Contient les configurations liées à la qualité du code, comme les configurations pour Prettier, ESLint, SonarCloud et Husky.
+- [**quality-config/**](./quality-config/ReadMe.md) : Contient les configurations liées à la qualité du code, comme les configurations pour Prettier, ESLint, SonarCloud et Husky.
 
-- [**security/**](./security/) : Contient les configurations de sécurité, comme la gestion des clés, les certificats, et les politiques de sécurité.
+- [**security/**](./security/ReadMe.md) : Contient les configurations de sécurité, comme la gestion des clés, les certificats, et les politiques de sécurité.
 
 - [**docker-compose.yml**](./docker-compose.yml): Fichier de configuration Docker Compose pour orchestrer les différents conteneurs Docker du projet.
 
