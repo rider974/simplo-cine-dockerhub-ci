@@ -4,6 +4,8 @@
 
 ## CI / CD
 
+## Code quality control
+
 ## Dictionnaire de données
 
 - [Movies-service](./data-dictionary/bdd-movies-service.md)
