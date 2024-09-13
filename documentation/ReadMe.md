@@ -15,7 +15,7 @@
 
 ## Règles de gestion
 
-- [Règles de gestion](./management-rules/)
+- [Règles de gestion](./management-rules/management-rules.md)
 
 ## Sécurité
 
