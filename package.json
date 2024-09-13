@@ -1,0 +1,19 @@
+{
+  "lint-staged": {
+    "*.(js|ts|tsx|html|css)": [
+      "prettier --write"
+    ],
+    "*.js": [
+      "eslint --fix"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^9.10.0",
+    "husky": "^8.0.0",
+    "prettier": "^3.3.3"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "test": "echo \"No test specified\" && exit 0"
+  }
+}

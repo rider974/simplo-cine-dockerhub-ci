@@ -10,9 +10,41 @@ ESLint est utilisé pour garantir que le code respecte les bonnes pratiques de J
 
 - **Intégration CI** : ESLint est intégré dans notre pipeline CI pour s'assurer que chaque commit ou pull request est conforme aux standards de qualité. Les commits non conformes sont automatiquement rejetés, ce qui garantit que seul du code propre et conforme est fusionné dans le codebase.
 
+### Installation
+
+```sh
+npm install --save-dev eslint
+```
+
+1. Créer un fichier **.lintstagedrc** pour corriger automatiquement les erreurs avant chaque commit :
+
+```sh
+{
+  "*.js": [
+    "eslint --fix"
+  ]
+}
+```
+
 ### 2. **Prettier**
 
 Prettier est utilisé en conjonction avec ESLint pour assurer un formatage cohérent du code.
+
+### Installation
+
+```sh
+npm install --save-dev prettier
+```
+
+1. Compléter le fichier **.lintstagedrc** pour formater les fichiers avant chaque commit :
+
+```sh
+{
+  "*.(js|ts|tsx|html|css)": [
+    "prettier --write"
+   ],
+}
+```
 
 - **Intégration avec ESLint** : Prettier est intégré dans le workflow ESLint, garantissant que le code n'est pas seulement fonctionnel, mais aussi correctement formaté selon les standards de l'équipe. Cela permet d'éviter les discussions sur le style de code lors des revues de code.
 
@@ -31,6 +63,69 @@ Husky et Lint-Staged sont utilisés pour renforcer les bonnes pratiques dès la 
 - **Husky** : Husky permet de gérer les hooks Git. Un hook `pre-commit` est configuré pour exécuter automatiquement ESLint, Prettier, et les tests unitaires avant d'autoriser un commit. Cela empêche les développeurs de commettre du code qui ne respecte pas les normes de qualité définies.
 
 - **Lint-Staged** : Lint-Staged optimise ce processus en exécutant ESLint et Prettier uniquement sur les fichiers modifiés, ce qui accélère considérablement le processus de validation des commits sans compromettre la qualité.
+
+### Installation
+
+1. Installer Husky comme dépendance de développement :
+
+```sh
+ npm install husky --save-dev
+```
+
+2. Configurer Husky dans votre projet :
+
+```sh
+npx husky-init
+npm install
+```
+
+3. Ajouter un hook Git pre-commit pour exécuter ESLint et Prettier :
+
+```sh
+npx husky add .husky/pre-commit "npx lint-staged"
+```
+
+4. Configurer lint-staged dans le package.json :
+
+```sh
+  "lint-staged": {
+    "*.(js|ts|tsx|html|css)": [
+      "prettier --write"
+    ],
+    "*.js": [
+      "eslint --fix"
+    ]
+  },
+```
+
+5. Ajouter un script test dans votre package.json. Voici un exemple de configuration basique :
+
+```sh
+"scripts": {
+  "test": "echo \"No test specified\" && exit 0"
+}
+```
+
+Ce script de test est simplement un placeholder. Vous devrez le remplacer par une commande qui exécute réellement nos tests unitaires, comme :
+
+```sh
+"scripts": {
+  "test": "jest"
+}
+```
+
+6. Vérifier les Tests Avant un git push : Ajoutez un hook pre-push pour s’assurer que les tests passent avant d’envoyer du code sur le dépôt distant :
+
+```sh
+npx husky add .husky/pre-push "npm run test"
+```
+
+7. Testez en effectuant un commit pour vérifier que le hook pre-commit fonctionne :
+
+```sh
+git add .
+git commit -m "Test Husky pre-commit hook"
+```
 
 ## Conclusion
 
