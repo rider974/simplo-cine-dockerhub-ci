@@ -21,9 +21,9 @@ app.use(helmet())
 
 app.use(express.json());
 // Middleware pour servir Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
+app.use('/api-movies-swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
 // Endpoint pour servir le fichier JSON de la documentation Swagger
-app.get('/swagger.json', (req, res) => {
+app.get('/api-movies-swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
@@ -31,7 +31,7 @@ app.get('/swagger.json', (req, res) => {
 app.use('/api/movies', movieRoutes);
 
 const PORT = process.env.PORT || 3000;
-if (process.env.NODE_ENV !== 'test') {  // N'exécute pas listen() lors des tests
+if (process.env.NODE_ENV !== 'test') {  
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
