@@ -28,7 +28,7 @@ app.get('/swagger.json', (req, res) => {
   res.send(swaggerSpec);
 });
 
-app.use('api/movies', movieRoutes);
+app.use('/api/movies', movieRoutes);
 
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'test') {  // N'exécute pas listen() lors des tests
