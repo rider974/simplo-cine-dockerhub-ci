@@ -25,7 +25,6 @@ services:
       - "3000:3000"
     volumes:
       - ./front:/app
-    command: npm run dev
     networks:
       - simplo-cine-network
 
