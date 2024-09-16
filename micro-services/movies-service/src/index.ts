@@ -17,7 +17,17 @@ export { sequelize, Movie };
 const app = express();
 // Configuration CORS
 app.use(cors());
-app.use(helmet())
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", 'http:', 'https:'],
+      scriptSrc: ["'self'", 'http:', 'https:'],
+      styleSrc: ["'self'", 'http:', 'https:', "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'http:', 'https:'],
+      connectSrc: ["'self'", 'http:', 'https:'],
+    },
+  })
+);
 
 app.use(express.json());
 // Middleware pour servir Swagger UI
