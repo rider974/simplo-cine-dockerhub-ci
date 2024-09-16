@@ -16,11 +16,7 @@ export { sequelize, Movie };
 
 const app = express();
 // Configuration CORS
-app.use(cors({
-  origin: 'http://localhost:8080', // Remplace par l'origine de ton frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 app.use(helmet())
 
 app.use(express.json());
@@ -32,7 +28,7 @@ app.get('/swagger.json', (req, res) => {
   res.send(swaggerSpec);
 });
 
-app.use('/movies', movieRoutes);
+app.use('api/movies', movieRoutes);
 
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'test') {  // N'exécute pas listen() lors des tests
