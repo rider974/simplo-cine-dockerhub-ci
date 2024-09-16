@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Commande pour démarrer le serveur de développement Next.js
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
