@@ -101,6 +101,7 @@ export function CredentialsForm({
                 <p className="text-red-500 text-sm mt-2">{emailError}</p>
               )}
             </div>
+
             <div className="mb-6">
               <label className="block text-gray-500 font-normal">
                 Password

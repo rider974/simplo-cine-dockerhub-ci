@@ -17,7 +17,6 @@ services:
     networks:
       - simplo-cine-network
 
-
   # Service Frontend (Next.js)
   front:
     build: ./front
@@ -112,6 +111,19 @@ services:
     networks:
       - simplo-cine-network
 
+  postgres_users:
+    ports:
+      - "5433:5432"
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users_db
+    volumes:
+      - postgres_data_user:/var/lib/postgresql/data
+    networks:
+      - simplo-cine-network
+
   prometheus:
     image: prom/prometheus
     volumes:
@@ -130,9 +142,8 @@ services:
 
 volumes:
   postgres_data_movie:
+  postgres_data_user:
 # Réseau personnalisé pour simplo-cine
 networks:
   simplo-cine-network:
     driver: bridge
-
-
