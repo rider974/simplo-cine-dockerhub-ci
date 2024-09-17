@@ -29,6 +29,7 @@ interface Movie {
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -40,6 +41,13 @@ export default function Home() {
         }
         const data = await response.json();
         setMovies(data);
+      } catch (err) {
+        // Typage plus spécifique pour l'erreur
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Une erreur inconnue est survenue");
+        }
       } finally {
         setLoading(false);
       }
