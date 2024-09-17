@@ -51,7 +51,7 @@ const Card: React.FC<CardProps> = ({ title,
                     <button key={index} className="inline-block">{renderIcon(icon)}</button>
                 ))}
             </div>
-            <div className="card-body p-4">
+            <div className="card-body p-4 h-72">
                 <div className="movie-info">
                     <h3 className="text-xl text-gray-700 text-gray-700 font-bold mb-2">{title}</h3>
                     <p className="text-gray-700 text-base">{description}</p>
