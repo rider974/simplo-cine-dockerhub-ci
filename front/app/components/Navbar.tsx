@@ -24,7 +24,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 p-4 shadow-sm flex items-center justify-between">
       <div className="flex items-center">
-        <FaHome />
+        <FaHome className="h-5 w-5 text-white" />
         <Link href="/" className="ml-2 text-white hover:underline">
           Accueil
         </Link>

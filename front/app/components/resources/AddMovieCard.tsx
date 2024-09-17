@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import {
+  FaAlignLeft,
+  FaCalendarAlt,
+  FaChair,
+  FaClock,
+  FaHeading,
+  FaImage,
+  FaPlus,
+} from "react-icons/fa";
 
 interface MovieAttributes {
   id: number;
@@ -11,35 +20,46 @@ interface MovieAttributes {
   poster?: File | null;
 }
 
-interface AddMovieCardProps {
-  onAddMovie: (newMovie: MovieAttributes) => void;
+interface HallAttributes {
+  id: number;
+  name: string;
+  capacity: number;
 }
 
-export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
+interface AddMovieCardProps {
+  onAddMovie: (newMovie: MovieAttributes) => void;
+  halls: HallAttributes[];
+}
+
+export const AddMovieCard: React.FC<AddMovieCardProps> = ({
+  onAddMovie,
+  halls,
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [releaseDate, setReleaseDate] = useState<Date | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
-  const [poster, setPoster] = useState<File | null>(null); // État pour stocker l'affiche
+  const [poster, setPoster] = useState<File | null>(null);
+  const [selectedHallId, setSelectedHallId] = useState<number | null>(null);
 
   const handleAdd = () => {
     if (title && releaseDate && duration) {
       const newMovie: MovieAttributes = {
-        id: Math.floor(Math.random() * 10000), // ID temporaire pour l'exemple
+        id: Math.floor(Math.random() * 10000),
         title,
         description,
         release_date: releaseDate,
         duration,
         created_at: new Date(),
         updated_at: new Date(),
-        poster, // Ajout de l'affiche au nouvel objet de film
+        poster,
       };
       onAddMovie(newMovie);
       setTitle("");
       setDescription("");
       setReleaseDate(null);
       setDuration(null);
-      setPoster(null); // Réinitialise l'affiche après l'ajout
+      setPoster(null);
     } else {
       alert("Veuillez remplir tous les champs requis.");
     }
@@ -52,12 +72,14 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
   };
 
   return (
-    <div className="w-full h-[600px] max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl text-gray-900 font-semibold mb-4">
+    <div className="w-full bg-white p-6 rounded-lg shadow-md mb-8">
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 flex items-center">
         Ajouter un nouveau film
       </h2>
       <div className="mb-4">
-        <label className="block text-gray-900">Titre</label>
+        <label className="text-gray-900 flex items-center">
+          <FaHeading className="text-green-600 mr-2" /> Titre
+        </label>
         <input
           type="text"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
@@ -67,7 +89,9 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-900">Description</label>
+        <label className="text-gray-900 flex items-center">
+          <FaAlignLeft className="text-purple-600 mr-2" /> Description
+        </label>
         <textarea
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
           value={description}
@@ -76,7 +100,9 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
         ></textarea>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-900">Date de sortie</label>
+        <label className="text-gray-900 flex items-center">
+          <FaCalendarAlt className="text-yellow-500 mr-2" /> Date de sortie
+        </label>
         <input
           type="date"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
@@ -84,7 +110,9 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-900">Durée (en minutes)</label>
+        <label className="text-gray-900 flex items-center">
+          <FaClock className="text-orange-600 mr-2" /> Durée (en minutes)
+        </label>
         <input
           type="number"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
@@ -94,7 +122,26 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-900">Affiche du film</label>
+        <label className="text-gray-900 flex items-center">
+          <FaChair className="text-purple-700 mr-2" /> Salle de projection
+        </label>
+        <select
+          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+          value={selectedHallId || ""}
+          onChange={(e) => setSelectedHallId(Number(e.target.value))}
+        >
+          <option value="">Sélectionnez une salle</option>
+          {halls.map((hall) => (
+            <option key={hall.id} value={hall.id}>
+              {hall.name} (Capacité: {hall.capacity})
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="mb-4">
+        <label className="text-gray-900 flex items-center">
+          <FaImage className="text-teal-600 mr-2" /> Affiche du film
+        </label>
         <input
           type="file"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
@@ -104,9 +151,9 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({ onAddMovie }) => {
       </div>
       <button
         onClick={handleAdd}
-        className="w-full py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700"
+        className="w-full py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700 flex items-center justify-center"
       >
-        Ajouter le film
+        <FaPlus className="mr-2" /> Ajouter le film
       </button>
     </div>
   );
