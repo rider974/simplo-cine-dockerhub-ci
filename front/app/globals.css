@@ -25,3 +25,23 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Cible les noms des jours dans l'en-tête du calendrier (ex: 'Sun', 'Mon', 'Tue', etc.) */
+.rbc-header {
+  @apply text-gray-800;
+}
+
+/* Cible les dates dans le calendrier */
+.rbc-date-cell {
+  @apply text-pink-600;
+}
+
+/* Cible les dates qui sont actuellement sélectionnées */
+.rbc-selected {
+  @apply bg-yellow-500 text-gray-900;
+}
+
+/* Cible les événements dans le calendrier */
+.rbc-toolbar-label {
+  @apply text-2xl text-gray-900;
+}

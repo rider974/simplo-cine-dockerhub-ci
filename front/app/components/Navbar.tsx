@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link"; 
-import { useRouter } from "next/navigation"; 
-import React, { useState, FormEvent } from "react"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState, FormEvent } from "react";
 import { FaHome, FaSignInAlt, FaSearch, FaBars, FaTimes } from "react-icons/fa";
 
 export default function Navbar() {
