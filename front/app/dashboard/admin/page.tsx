@@ -4,8 +4,11 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
-import { MovieTable } from "../../components/resources/MovieTable";
+import { MovieCard } from "../../components/resources/MovieTable";
 import { AddMovieCard } from "@/app/components/resources/AddMovieCard";
+import { MovieView } from "@/app/components/resources/MovieView";
+import { AddHallCard } from "@/app/components/resources/AddHallCard";
+import { ScheduleScreeningForm } from "@/app/components/resources/ScheduleScreeningForm";
 
 interface MovieAttributes {
   id: number;
@@ -18,10 +21,22 @@ interface MovieAttributes {
   poster?: File | null;
 }
 
+interface HallAttributes {
+  id: number;
+  name: string;
+  capacity: number;
+}
+
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
+  const [halls, setHalls] = useState<HallAttributes[]>([]);
+  const [screenings, setScreenings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(
+    null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // useEffect(() => {
   //   const fetchMovies = async () => {
@@ -96,35 +111,105 @@ export default function AdminDashboard() {
   }));
 
   const handleSelectEvent = (event: any) => {
-    alert(`Selected movie: ${event.title}`);
+    const movie = movies.find((m) => m.id === event.id);
+    if (movie) {
+      setSelectedMovie(movie);
+      setIsModalOpen(true);
+    }
   };
 
   const handleAddMovie = (newMovie: MovieAttributes) => {
     setMovies([...movies, newMovie]);
   };
 
-  return (
-    <div className="min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-4">Gestion des Séances de Films</h1>
+  const handleAddHall = (newHall: HallAttributes) => {
+    setHalls([...halls, newHall]);
+  };
 
-      {loading && <p>Loading movies...</p>}
-      {error && <p className="text-red-500">Error: {error}</p>}
+  const handleScheduleScreening = (newScreening: any) => {
+    setScreenings([...screenings, newScreening]);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovie(null);
+  };
+
+  const handleModifyMovie = (updatedMovie: MovieAttributes) => {
+    setMovies(
+      movies.map((movie) =>
+        movie.id === updatedMovie.id ? updatedMovie : movie
+      )
+    );
+  };
+
+  const handleArchiveMovie = () => {
+    if (selectedMovie) {
+      setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+      handleCloseModal();
+    }
+  };
+
+  return (
+    <div className="min-h-screen p-6 flex flex-col items-center">
+      <h1 className="text-3xl font-bold mb-6 text-gray-900">
+        Gestion des Séances de Films
+      </h1>
+
+      {loading && <p>Chargement des films...</p>}
+      {error && <p className="text-red-500">Erreur : {error}</p>}
 
       {!loading && !error && (
-        <div className="flex flex-col lg:flex-row lg:space-x-4">
-          <div className="lg:w-2/3 w-full">
-            <MovieCalendar events={events} onSelectEvent={handleSelectEvent} />
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Colonne 1: Calendrier et Liste des Films */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="rounded-lg shadow-md">
+              <h2 className="text-xl pl-6 font-semibold mb-4 text-gray-900">
+                Calendrier des Séances
+              </h2>
+              <MovieCalendar
+                events={events}
+                onSelectEvent={handleSelectEvent}
+              />
+            </div>
+            <div className="rounded-lg">
+              <h2 className="text-xl pl-6 text-gray-900 font-semibold mb-4">
+                Liste des Films
+              </h2>
+              <MovieCard movies={movies} />
+            </div>
           </div>
-          <div className="lg:w-1/3 w-full mt-4 lg:mt-0">
-            <AddMovieCard onAddMovie={handleAddMovie} />
+
+          {/* Colonne 2: Formulaires à droite */}
+          <div className="space-y-6">
+            <div className="rounded-lg shadow-md">
+              <AddMovieCard onAddMovie={handleAddMovie} halls={[]} />
+            </div>
+            <div className="rounded-lg shadow-md">
+              <AddHallCard onAddHall={handleAddHall} />
+            </div>
+            <div className="rounded-lg shadow-md">
+              <ScheduleScreeningForm
+                movies={movies}
+                halls={halls}
+                onSchedule={handleScheduleScreening}
+              />
+            </div>
           </div>
         </div>
       )}
 
-      <h2 className="text-xl text-gray-900 font-semibold mb-4 mt-6">
-        Liste des Films
-      </h2>
-      <MovieTable movies={movies} />
+      {/* Modal */}
+      {selectedMovie && (
+        <MovieView
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          movie={selectedMovie}
+          onModify={handleModifyMovie}
+          onArchive={handleArchiveMovie}
+          availableHalls={[]}
+        />
+      )}
     </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div className="text-gray-900">
       <h1>Welcome to Simplon Cine</h1>
       <h2>Discover our movies</h2>
       {loading && <p>Loading movies...</p>}
