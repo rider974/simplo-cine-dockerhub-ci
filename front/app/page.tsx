@@ -1,20 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
 
+import Card from "./components/Card";
+
+
+
+export enum IconType {
+  view = 'view',
+  edit = 'edit',
+  delete = 'delete'
+}
+
 interface Movie {
   id: number;
   title: string;
   description?: string;
+  image: string;
+  type: string;
   release_date?: string;
   duration?: number;
   created_at: string;
   updated_at: string;
+  icon: IconType[]; // Liste d'icônes
 }
+
+
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -25,13 +40,6 @@ export default function Home() {
         }
         const data = await response.json();
         setMovies(data);
-      } catch (err) {
-        // Typage plus spécifique pour l'erreur
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Une erreur inconnue est survenue");
-        }
       } finally {
         setLoading(false);
       }
@@ -41,37 +49,37 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <h1>Welcome to Simplon Cine</h1>
-      <h2>Discover our movies</h2>
-      {loading && <p>Loading movies...</p>}
+    <div className="m-4">
+      <h1 className="text-center text-3xl">Welcome to Simplon Cine</h1>
+      {loading &&
+        <>
+          <p>Loading movies...</p>
+          <div className="flex flex-wrap -mx-2">
+            <h2 className="ms-6">Discover our movies</h2>
+            {movies.map((movie) => (
+              <div key={movie.id} className="w-auto sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-2">
+                <div className="bg-white rounded-lg shadow-md p-4 m-4 mt-5">
+                  <Card
+                    title={movie.title}
+                    description={movie.description}
+                    release_date={movie.release_date}
+                    duration={movie.duration}
+                    created_at={movie.created_at}
+                    updated_at={movie.updated_at}
+                    image={movie.image}
+                    type={movie.type}
+                    icons={movie.icon}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+
+      }
       {error && <p>Error: {error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Release Date</th>
-            <th>Duration (min)</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.id}</td>
-              <td>{movie.title}</td>
-              <td>{movie.description || "N/A"}</td>
-              <td>{movie.release_date || "N/A"}</td>
-              <td>{movie.duration || "N/A"}</td>
-              <td>{movie.created_at}</td>
-              <td>{movie.updated_at}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
     </div>
+
   );
 }
