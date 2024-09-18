@@ -8,11 +8,21 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "../swagger/swaggerOptions";
 import cors from "cors";
 import helmet from "helmet";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Synchronise les modèles avec la base de données (alter : true pour mettre à jour la table existante)
-sequelize.sync({ alter: true }).then(() => {
-  console.log("Database & tables created!");
-});
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("Database & tables created!");
+  })
+  .catch((error) => {
+    console.error(
+      "Erreur lors de la synchronisation avec la base de données:",
+      error
+    );
+  });
 
 export { sequelize, User, Role };
 

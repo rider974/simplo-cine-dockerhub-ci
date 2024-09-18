@@ -26,6 +26,30 @@ npm install --save-dev eslint
 }
 ```
 
+### Corriger l’ordre des imports et gérer les types any dans le projet
+
+Pour assurer la conformité avec les règles d’ESLint et améliorer la lisibilité du code, il est essentiel de corriger l’ordre des imports et de bien gérer l’utilisation des types any dans les fichiers TypeScript.
+
+- 1. Corriger l’ordre des imports :
+
+L’ordre des imports doit respecter la règle import/order d’ESLint. Il est nécessaire d’organiser les imports en veillant à insérer une ligne vide entre différents groupes d’importation.
+
+- Imports des librairies tierces (comme react, moment) doivent être placés avant les imports des modules locaux.
+- Une bonne organisation rend le code plus clair et facile à maintenir.
+
+- 2. Remplacer les types any :
+
+L’utilisation du type any est à éviter car elle désactive les avantages du typage fort offert par TypeScript.  
+Remplacez les types any par des types plus spécifiques pour une meilleure vérification statique.  
+ Si un type précis ne peut être défini, utilisez **unknown** comme alternative plus sûre.  
+ Si la correction du type any n’est pas faisable à court terme, vous pouvez désactiver temporairement la règle ESLint à l’aide du commentaire suivant :
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+```
+
+Cela permet d’ignorer les avertissements d’ESLint sur une ligne spécifique sans bloquer la compilation.
+
 ### 2. **Prettier**
 
 Prettier est utilisé en conjonction avec ESLint pour assurer un formatage cohérent du code.

@@ -1,14 +1,17 @@
 // /* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
-import React, { useEffect, useState } from "react";
+
 import moment from "moment";
-import { MovieCalendar } from "../../components/resources/MovieCalendar";
-import { MovieCard } from "../../components/resources/MovieTable";
+import React, { useEffect, useState } from "react";
+
+import { AddHallCard } from "@/app/components/resources/AddHallCard";
 import { AddMovieCard } from "@/app/components/resources/AddMovieCard";
 import { MovieView } from "@/app/components/resources/MovieView";
-import { AddHallCard } from "@/app/components/resources/AddHallCard";
 import { ScheduleScreeningForm } from "@/app/components/resources/ScheduleScreeningForm";
+
+import { MovieCalendar } from "../../components/resources/MovieCalendar";
+import { MovieCard } from "../../components/resources/MovieTable";
 
 interface MovieAttributes {
   id: number;
@@ -30,9 +33,10 @@ interface HallAttributes {
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
   const [halls, setHalls] = useState<HallAttributes[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [screenings, setScreenings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(
     null
   );
@@ -109,7 +113,7 @@ export default function AdminDashboard() {
     ),
     desc: movie.description || "",
   }));
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelectEvent = (event: any) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
@@ -125,7 +129,7 @@ export default function AdminDashboard() {
   const handleAddHall = (newHall: HallAttributes) => {
     setHalls([...halls, newHall]);
   };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleScheduleScreening = (newScreening: any) => {
     setScreenings([...screenings, newScreening]);
   };

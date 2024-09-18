@@ -1,5 +1,7 @@
 "use client";
+
 import { useEffect, useState } from "react";
+
 
 import Card from "./components/Card";
 
@@ -23,6 +25,9 @@ interface Movie {
   updated_at: string;
   icon: IconType[]; // Liste d'icônes
 }
+
+import { Movie } from "../app/types/types";
+
 
 
 

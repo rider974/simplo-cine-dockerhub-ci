@@ -39,3 +39,13 @@ export interface MovieEvent {
   end: Date;
   desc: string;
 }
+
+export interface Movie {
+  id: number;
+  title: string;
+  description?: string;
+  release_date?: string;
+  duration?: number;
+  created_at: string;
+  updated_at: string;
+}

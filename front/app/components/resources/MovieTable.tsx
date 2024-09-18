@@ -1,4 +1,5 @@
 import React from "react";
+
 import { MovieAttributes } from "../../types/types";
 
 interface MovieCardProps {
