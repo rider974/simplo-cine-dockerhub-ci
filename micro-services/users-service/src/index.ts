@@ -8,10 +8,10 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "../swagger/swaggerOptions";
 import cors from "cors";
 import helmet from "helmet";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
 // Charger les variables d'environnement
-dotenv.config();
+// dotenv.config();
 
 // Synchronisation des modèles avec la base de données
 sequelize
