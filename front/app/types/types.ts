@@ -1,6 +1,6 @@
 // types.ts
 
-import { IconType } from "../page";
+// import { iconType } from "../page";
 
 // Interface générale pour les attributs d'une entité
 export interface BaseAttributes {
@@ -52,5 +52,5 @@ export interface Movie {
   duration?: number;
   created_at: string;
   updated_at: string;
-  icon: IconType[]; // Liste d'icônes
+  // icon: iconType[]; // Liste d'icônes
 }
