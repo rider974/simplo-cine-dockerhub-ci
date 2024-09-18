@@ -1,5 +1,7 @@
 // types.ts
 
+import { IconType } from "../page";
+
 // Interface générale pour les attributs d'une entité
 export interface BaseAttributes {
   id: number;
