@@ -58,7 +58,7 @@ jobs:
         # Construit le projet après l'analyse et les tests
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: build/
@@ -75,7 +75,7 @@ jobs:
         # Vérifie à nouveau le code source du dépôt pour s'assurer que nous avons la dernière version
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
