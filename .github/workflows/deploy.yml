@@ -26,18 +26,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            # Arrêter tous les conteneurs s'ils existent
-            # containers=$(sudo docker ps -q)
-            # if [ -n "$containers" ]; then
-            #   sudo docker stop $containers
-            # fi
-
-            # Supprimer tous les conteneurs s'ils existent
-            # containers=$(sudo docker ps -a -q)
-            # if [ -n "$containers" ]; then
-            #   sudo docker rm $containers
-            # fi
-
+          
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/devops/simplo-cine ]; then
               mkdir -p ~/devops
