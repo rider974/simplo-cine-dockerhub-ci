@@ -13,9 +13,6 @@ RUN npm install
 # Copier tout le code source dans le conteneur
 COPY . .
 
-# build
-RUN npm run build
-
 # Exposer le port utilisé par le frontend
 EXPOSE 3000
 
