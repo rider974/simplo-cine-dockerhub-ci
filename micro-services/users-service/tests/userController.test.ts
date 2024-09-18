@@ -1,6 +1,6 @@
 // tester les fonctionnalités du userController, comme la récupération de la liste des utilisateurs et les détails d’un utilisateur spécifique.
 import request from "supertest";
-import { app } from "../src/index";
+import app from "../src/index";
 
 describe("User Controller", () => {
   it("should return a list of users", async () => {
