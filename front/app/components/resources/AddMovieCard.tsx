@@ -5,27 +5,11 @@ import {
   FaChair,
   FaClock,
   FaHeading,
+  FaHourglassStart,
   FaImage,
   FaPlus,
 } from "react-icons/fa";
-
-interface MovieAttributes {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: Date;
-  duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
-  poster?: File | null;
-}
-
-interface HallAttributes {
-  id: number;
-  name: string;
-  capacity: number;
-}
-
+import { MovieAttributes, HallAttributes } from "../../types/types";
 interface AddMovieCardProps {
   onAddMovie: (newMovie: MovieAttributes) => void;
   halls: HallAttributes[];
@@ -73,9 +57,12 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
 
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900 flex items-center">
-        Ajouter un nouveau film
-      </h2>
+      <div className="relative">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900 flex items-center relative z-10">
+          Ajouter un nouveau film
+        </h2>
+        <div className="bg-orange-500 absolute top-8 left-2 w-[calc(100%_-_20px)] h-2"></div>
+      </div>
       <div className="mb-4">
         <label className="text-gray-900 flex items-center">
           <FaHeading className="text-green-600 mr-2" /> Titre
@@ -111,7 +98,8 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
       </div>
       <div className="mb-4">
         <label className="text-gray-900 flex items-center">
-          <FaClock className="text-orange-600 mr-2" /> Durée (en minutes)
+          <FaHourglassStart className="text-orange-600 mr-2" /> Durée (en
+          minutes)
         </label>
         <input
           type="number"
@@ -151,7 +139,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
       </div>
       <button
         onClick={handleAdd}
-        className="w-full py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700 flex items-center justify-center"
+        className="w-full py-2 bg-blue-900 text-white rounded-md hover:bg-blue-500 flex items-center justify-center"
       >
         <FaPlus className="mr-2" /> Ajouter le film
       </button>

@@ -6,12 +6,7 @@ import {
   FaClock,
   FaHourglassStart,
 } from "react-icons/fa";
-
-interface HallAttributes {
-  id: number;
-  name: string;
-  capacity: number;
-}
+import { HallAttributes, MovieAttributes } from "../../types/types";
 
 interface Screening {
   movieId: number;
@@ -19,17 +14,6 @@ interface Screening {
   date: Date;
   startTime: string;
   duration: number;
-}
-
-interface MovieAttributes {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: Date;
-  duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
-  poster?: File | null;
 }
 
 export const ScheduleScreeningForm: React.FC<{
@@ -66,10 +50,13 @@ export const ScheduleScreeningForm: React.FC<{
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
-        Planifier une nouvelle séance
-      </h2>
+    <div className="w-full bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="relative">
+        <div className="bg-orange-500 absolute top-8 left-2 w-[calc(100%_-_20px)] h-2"></div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Planifier une nouvelle séance
+        </h2>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="text-gray-900 flex items-center">
@@ -141,7 +128,7 @@ export const ScheduleScreeningForm: React.FC<{
         </div>
         <button
           type="submit"
-          className="w-full py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700"
+          className="w-full py-2 bg-blue-900 text-white rounded-md hover:bg-blue-500"
         >
           Planifier la séance
         </button>

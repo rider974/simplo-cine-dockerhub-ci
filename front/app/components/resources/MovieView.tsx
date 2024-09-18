@@ -9,24 +9,7 @@ import {
   FaInfoCircle,
   FaClock,
 } from "react-icons/fa";
-
-interface HallAttributes {
-  id: number;
-  name: string;
-  capacity: number;
-}
-
-interface MovieAttributes {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: Date;
-  duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
-  poster?: File | null;
-  hall?: HallAttributes;
-}
+import { HallAttributes, MovieAttributes } from "../../types/types";
 
 interface MovieViewProps {
   isOpen: boolean;

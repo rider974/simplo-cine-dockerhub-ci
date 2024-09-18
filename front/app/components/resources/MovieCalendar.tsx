@@ -6,16 +6,9 @@ import {
 } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { MovieEvent } from "../../types/types";
 
 const localizer = momentLocalizer(moment);
-
-interface MovieEvent {
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  desc: string;
-}
 
 interface MovieCalendarProps {
   events: MovieEvent[];

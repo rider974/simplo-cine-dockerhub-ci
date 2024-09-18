@@ -1,15 +1,5 @@
 import React from "react";
-
-interface MovieAttributes {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: Date;
-  duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
-  poster?: File | null;
-}
+import { MovieAttributes } from "../../types/types";
 
 interface MovieCardProps {
   movies: MovieAttributes[];
@@ -17,7 +7,7 @@ interface MovieCardProps {
 
 export const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-5 px-5">
       {movies.map((movie) => (
         <div key={movie.id} className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-gray-900">{movie.title}</h3>

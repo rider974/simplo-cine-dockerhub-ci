@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { MdPeople, MdRoom } from "react-icons/md";
-
-interface HallAttributes {
-  id: number;
-  name: string;
-  capacity: number;
-}
+import { HallAttributes } from "../../types/types";
 
 interface AddHallCardProps {
   onAddHall: (newHall: HallAttributes) => void;
@@ -41,9 +36,12 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
 
   return (
     <div className="w-full bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
-        Ajouter une nouvelle salle
-      </h2>
+      <div className="relative">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Ajouter une nouvelle salle
+        </h2>
+        <div className="bg-orange-500 absolute top-8 left-2 w-[calc(100%_-_20px)] h-2"></div>
+      </div>
       <div className="mb-4">
         <label className="text-gray-900 flex items-center">
           <MdRoom className="text-blue-600 mr-2" /> Nom de la salle
@@ -70,7 +68,7 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
       </div>
       <button
         onClick={handleAdd}
-        className="w-full py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700"
+        className="w-full py-2 bg-blue-900 text-white rounded-md hover:bg-blue-500"
       >
         Ajouter la salle
       </button>

@@ -49,3 +49,7 @@ body {
 .rbc-calendar {
   @apply shadow-none;
 }
+
+.rbc-event {
+  @apply bg-blue-900 !important;
+}
