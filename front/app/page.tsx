@@ -1,18 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import Card from './components/Card';
-import Image from "./components/Image";
 
 interface Movie {
-  id: number;  
-  title: string;  
-  description?: string;  
-  image: any;
+  id: number;
+  title: string;
+  description?: string;
+  image?: string;
   type: string;
-  release_date?: string;  
-  duration?: number;  
-  created_at: string; 
-  updated_at: string;  
+  release_date?: string;
+  duration?: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function Home() {
@@ -51,7 +50,7 @@ export default function Home() {
             key={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
-            image={movie.image || Image}
+            image={movie.image || '/testMovieImage.jpg'}
             type={movie.type || 'Unknown type'}
             release_date={movie.release_date}
             duration={movie.duration}

@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import Image from 'next/image'; // Adjust the import based on your actual setup
-import { SlTag } from 'react-icons/sl'; // Adjust the import based on your actual setup
+
+import MovieImage from './MovieImage'; 
+import { SlTag } from 'react-icons/sl';
 
 interface CardProps {
     title: string;
@@ -28,14 +29,13 @@ const Card: React.FC<CardProps> = ({
     const icons: any[] = []; // Define your icons array or remove if not needed
 
     const renderIcon = (icon: any) => {
-        // Define your icon rendering logic or remove if not needed
         return <span>{icon}</span>;
     };
 
     return (
         <div className="card max-w-sm rounded overflow-hidden shadow-lg">
             <div className="card-header">
-                <Image src={image} alt="Movie Poster" width={300} height={300} className="w-full" />
+                <MovieImage src={image} alt={`${title} poster`} />  {/* Utilisation correcte de MovieImage */}
             </div>
             <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
                 {icons.map((icon, index) => (
