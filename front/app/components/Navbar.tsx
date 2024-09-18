@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link"; 
-import { useRouter } from "next/navigation"; 
-import React, { useState, FormEvent } from "react"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState, FormEvent } from "react";
 import { FaHome, FaSignInAlt, FaSearch, FaBars, FaTimes } from "react-icons/fa";
 
 export default function Navbar() {
@@ -24,7 +24,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 p-4 shadow-sm flex items-center justify-between">
       <div className="flex items-center">
-        <FaHome />
+        <FaHome className="h-5 w-5 text-white" />
         <Link href="/" className="ml-2 text-white hover:underline">
           Accueil
         </Link>

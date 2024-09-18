@@ -166,9 +166,5 @@ export default function Home() {
         </>
 
       }
-      {error && <p>Error: {error}</p>}
-
-    </div>
-
   );
 }
