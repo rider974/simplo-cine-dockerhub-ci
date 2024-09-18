@@ -6,6 +6,7 @@ import {
   FaClock,
   FaHourglassStart,
 } from "react-icons/fa";
+
 import { HallAttributes, MovieAttributes } from "../../types/types";
 
 interface Screening {
