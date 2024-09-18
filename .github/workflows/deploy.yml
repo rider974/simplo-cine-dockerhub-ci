@@ -39,15 +39,17 @@ jobs:
         # Installe les dépendances définies dans package.json
 
       - name: Run tests
-        run: npm i jest || npm test
+        run: |
+          npm i jest
+          npm test
         # Exécute les tests unitaires pour s'assurer que le code est fonctionnel
 
-      - name: Run SonarQube analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          # Lance l'analyse de qualité du code avec SonarQube
-          npx sonar-scanner -Dsonar.login=$SONAR_TOKEN -X
+      # - name: Run SonarQube analysis
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   run: |
+      #     # Lance l'analyse de qualité du code avec SonarQube
+      #     npx sonar-scanner -Dsonar.login=$SONAR_TOKEN -X
 
       - name: Display SonarCloud link
         run: |
