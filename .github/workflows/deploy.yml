@@ -21,10 +21,10 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 45.81.84.133
-          username: "adminlocal"
-          password: "cdadevops2024"
-          port: 9049
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
             # Arrêter tous les conteneurs s'ils existent
             containers=$(sudo docker ps -q)
@@ -47,6 +47,7 @@ jobs:
               # Réinitialiser les changements locaux à l'état de la branche distante
               git fetch origin
               git reset --hard origin/develop
+            fi
 
   build-and-run-on-vps:
     runs-on: ubuntu-latest
@@ -56,10 +57,10 @@ jobs:
       - name: Build Docker Containers
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 45.81.84.133
-          username: "adminlocal"
-          password: "cdadevops2024"
-          port: 9049
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/devops/simplo-cine
             sudo docker-compose down
@@ -68,10 +69,10 @@ jobs:
       - name: Start Docker Containers
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 45.81.84.133
-          username: "adminlocal"
-          password: "cdadevops2024"
-          port: 9049
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/devops/simplo-cine
             sudo docker-compose up --build -d
