@@ -1,3 +1,5 @@
+// Contient toute la logique de l’authentification.
+
 import * as jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/user";
