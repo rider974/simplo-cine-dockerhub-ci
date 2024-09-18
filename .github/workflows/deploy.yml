@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         # Vérifie le code source du dépôt pour l'utiliser dans le workflow
 
       - name: Set up Node.js
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         # Vérifie à nouveau le code source du dépôt pour s'assurer que nous avons la dernière version
 
       - name: Download build artifacts
