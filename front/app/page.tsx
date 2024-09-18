@@ -13,18 +13,7 @@ export enum IconType {
   delete = 'delete'
 }
 
-interface Movie {
-  id: number;
-  title: string;
-  description?: string;
-  image: string;
-  type: string;
-  release_date?: string;
-  duration?: number;
-  created_at: string;
-  updated_at: string;
-  icon: IconType[]; // Liste d'icônes
-}
+
 
 import { Movie } from "../app/types/types";
 
@@ -35,7 +24,7 @@ export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
-  const [error] = useState<string | null>(null);
+  // const [error] = useState<string | null>(null);
 
   const initialMovies: Movie[] = [
     {
