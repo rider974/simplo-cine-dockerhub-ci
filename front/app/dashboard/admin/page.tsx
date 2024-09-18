@@ -160,22 +160,20 @@ export default function AdminDashboard() {
       {error && <p className="text-red-500">Erreur : {error}</p>}
 
       {!loading && !error && (
-        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Colonne 1: Calendrier et Liste des Films */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-lg shadow-md">
-              <h2 className="text-xl pl-6 font-semibold mb-4 text-gray-900">
-                Calendrier des Séances
-              </h2>
-              <MovieCalendar
-                events={events}
-                onSelectEvent={handleSelectEvent}
-              />
-            </div>
-            <div className="rounded-lg">
-              <h2 className="text-xl pl-6 text-gray-900 font-semibold mb-4">
+          <div className="lg:col-span-2 space-y-6 relative">
+            <h2 className="text-xl pl-6 font-medium text-gray-900 py-2">
+              Calendrier des Séances
+            </h2>
+            <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
+            <MovieCalendar events={events} onSelectEvent={handleSelectEvent} />
+
+            <div className="rounded-lg bg-gray-300 relative">
+              <h2 className="text-xl pl-6 text-gray-900 font-medium py-2">
                 Liste des Films
               </h2>
+              <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
               <MovieCard movies={movies} />
             </div>
           </div>
