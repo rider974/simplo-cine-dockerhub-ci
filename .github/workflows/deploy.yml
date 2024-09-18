@@ -147,7 +147,7 @@ deploy-on-vps:
               git reset --hard origin/develop
             fi
 
-  build-and-run-on-vps:
+build-and-run-on-vps:
     runs-on: ubuntu-latest
     needs: deploy-on-vps
 
