@@ -12,10 +12,10 @@ export class AuthController {
 
     try {
       // Vérifier si l'utilisateur existe déjà dans la base de données
-      const existingUser = await authService.login(email, password);
-      if (existingUser) {
-        return res.status(400).json({ message: "L'utilisateur existe déjà" });
-      }
+      // const existingUser = await authService.login(email, password);
+      // if (existingUser) {
+      //   return res.status(400).json({ message: "L'utilisateur existe déjà" });
+      // }
 
       // Créer un nouvel utilisateur avec le rôle
       const newUser = await authService.register(
