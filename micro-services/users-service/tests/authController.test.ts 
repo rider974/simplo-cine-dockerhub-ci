@@ -1,0 +1,37 @@
+// tester les fonctionnalités du authController, telles que la connexion et la vérification des tokens.
+import request from 'supertest';
+import { app } from '../app'; // Assurez-vous que vous exportez votre app dans app.ts
+
+describe('Auth Controller', () => {
+  it('should authenticate an admin user and return a token', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ email: 'admin@example.com', password: 'yourpassword' });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('token');
+  });
+
+  it('should return 401 for incorrect credentials', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ email: 'wrong@example.com', password: 'wrongpassword' });
+
+    expect(response.status).toBe(401);
+  });
+
+  it('should verify a valid token', async () => {
+    const loginResponse = await request(app)
+      .post('/auth/login')
+      .send({ email: 'admin@example.com', password: 'yourpassword' });
+
+    const token = loginResponse.body.token;
+
+    const verifyResponse = await request(app)
+      .get('/auth/verify-token')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(verifyResponse.status).toBe(200);
+    expect(verifyResponse.body).toHaveProperty('decoded');
+  });
+});

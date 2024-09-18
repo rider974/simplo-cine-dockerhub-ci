@@ -1,33 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
 
-interface movie {
-  id: number;  
-  title: string;  
-  description?: string;  
-  release_date?: string;  
-  duration?: number;  
-  created_at: string; 
-  updated_at: string;  
+interface Movie {
+  id: number;
+  title: string;
+  description?: string;
+  release_date?: string;
+  duration?: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function Home() {
-
-  const [movies, setMovies] = useState<movie[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("/api/movies"); 
+        const response = await fetch("/api/movies");
         if (!response.ok) {
           throw new Error("Erreur lors du fetch des films");
         }
-        const data = await response.json(); 
+        const data = await response.json();
         setMovies(data);
-      } catch (err:any) {
-        setError(err.message); 
+      } catch (err) {
+        // Typage plus spécifique pour l'erreur
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Une erreur inconnue est survenue");
+        }
       } finally {
         setLoading(false);
       }
@@ -36,13 +40,12 @@ export default function Home() {
     fetchMovies();
   }, []);
 
-
   return (
-    <div>
+    <div className="text-gray-900">
       <h1>Welcome to Simplon Cine</h1>
       <h2>Discover our movies</h2>
-      {loading && <p>Loading movies...</p>} 
-      {error && <p>Error: {error}</p>} 
+      {loading && <p>Loading movies...</p>}
+      {error && <p>Error: {error}</p>}
       <table>
         <thead>
           <tr>
@@ -60,9 +63,9 @@ export default function Home() {
             <tr key={movie.id}>
               <td>{movie.id}</td>
               <td>{movie.title}</td>
-              <td>{movie.description || 'N/A'}</td>
-              <td>{movie.release_date || 'N/A'}</td>
-              <td>{movie.duration || 'N/A'}</td>
+              <td>{movie.description || "N/A"}</td>
+              <td>{movie.release_date || "N/A"}</td>
+              <td>{movie.duration || "N/A"}</td>
               <td>{movie.created_at}</td>
               <td>{movie.updated_at}</td>
             </tr>

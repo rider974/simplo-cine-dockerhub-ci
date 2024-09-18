@@ -9,19 +9,47 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #eceff1;
     --foreground: #ededed;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Roboto", sans-serif;
+  color: #333333;
+  background-color: #fefefe;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Cible les noms des jours dans l'en-tête du calendrier (ex: 'Sun', 'Mon', 'Tue', etc.) */
+.rbc-header {
+  @apply text-gray-800;
+}
+
+/* Cible les dates dans le calendrier */
+.rbc-date-cell {
+  @apply text-pink-600;
+}
+
+/* Cible les dates qui sont actuellement sélectionnées */
+.rbc-selected {
+  @apply bg-yellow-500 text-gray-900;
+}
+
+/* Cible les événements dans le calendrier */
+.rbc-toolbar-label {
+  @apply text-2xl text-gray-900;
+}
+
+.rbc-calendar {
+  @apply shadow-none;
+}
+
+.rbc-event {
+  @apply bg-blue-900 !important;
 }
