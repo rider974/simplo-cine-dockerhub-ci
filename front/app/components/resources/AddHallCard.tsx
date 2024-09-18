@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MdPeople, MdRoom } from "react-icons/md";
+
 import { HallAttributes } from "../../types/types";
 
 interface AddHallCardProps {

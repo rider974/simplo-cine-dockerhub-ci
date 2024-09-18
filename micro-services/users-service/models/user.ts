@@ -4,6 +4,7 @@ import { sequelize } from "../database/connexion";
 // Interface des attributs du modèle User
 interface UserAttributes {
   id: number;
+  username: string;
   email: string;
   password: string;
   role: string;
@@ -20,6 +21,7 @@ class User
   implements UserAttributes
 {
   public id!: number;
+  public username!: string;
   public email!: string;
   public password!: string;
   public role!: string;
@@ -33,6 +35,10 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,

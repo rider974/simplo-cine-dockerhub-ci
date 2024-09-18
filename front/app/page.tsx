@@ -1,15 +1,8 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
-interface Movie {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: string;
-  duration?: number;
-  created_at: string;
-  updated_at: string;
-}
+import { Movie } from "../app/types/types";
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);

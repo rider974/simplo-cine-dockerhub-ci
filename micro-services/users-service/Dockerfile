@@ -13,9 +13,6 @@ RUN npm install
 # Copier tout le code source dans le conteneur
 COPY . .
 
-# Assurez-vous que les dépendances sont installées et bcrypt est recompilé
-RUN npm install --build-from-source bcrypt
-
 # Exposer le port utilisé par le service
 EXPOSE 3007
 

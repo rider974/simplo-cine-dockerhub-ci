@@ -107,7 +107,7 @@ services:
       - "3007:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgres://user:password@postgres-db:5432/users_db
+      - DATABASE_URL=postgres://user:password@postgres_users:5432/users_db
     networks:
       - simplo-cine-network
 
