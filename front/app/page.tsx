@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("http://localhost:3001/movies"); 
+        const response = await fetch("api/movies"); 
         if (!response.ok) {
           throw new Error("Erreur lors du fetch des films");
         }
