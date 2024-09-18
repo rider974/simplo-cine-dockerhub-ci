@@ -1,3 +1,5 @@
+// Contient les méthodes pour l’inscription, la connexion, etc.
+
 import { Request, Response } from "express";
 import { AuthService } from "../services/authService";
 import User from "../models/user"; // Modèle utilisateur
