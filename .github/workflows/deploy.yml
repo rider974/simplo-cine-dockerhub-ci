@@ -47,7 +47,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           # Lance l'analyse de qualité du code avec SonarQube
-          npx sonar-scanner -Dsonar.login=$SONAR_TOKEN
+          npx sonar-scanner -Dsonar.login=$SONAR_TOKEN -X
 
       - name: Display SonarCloud link
         run: |
