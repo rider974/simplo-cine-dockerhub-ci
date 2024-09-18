@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import Card from './components/Card'; // Adjust the path based on your project structure
+import Card from './components/Card';
 
 interface Movie {
   id: number;  
   title: string;  
   description?: string;  
-  image: string;  // Assuming you have an image URL
-  type: string;   // Assuming you have a type
+  image: string;
+  type: string;
   release_date?: string;  
   duration?: number;  
   created_at: string; 
@@ -50,7 +50,7 @@ export default function Home() {
             key={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
-            image={movie.image || '/path/to/default-image.jpg'}  // Provide a default image path
+            image={movie.image || '/path/to/default-image.jpg'}
             type={movie.type || 'Unknown type'}
             release_date={movie.release_date}
             duration={movie.duration}
