@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 
 import Card from "../app/components/Card";
+import { Movie } from "../app/types/types";
 
 
 
@@ -12,13 +13,6 @@ export enum IconType {
   edit = 'edit',
   delete = 'delete'
 }
-
-
-
-import { Movie } from "../app/types/types";
-
-
-
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -160,6 +154,6 @@ export default function Home() {
         </>
 
       }
-      </div>
+    </div>
   );
 }
