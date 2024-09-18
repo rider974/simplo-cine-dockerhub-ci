@@ -39,6 +39,7 @@ jobs:
         # Installe les dépendances définies dans package.json
 
       - name: Run tests
+        run: npm i jest
         run: npm test
         # Exécute les tests unitaires pour s'assurer que le code est fonctionnel
 
