@@ -50,7 +50,7 @@ export default function Home() {
             key={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
-            image={movie.image || '/path/to/default-image.jpg'}
+            image={movie.image || '/public/testMovieImage.jpg'}
             type={movie.type || 'Unknown type'}
             release_date={movie.release_date}
             duration={movie.duration}
