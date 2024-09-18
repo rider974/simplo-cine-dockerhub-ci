@@ -21,12 +21,23 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_PORT }}
+          host: 45.81.84.133
+          username: "adminlocal"
+          password: "cdadevops2024"
+          port: 9049
           script: |
-          
+            # Arrêter tous les conteneurs s'ils existent
+            containers=$(sudo docker ps -q)
+            if [ -n "$containers" ]; then
+              sudo docker stop $containers
+            fi
+
+            # Supprimer tous les conteneurs s'ils existent
+            containers=$(sudo docker ps -a -q)
+            if [ -n "$containers" ]; then
+              sudo docker rm $containers
+            fi
+
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/devops/simplo-cine ]; then
               mkdir -p ~/devops
@@ -45,10 +56,10 @@ jobs:
       - name: Build Docker Containers
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_PORT }}
+          host: 45.81.84.133
+          username: "adminlocal"
+          password: "cdadevops2024"
+          port: 9049
           script: |
             cd ~/devops/simplo-cine
             sudo docker-compose down
@@ -57,10 +68,10 @@ jobs:
       - name: Start Docker Containers
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_PORT }}
+          host: 45.81.84.133
+          username: "adminlocal"
+          password: "cdadevops2024"
+          port: 9049
           script: |
             cd ~/devops/simplo-cine
             sudo docker-compose up --build -d
