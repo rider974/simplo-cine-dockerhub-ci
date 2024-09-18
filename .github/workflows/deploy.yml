@@ -76,4 +76,4 @@ jobs:
           script: |
             cd ~/devops/simplo-cine
             sudo docker-compose up --build -d
-        
+
