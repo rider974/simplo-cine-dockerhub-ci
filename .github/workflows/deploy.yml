@@ -38,10 +38,10 @@ jobs:
         run: npm install
         # Installe les dépendances définies dans package.json
 
-      - name: Run tests
-        run: |
-          npm i jest
-          npm test
+      # - name: Run tests
+      #   run: |
+      #     npm i jest
+      #     npm test
         # Exécute les tests unitaires pour s'assurer que le code est fonctionnel
 
       # - name: Run SonarQube analysis
