@@ -10,6 +10,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.0"
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "pg": "^8.13.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express-validator": "^2.20.33",
+    "@types/helmet": "^0.0.48",
+    "@types/sequelize": "^4.28.20"
   }
 }
