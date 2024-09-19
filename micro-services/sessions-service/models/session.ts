@@ -6,7 +6,7 @@ import { Optional, Model, DataTypes } from 'sequelize';
 interface SessionAttributes {
   id: number;
   movie_id: string
-  room_id: number;
+  room_id: string;
   date: Date;
   heure_debut: string;
   heure_fin: string;
@@ -20,7 +20,7 @@ interface SessionCreationAttributes extends Optional<SessionAttributes, 'id'> { 
 class Session extends Model<SessionAttributes, SessionCreationAttributes> implements SessionAttributes {
   public id!: number;
   public movie_id!: string;
-  public room_id!: number;
+  public room_id!: string;
   public readonly date!: Date;
   public heure_debut!: string;
   public heure_fin!: string;
@@ -38,7 +38,7 @@ Session.init({
     allowNull: false,
   },
   room_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false
   },
   date: {
