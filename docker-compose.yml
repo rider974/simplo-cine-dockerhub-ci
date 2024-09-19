@@ -76,6 +76,19 @@ services:
     networks:
       - simplo-cine-network
 
+  postgres_rooms:
+    ports:
+      - "5435:5432"
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rooms_db
+    volumes:
+      - postgres_data_room:/var/lib/postgresql/data
+    networks:
+      - simplo-cine-network
+
   # Service de recherche
   search-service:
     build: ./micro-services/search-service
@@ -158,6 +171,7 @@ volumes:
   postgres_data_movie:
   postgres_data_user:
   postgres_data_session:
+  postgres_data_room:
 networks:
   simplo-cine-network:
     driver: bridge
