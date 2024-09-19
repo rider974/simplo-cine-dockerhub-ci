@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import * as React from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Footer: React.FC = () => {
