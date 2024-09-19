@@ -57,6 +57,7 @@ router.post("/register", authController.register);
  *       401:
  *         description: Identifiants incorrects
  */
-router.post("/login", authController.login);
+router.post("/signin", authController.login);
+router.get("/verifyToken", authController.verifyToken);
 
 export default router;

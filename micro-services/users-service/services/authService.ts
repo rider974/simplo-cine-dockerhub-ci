@@ -1,24 +1,39 @@
+// Contient toute la logique de l’authentification.
+
+// authService.ts
 import * as jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import User from "../models/user";
+import { hashPassword, comparePassword } from "../utils/authUtils"; // Import des utilitaires
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 export class AuthService {
-  // Hachage de mot de passe
-  public async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10; // Nombre de rounds pour bcrypt (augmente la sécurité)
-    return await bcrypt.hash(password, saltRounds);
+  // Inscription : Hachage du mot de passe et création de l'utilisateur
+  public async register(
+    username: string,
+    email: string,
+    password: string,
+    role: string
+  ) {
+    const hashedPassword = await hashPassword(password); // Hachage via authUtils
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    return newUser;
   }
 
-  // Vérification du mot de passe (login)
+  // Connexion : Comparaison du mot de passe et génération d'un token JWT
   public async login(email: string, password: string) {
     const user = await User.findOne({ where: { email } });
     if (!user) {
       throw new Error("User not found");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password); // Comparaison via authUtils
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
