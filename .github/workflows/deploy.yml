@@ -47,7 +47,7 @@ jobs:
             else
               cd ~/devops/simplo-cine
               # Réinitialiser les changements locaux à l'état de la branche distante
-              git fetch origin
+              git fetch origin/develop
               git reset --hard origin/develop
             fi
 
