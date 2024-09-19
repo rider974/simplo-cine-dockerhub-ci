@@ -1,5 +1,5 @@
-import { sequelize } from '../../sessions-service/database/connexion';
-import Movie from '../../movies-service/models/movie';
+import { sequelize } from './../database/connexion';
+import Movie from './../../movies-service/models/movie';
 import { Optional, Model, DataTypes } from 'sequelize';
 
 // Interface des attributs du modèle Movie
