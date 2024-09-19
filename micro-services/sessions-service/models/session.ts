@@ -34,12 +34,8 @@ Session.init({
     primaryKey: true
   },
   movie_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: 'movie', // Assurez-vous que le nom du modèle référencé est correct
-      key: 'id'
-    }
   },
   room_id: {
     type: DataTypes.INTEGER,
