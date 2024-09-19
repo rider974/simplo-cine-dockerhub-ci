@@ -1,8 +1,8 @@
-# Utiliser une image de base légère de Node.js
-FROM node:18-alpine
+# Utiliser l'image Node.js
+FROM node:18
 
-# Définir le répertoire de travail dans le conteneur
-WORKDIR /app
+# Créer le répertoire de l'application
+WORKDIR /usr/src/app
 
 # Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
@@ -10,11 +10,11 @@ COPY package*.json ./
 # Installer les dépendances
 RUN npm install
 
-# Copier tout le code source dans le conteneur
+# Copier le reste des fichiers
 COPY . .
 
-# Exposer le port utilisé par le service
+# Exposer le port de l'application
 EXPOSE 3006
 
-# Commande pour démarrer l'application
-CMD ["node", "src/index.js"]
+# Démarrer l'application
+CMD ["sh", "-c", "npm install && npm run start"]

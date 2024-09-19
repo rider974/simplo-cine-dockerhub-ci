@@ -26,7 +26,7 @@ export default function Home() {
         if (!response.ok) {
           throw new Error("Erreur lors du fetch des films");
         }
-        const data = await response.json(); 
+        const data = await response.json();  
         setMovies(data);
       } catch (err: any) {
         setError(err.message); 
