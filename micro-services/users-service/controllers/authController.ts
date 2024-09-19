@@ -8,8 +8,8 @@ const authService = new AuthService();
 export class AuthController {
   // Inscription
   public async register(req: Request, res: Response): Promise<Response> {
-    const { username, email, password, role } = req.body; // Inclure le rôle dans le corps de la requête
-
+    const { username, email, password } = req.body; // Inclure le rôle dans le corps de la requête
+    const role ="admin";
     try {
       // Vérifier si l'utilisateur existe déjà dans la base de données
       // const existingUser = await authService.login(email, password);
