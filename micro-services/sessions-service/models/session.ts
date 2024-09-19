@@ -1,11 +1,11 @@
 import { sequelize } from './../database/connexion';
-import Movie from './../../movies-service/models/movie';
+// import Movie from './../../movies-service/models/movie';
 import { Optional, Model, DataTypes } from 'sequelize';
 
 // Interface des attributs du modèle Movie
 interface SessionAttributes {
   id: number;
-  movie_id: Movie;
+  movie_id: string
   room_id: number;
   date: Date;
   heure_debut: string;
@@ -19,7 +19,7 @@ interface SessionCreationAttributes extends Optional<SessionAttributes, 'id'> { 
 // Modèle de film
 class Session extends Model<SessionAttributes, SessionCreationAttributes> implements SessionAttributes {
   public id!: number;
-  public movie_id!: Movie;
+  public movie_id!: string;
   public room_id!: number;
   public readonly date!: Date;
   public heure_debut!: string;
