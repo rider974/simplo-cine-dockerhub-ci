@@ -23,13 +23,16 @@ const authController = new AuthController();
  *                 type: string
  *               password:
  *                 type: string
+ *               role:
+ *                 type: string
+ *                 description: "Rôle de l'utilisateur (ex: admin, user)"  # Correction ici
  *     responses:
  *       201:
  *         description: Utilisateur enregistré avec succès
  *       400:
  *         description: Erreur de validation
  */
-router.post("/register", authController.login);
+router.post("/register", authController.register);
 
 /**
  * @swagger
@@ -54,18 +57,7 @@ router.post("/register", authController.login);
  *       401:
  *         description: Identifiants incorrects
  */
-router.post("/login", authController.login);
-
-// /**
-//  * @swagger
-//  * /auth/logout:
-//  *   post:
-//  *     summary: Déconnecte l'utilisateur
-//  *     tags: [Auth]
-//  *     responses:
-//  *       200:
-//  *         description: Déconnexion réussie
-//  */
-// router.post("/logout", authController.logout);
+router.post("/signin", authController.login);
+router.get("/verifyToken", authController.verifyToken);
 
 export default router;

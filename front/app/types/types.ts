@@ -1,5 +1,7 @@
 // types.ts
 
+// import { iconType } from "../page";
+
 // Interface générale pour les attributs d'une entité
 export interface BaseAttributes {
   id: number;
@@ -38,4 +40,17 @@ export interface MovieEvent {
   start: Date;
   end: Date;
   desc: string;
+}
+
+export interface Movie {
+  id: number;
+  title: string;
+  description?: string;
+  image: string;
+  type: string;
+  release_date?: string;
+  duration?: number;
+  created_at: string;
+  updated_at: string;
+  // icon: iconType[]; // Liste d'icônes
 }

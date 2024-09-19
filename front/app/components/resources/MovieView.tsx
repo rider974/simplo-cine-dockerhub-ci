@@ -9,6 +9,7 @@ import {
   FaInfoCircle,
   FaClock,
 } from "react-icons/fa";
+
 import { HallAttributes, MovieAttributes } from "../../types/types";
 
 interface MovieViewProps {

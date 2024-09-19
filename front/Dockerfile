@@ -13,11 +13,8 @@ RUN npm install
 # Copier tout le code source dans le conteneur
 COPY . .
 
-# build
-RUN npm run build
-
 # Exposer le port utilisé par le frontend
 EXPOSE 3000
 
 # Commande pour démarrer le serveur de développement Next.js
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm install && npm run dev"]

@@ -1,7 +1,7 @@
 // tester les méthodes spécifiques à authService, comme login et verifyToken.
 import { AuthService } from "../services/authService";
 import User from "../models/user";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 jest.mock("../models/user"); // Mock du modèle User

@@ -1,10 +1,10 @@
-// Ce contrôleur est principalement utilisé pour gérer les informations des utilisateurs
 import { Request, Response } from "express";
 import { UserService } from "../services/userService";
 
 const userService = new UserService();
 
 export class UserController {
+  // Récupérer tous les utilisateurs
   public async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await userService.getAllUsers();
@@ -15,19 +15,55 @@ export class UserController {
     }
   }
 
+  // Récupérer un utilisateur par ID
   public async getUserById(req: Request, res: Response): Promise<void> {
     try {
       const user = await userService.getUserById(req.params.id);
       if (user) {
         res.status(200).json(user);
       } else {
-        res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "Utilisateur non trouvé" });
       }
     } catch (error) {
-      const err = error as Error; // Assertion explicite
+      const err = error as Error;
       res.status(500).json({ message: err.message });
     }
   }
 
-  // Ajoutez d'autres méthodes si nécessaire, comme la mise à jour des profils utilisateur, etc.
+  // Créer un nouvel utilisateur
+  public async createUser(req: Request, res: Response): Promise<void> {
+    try {
+      const newUser = await userService.createUser(req.body);
+      res.status(201).json(newUser);
+    } catch (error) {
+      const err = error as Error;
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  // Mettre à jour un utilisateur par ID
+  public async updateUser(req: Request, res: Response): Promise<void> {
+    try {
+      const updatedUser = await userService.updateUser(req.params.id, req.body);
+      if (updatedUser) {
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(404).json({ message: "Utilisateur non trouvé" });
+      }
+    } catch (error) {
+      const err = error as Error;
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  // Supprimer un utilisateur par ID
+  public async deleteUser(req: Request, res: Response): Promise<void> {
+    try {
+      const deletedMessage = await userService.deleteUser(req.params.id);
+      res.status(200).json(deletedMessage);
+    } catch (error) {
+      const err = error as Error;
+      res.status(500).json({ message: err.message });
+    }
+  }
 }

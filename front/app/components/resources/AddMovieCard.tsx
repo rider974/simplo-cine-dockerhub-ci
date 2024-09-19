@@ -3,13 +3,14 @@ import {
   FaAlignLeft,
   FaCalendarAlt,
   FaChair,
-  FaClock,
   FaHeading,
   FaHourglassStart,
   FaImage,
   FaPlus,
 } from "react-icons/fa";
+
 import { MovieAttributes, HallAttributes } from "../../types/types";
+
 interface AddMovieCardProps {
   onAddMovie: (newMovie: MovieAttributes) => void;
   halls: HallAttributes[];

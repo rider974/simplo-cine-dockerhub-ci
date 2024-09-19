@@ -1,11 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+import moment from "moment";
 import React, { useState } from "react";
 import {
   Calendar as BigCalendar,
   momentLocalizer,
   View,
 } from "react-big-calendar";
-import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+
 import { MovieEvent } from "../../types/types";
 
 const localizer = momentLocalizer(moment);
@@ -47,7 +50,8 @@ export const MovieCalendar: React.FC<MovieCalendarProps> = ({
         padding: "20px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
       }}
-      eventPropGetter={(event) => ({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      eventPropGetter={(_) => ({
         style: {
           backgroundColor: "#42a5f5",
           color: "white",
