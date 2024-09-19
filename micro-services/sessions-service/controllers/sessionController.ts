@@ -6,10 +6,10 @@ import { check, validationResult } from 'express-validator';
 export const createSession = async (req: Request, res: Response) => {
     // Validation et sanitation des champs
     await Promise.all([
-        check('movieId').not().isEmpty().isInt().withMessage('Movie ID is required').run(req),
-        check('startTime').not().isEmpty().isISO8601().withMessage('Start time is required').run(req),
-        check('endTime').not().isEmpty().isISO8601().withMessage('End time is required').run(req),
-        check('roomId').not().isEmpty().isInt().withMessage('Room ID is required').run(req),
+        check('movie_id').not().isEmpty().withMessage('Movie ID is required').run(req),
+        check('heure_debut').not().isEmpty().withMessage('Start time is required').run(req),
+        check('heure_fin').not().isEmpty().withMessage('End time is required').run(req),
+        check('room_id').not().isEmpty().withMessage('Room ID is required').run(req),
     ]);
 
     const errors = validationResult(req);
