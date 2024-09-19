@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3006
 
 # Démarrer l'application
-CMD ["sh", "-c", "npm install && npm run start"]
+CMD ["npm", "run", "start"]
