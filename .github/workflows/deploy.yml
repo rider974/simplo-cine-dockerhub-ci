@@ -43,13 +43,12 @@ jobs:
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/devops/simplo-cine ]; then
               mkdir -p ~/devops
-              sudo rm rf simplo-cine
               git clone --branch develop https://github.com/Florence-Martin/simplo-cine ~/devops/simplo-cine
             else
-              cd ~/devops/
-              sudo rm rf simplo-cine
+              cd ~/devops/simplo-cine
               # Réinitialiser les changements locaux à l'état de la branche distante
-              git clone --branch develop https://github.com/Florence-Martin/simplo-cine ~/devops/simplo-cine
+              git fetch origin
+              git reset --hard origin
             fi
 
   build-and-run-on-vps:
