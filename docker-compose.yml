@@ -100,6 +100,19 @@ services:
     networks:
       - simplo-cine-network
 
+  postgres_sessions:
+    ports:
+      - "5434:5432"
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sessions_db
+    volumes:
+      - postgres_data_session:/var/lib/postgresql/data
+    networks:
+      - simplo-cine-network
+
   # Service de gestion des utilisateurs
   users-service:
     build: ./micro-services/users-service
@@ -141,9 +154,10 @@ services:
       - simplo-cine-network
 
 volumes:
+  # Réseau personnalisé pour simplo-cine
   postgres_data_movie:
   postgres_data_user:
-# Réseau personnalisé pour simplo-cine
+  postgres_data_session:
 networks:
   simplo-cine-network:
     driver: bridge
