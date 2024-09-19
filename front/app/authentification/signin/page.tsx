@@ -13,12 +13,10 @@ import { CredentialsForm } from "@/app/components/authentification/CredentialFor
 
 // Interface pour représenter la structure du token décodé
 interface DecodedToken {
-  role?: {
-    role_name?: string;
+  role: string;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+
+
 
 export default function SignInPage() {
   const router = useRouter();
@@ -53,7 +51,7 @@ export default function SignInPage() {
           }
 
           // Extraire le rôle de l'utilisateur
-          const userRole = sanitizeInput(decodedToken.role?.role_name || "");
+          const userRole = sanitizeInput(decodedToken.role || "");
           if (userRole === "admin") {
             router.push("/dashboard/admin");
           } else {
