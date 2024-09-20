@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../database/connexion';
 
-
-
 // Interface des attributs du modèle Movie
 interface MovieAttributes {
   id: number;
@@ -10,8 +8,6 @@ interface MovieAttributes {
   description?: string;
   release_date?: Date;
   duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
 }
 
 // Interface pour les options de création
@@ -26,10 +22,7 @@ class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements M
   public duration!: number;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
-  static init: any;
 }
-
-
 
 Movie.init({
   id: {
@@ -49,17 +42,8 @@ Movie.init({
   },
   duration: {
     type: DataTypes.INTEGER
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false
   }
+
 }, {
   sequelize, // Instance sequelize
   modelName: 'movie',
@@ -68,6 +52,5 @@ Movie.init({
   createdAt: 'created_at', // Nom de la colonne dans la base de données
   updatedAt: 'updated_at'  // Nom de la colonne dans la base de données
 });
-
 
 export default Movie;

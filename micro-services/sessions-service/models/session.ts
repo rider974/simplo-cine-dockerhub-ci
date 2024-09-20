@@ -1,13 +1,11 @@
 import { sequelize } from './../database/connexion';
-import Room from '../../rooms-service/models/room';
 import { Optional, Model, DataTypes } from 'sequelize';
-import Movie from '../../movies-service/models/movie';
 
 // Interface des attributs du modèle session
 interface SessionAttributes {
   id: number;
-  movie_id: number;
-  room_id: number;
+  movie_id: number;  // On conserve uniquement l'ID du film
+  room_id: number;   // On conserve uniquement l'ID de la salle
   date: Date;
   heure_debut: string;
   heure_fin: string;
@@ -20,15 +18,13 @@ interface SessionCreationAttributes extends Optional<SessionAttributes, 'id'> { 
 // Modèle de session
 class Session extends Model<SessionAttributes, SessionCreationAttributes> implements SessionAttributes {
   public id!: number;
-  public movie_id!: number;
-  public room_id!: number;
+  public movie_id!: number;  // ID du film
+  public room_id!: number;   // ID de la salle
   public readonly date!: Date;
   public heure_debut!: string;
   public heure_fin!: string;
   public nb_spectateurs!: number;
 }
-
-
 
 Session.init({
   id: {
@@ -38,20 +34,11 @@ Session.init({
   },
   movie_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Movie,
-      key: 'room_id'
-    }
-
+    allowNull: false  // Stocke uniquement l'ID du film
   },
   room_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Room,
-      key: 'room_id'
-    }
+    allowNull: false  // Stocke uniquement l'ID de la salle
   },
   date: {
     type: DataTypes.DATE,
@@ -75,9 +62,5 @@ Session.init({
   underscored: true,
   timestamps: true
 });
-
-// Définir les associations
-Session.belongsTo(Movie, { foreignKey: 'movie_id', as: 'movie' });
-Session.belongsTo(Room, { foreignKey: 'room_id', as: 'room' });
 
 export default Session;
