@@ -42,8 +42,7 @@ jobs:
             else
               cd ~/devops/simplo-cine
               # Réinitialiser les changements locaux à l'état de la branche distante
-              git fetch origin
-              git reset --hard origin
+              git pull origin develop
             fi
 
   build-and-run-on-vps:
