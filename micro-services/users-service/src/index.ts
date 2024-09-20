@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import userRoutes from "../routes/userRoutes";
 import authRoutes from "../routes/authRoutes";
+
+import rolesRoutes from "../routes/rolesRoutes";
 import { sequelize } from "../database/connexion";
 import User from "../models/user";
 import Role from "../models/role";
@@ -51,6 +53,7 @@ app.get("/api-users-swagger.json", (req: Request, res: Response) => {
 // Routes API pour utilisateurs et authentification
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/roles", rolesRoutes);
 
 // Middleware de gestion des erreurs globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

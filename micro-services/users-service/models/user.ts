@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../database/connexion";
+import Role from "./role";
 
 // Interface des attributs du modèle User
 interface UserAttributes {
@@ -7,7 +8,7 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string;
-  role: string;
+  role: Role;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -24,7 +25,7 @@ class User
   public username!: string;
   public email!: string;
   public password!: string;
-  public role!: string;
+  public role!: Role;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
@@ -53,7 +54,7 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.STRING,
+      type: Role,
       allowNull: false,
     },
     created_at: {
