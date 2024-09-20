@@ -14,7 +14,7 @@ export class RoleService {
   }
 
   // Récupérer un role par ID
-  public async getRoleById(id: string) {
+  public async getRoleById(id: number) {
     try {
       const role = await Role.findByPk(id);
       if (!role) {
