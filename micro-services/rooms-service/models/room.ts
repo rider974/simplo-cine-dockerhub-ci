@@ -1,7 +1,5 @@
 import { sequelize } from '../database/connexion';
 import { Optional, Model, DataTypes } from 'sequelize';
-import Session from './../../sessions-service/models/session';
-
 
 // Interface des attributs du modèle Room
 interface RoomAttributes {
@@ -20,9 +18,7 @@ class Room extends Model<RoomAttributes, RoomCreationAttributes> implements Room
   public name!: string;
   public seatsNumber!: number;
   public available!: boolean;
-  static init: any;
 }
-
 
 
 Room.init({
@@ -46,7 +42,11 @@ Room.init({
 }, {
   sequelize, // Instance sequelize
   modelName: 'room',
-});
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at', // Nom de la colonne dans la base de données
+  updatedAt: 'updated_at'  // Nom de la colonne dans la base de données
 
+});
 
 export default Room;
