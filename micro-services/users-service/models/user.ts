@@ -28,6 +28,7 @@ class User
   public role!: Role;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
+  static init: any;
 }
 
 User.init(

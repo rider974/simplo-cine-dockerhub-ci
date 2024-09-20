@@ -28,15 +28,7 @@ class Session extends Model<SessionAttributes, SessionCreationAttributes> implem
   public nb_spectateurs!: number;
 }
 
-Session.belongsTo(Movie, {
-  foreignKey: 'movie_id',
-  as: 'movie'
-});
 
-Session.belongsTo(Room, {
-  foreignKey: 'room_id',
-  as: 'room'
-});
 
 Session.init({
   id: {
@@ -49,8 +41,9 @@ Session.init({
     allowNull: false,
     references: {
       model: Movie,
-      key: 'id'
+      key: 'room_id'
     }
+
   },
   room_id: {
     type: DataTypes.INTEGER,
