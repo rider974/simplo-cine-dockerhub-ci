@@ -13,7 +13,7 @@ interface RoleAttributes {
 interface RoleCreationAttributes extends Optional<RoleAttributes, "id"> {}
 
 // Modèle de rôle
-class Role
+abstract class Role
   extends Model<RoleAttributes, RoleCreationAttributes>
   implements RoleAttributes
 {

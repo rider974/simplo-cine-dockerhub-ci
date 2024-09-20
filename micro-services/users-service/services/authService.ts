@@ -3,6 +3,7 @@
 // authService.ts
 import * as jwt from "jsonwebtoken";
 import User from "../models/user";
+import Role from "../models/role";
 import { hashPassword, comparePassword } from "../utils/authUtils"; // Import des utilitaires
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
@@ -13,7 +14,7 @@ export class AuthService {
     username: string,
     email: string,
     password: string,
-    role: string
+    role: Role
   ) {
     const hashedPassword = await hashPassword(password); // Hachage via authUtils
     const newUser = await User.create({
@@ -39,7 +40,7 @@ export class AuthService {
     }
 
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
     return { token, user };
   }
