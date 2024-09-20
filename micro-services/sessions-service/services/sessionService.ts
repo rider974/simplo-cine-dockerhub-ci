@@ -1,7 +1,7 @@
 import Session from '../models/session';
 import SessionCreationAttributes from "../models/session";
 import SessionAttributes from "../models/session";
-
+import Movie from "./../../movies-service/models/movie"
 // Fonction de gestion des erreurs
 const handleError = (operation: string, err: unknown) => {
     if (err instanceof Error) {
@@ -25,7 +25,7 @@ export const createSession = async (data: SessionCreationAttributes): Promise<Se
 // Obtenir toutes les sessions avec les relations 'movie' et 'room'
 export const getSessions = async (): Promise<SessionAttributes[]> => {
     try {
-        return await Session.findAll({ include: ['movie', 'room'] });
+        return await Session.findAll();
     } catch (err) {
         handleError('fetching sessions', err);
         return []; // Return an empty array in case of an error
@@ -35,7 +35,7 @@ export const getSessions = async (): Promise<SessionAttributes[]> => {
 // Obtenir une session par ID
 export const getSessionById = async (id: number): Promise<SessionAttributes | null> => {
     try {
-        return await Session.findByPk(id, { include: ['movie', 'room'] }); // Inclure les relations si nécessaire
+        return await Session.findByPk(id); // Inclure les relations si nécessaire
     } catch (err) {
         handleError('fetching session by ID', err);
         return null; // Ensure a return value in case of an error
