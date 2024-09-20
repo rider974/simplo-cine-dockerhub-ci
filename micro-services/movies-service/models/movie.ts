@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../database/connexion';
-import Session from './../../sessions-service/models/session';
 
 
 
@@ -27,13 +26,10 @@ class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements M
   public duration!: number;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
+  static init: any;
 }
 
 
-Movie.hasMany(Session, {
-  foreignKey: 'movie_id',
-  as: 'sessions'
-});
 
 Movie.init({
   id: {
