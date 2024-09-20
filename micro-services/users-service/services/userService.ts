@@ -1,3 +1,4 @@
+import Role from "../models/role";
 import User from "../models/user";
 
 export class UserService {
@@ -34,7 +35,7 @@ export class UserService {
     username: string;
     email: string;
     password: string;
-    role: string;
+    role: Role;
   }) {
     try {
       const newUser = await User.create(data);
@@ -54,7 +55,7 @@ export class UserService {
       username?: string;
       email?: string;
       password?: string;
-      role?: string;
+      role?: Role;
     }
   ) {
     try {

@@ -7,7 +7,7 @@ const options = {
     info: {
       title: "User API",
       version: "1.0.0",
-      description: "API pour la gestion des utilisateurs",
+      description: "API pour la gestion des utilisateurs et des roles",
     },
     servers: [
       {
