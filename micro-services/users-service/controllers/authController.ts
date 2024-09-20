@@ -2,14 +2,17 @@
 
 import { Request, Response } from "express";
 import { AuthService } from "../services/authService";
+import { RoleService } from "../services/roleService";
 
 const authService = new AuthService();
+
+const roleService = new RoleService();
 
 export class AuthController {
   // Inscription
   public async register(req: Request, res: Response): Promise<Response> {
     const { username, email, password } = req.body; // Inclure le rôle dans le corps de la requête
-    const role ="admin";
+    const role = await roleService.getRoleById(1);
     try {
       // Vérifier si l'utilisateur existe déjà dans la base de données
       // const existingUser = await authService.login(email, password);

@@ -18,7 +18,7 @@ export class RoleController {
   // Récupérer un role par ID
   public async getRoleById(req: Request, res: Response): Promise<void> {
     try {
-      const role = await roleService.getRoleById(req.params.id);
+      const role = await roleService.getRoleById(parseInt(req?.params?.id));
       if (role) {
         res.status(200).json(role);
       } else {
