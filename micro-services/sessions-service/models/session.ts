@@ -1,12 +1,13 @@
 import { sequelize } from './../database/connexion';
-// import Movie from './../../movies-service/models/movie';
+import Room from '../../rooms-service/models/room';
 import { Optional, Model, DataTypes } from 'sequelize';
+import Movie from './../../movies-service/models/movie';
 
-// Interface des attributs du modèle Movie
+// Interface des attributs du modèle session
 interface SessionAttributes {
   id: number;
-  movie_id: string
-  room_id: string;
+  movie_id: number;
+  room_id: number;
   date: Date;
   heure_debut: string;
   heure_fin: string;
@@ -16,16 +17,26 @@ interface SessionAttributes {
 // Interface pour les options de création
 interface SessionCreationAttributes extends Optional<SessionAttributes, 'id'> { }
 
-// Modèle de film
+// Modèle de session
 class Session extends Model<SessionAttributes, SessionCreationAttributes> implements SessionAttributes {
   public id!: number;
-  public movie_id!: string;
-  public room_id!: string;
+  public movie_id!: number;
+  public room_id!: number;
   public readonly date!: Date;
   public heure_debut!: string;
   public heure_fin!: string;
   public nb_spectateurs!: number;
 }
+
+Session.belongsTo(Movie, {
+  foreignKey: 'movie_id',
+  as: 'movie'
+});
+
+Session.belongsTo(Room, {
+  foreignKey: 'room_id',
+  as: 'room'
+});
 
 Session.init({
   id: {
@@ -34,23 +45,31 @@ Session.init({
     primaryKey: true
   },
   movie_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: Movie,
+      key: 'id'
+    }
   },
   room_id: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Room,
+      key: 'room_id'
+    }
   },
   date: {
     type: DataTypes.DATE,
     allowNull: false
   },
   heure_debut: {
-    type: DataTypes.STRING,
+    type: DataTypes.TIME,
     allowNull: false
   },
   heure_fin: {
-    type: DataTypes.STRING,
+    type: DataTypes.TIME,
     allowNull: false
   },
   nb_spectateurs: {
@@ -60,6 +79,12 @@ Session.init({
 }, {
   sequelize, // Instance sequelize
   modelName: 'session',
+  underscored: true,
+  timestamps: true
 });
+
+// Définir les associations
+Session.belongsTo(Movie, { foreignKey: 'movie_id', as: 'movie' });
+Session.belongsTo(Room, { foreignKey: 'room_id', as: 'room' });
 
 export default Session;

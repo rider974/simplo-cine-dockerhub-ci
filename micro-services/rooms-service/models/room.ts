@@ -1,5 +1,7 @@
 import { sequelize } from '../database/connexion';
 import { Optional, Model, DataTypes } from 'sequelize';
+import Session from './../../sessions-service/models/session';
+
 
 // Interface des attributs du modèle Room
 interface RoomAttributes {
@@ -19,6 +21,12 @@ class Room extends Model<RoomAttributes, RoomCreationAttributes> implements Room
   public seatsNumber!: number;
   public available!: boolean;
 }
+
+
+Room.hasMany(Session, {
+  foreignKey: 'room_id',
+  as: 'sessions'
+});
 
 Room.init({
   room_id: {
@@ -42,5 +50,6 @@ Room.init({
   sequelize, // Instance sequelize
   modelName: 'room',
 });
+
 
 export default Room;
