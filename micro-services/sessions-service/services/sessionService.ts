@@ -16,10 +16,10 @@ export const createSession = async (data: SessionCreationAttributes): Promise<Se
     }
 };
 
-// Obtenir toutes les sessions
+// Obtenir toutes les sessions avec les relations 'movie' et 'room'
 export const getSessions = async (): Promise<SessionAttributes[]> => {
     try {
-        return await Session.findAll();
+        return await Session.findAll({ include: ['movie', 'room'] });
     } catch (err: unknown) {
         if (err instanceof Error) {
             throw new Error(`Error fetching sessions: ${err.message}`);

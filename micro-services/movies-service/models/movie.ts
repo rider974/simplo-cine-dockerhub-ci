@@ -1,5 +1,8 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../database/connexion';
+import Session from './../../sessions-service/models/session';
+
+
 
 // Interface des attributs du modèle Movie
 interface MovieAttributes {
@@ -13,7 +16,7 @@ interface MovieAttributes {
 }
 
 // Interface pour les options de création
-interface MovieCreationAttributes extends Optional<MovieAttributes, 'id'> {}
+interface MovieCreationAttributes extends Optional<MovieAttributes, 'id'> { }
 
 // Modèle de film
 class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements MovieAttributes {
@@ -25,6 +28,12 @@ class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements M
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
+
+
+Movie.hasMany(Session, {
+  foreignKey: 'movie_id',
+  as: 'sessions'
+});
 
 Movie.init({
   id: {
@@ -63,5 +72,6 @@ Movie.init({
   createdAt: 'created_at', // Nom de la colonne dans la base de données
   updatedAt: 'updated_at'  // Nom de la colonne dans la base de données
 });
+
 
 export default Movie;
