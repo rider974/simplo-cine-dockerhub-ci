@@ -4,12 +4,28 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useState, FormEvent } from "react";
-import { FaHome, FaSignInAlt, FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaHome,
+  FaSignInAlt,
+  FaSearch,
+  FaBars,
+  FaTimes,
+  FaUserPlus,
+} from "react-icons/fa";
+
+const useAuth = () => {
+  const [isAuthenticated] = useState(true); // Change à true si l'utilisateur est connecté
+  const [isAdmin] = useState(true); // Change à true si l'utilisateur est admin
+
+  // Ici, tu peux utiliser un hook réel ou une API pour récupérer ces informations
+  return { isAuthenticated, isAdmin };
+};
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { isAuthenticated, isAdmin } = useAuth();
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -93,6 +109,16 @@ export default function Navbar() {
               <FaSignInAlt />
               <span className="ml-2">Admin</span>
             </Link>
+            {/* Affichage du lien Signup dans le menu mobile */}
+            {isAuthenticated && isAdmin && (
+              <Link
+                href="/authentification/signup"
+                className="flex items-center hover:underline"
+              >
+                <FaUserPlus />
+                <span className="ml-2">Signup</span>
+              </Link>
+            )}
           </div>
         </div>
       )}
