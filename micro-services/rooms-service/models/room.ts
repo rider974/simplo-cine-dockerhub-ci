@@ -20,13 +20,10 @@ class Room extends Model<RoomAttributes, RoomCreationAttributes> implements Room
   public name!: string;
   public seatsNumber!: number;
   public available!: boolean;
+  static init: any;
 }
 
 
-Room.hasMany(Session, {
-  foreignKey: 'room_id',
-  as: 'sessions'
-});
 
 Room.init({
   room_id: {
