@@ -60,7 +60,7 @@ jobs:
           port: 9049
           script: |
             cd ~/devops/simplo-cine
-            sudo docker network rm -a
+            sudo docker network rm simplo-cine-network
             sudo docker-compose down
             sudo docker-compose build --parallel
 
@@ -73,6 +73,6 @@ jobs:
           port: 9049
           script: |
             cd ~/devops/simplo-cine
-            sudo docker network rm -a
+            sudo docker network rm simplo-cine-network
             sudo docker-compose up --build -d
 
