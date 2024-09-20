@@ -1,7 +1,6 @@
 import Session from '../models/session';
 import SessionCreationAttributes from "../models/session";
 import SessionAttributes from "../models/session";
-import Movie from "./../../movies-service/models/movie"
 // Fonction de gestion des erreurs
 const handleError = (operation: string, err: unknown) => {
     if (err instanceof Error) {
