@@ -27,12 +27,12 @@ jobs:
               sudo docker stop $containers
             fi
 
-            # Supprimer tous les conteneurs s'ils existent
+            # Supprimer tous les conteneurs + network s'ils existent
             containers=$(sudo docker ps -a -q)
             if [ -n "$containers" ]; then
               sudo docker rm $containers
               # Supprime le network custom
-              sudo docker network rm simplo-cine-network
+              sudo docker network rm simplo-cine_simplo-cine-network
             fi
 
             # Vérifier si le répertoire existe, sinon le cloner
@@ -60,7 +60,7 @@ jobs:
           port: 9049
           script: |
             cd ~/devops/simplo-cine
-            sudo docker network rm simplo-cine-network
+            sudo docker network rm simplo-cine_simplo-cine-network
             sudo docker-compose down
             sudo docker-compose build --parallel
 
@@ -73,6 +73,6 @@ jobs:
           port: 9049
           script: |
             cd ~/devops/simplo-cine
-            sudo docker network rm simplo-cine-network
+            sudo docker network rm simplo-cine_simplo-cine-network
             sudo docker-compose up --build -d
 
