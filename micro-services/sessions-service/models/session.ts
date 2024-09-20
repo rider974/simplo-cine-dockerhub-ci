@@ -1,7 +1,7 @@
 import { sequelize } from './../database/connexion';
 import Room from '../../rooms-service/models/room';
 import { Optional, Model, DataTypes } from 'sequelize';
-import Movie from './../../movies-service/models/movie';
+import Movie from '../../movies-service/models/movie';
 
 // Interface des attributs du modèle session
 interface SessionAttributes {
