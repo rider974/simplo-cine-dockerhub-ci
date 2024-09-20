@@ -14,9 +14,7 @@ import { CredentialsForm } from "@/app/components/authentification/CredentialFor
 // Interface pour représenter la structure du token décodé
 interface DecodedToken {
   role: string;
-  };
-
-
+}
 
 export default function SignInPage() {
   const router = useRouter();

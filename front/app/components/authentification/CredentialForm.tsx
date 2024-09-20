@@ -1,8 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState } from "react";
-
-import { SignUpButton } from "./SignUpButton";
 
 interface CredentialsFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -122,7 +121,12 @@ export function CredentialsForm({
                 <p className="text-red-500 text-sm mt-2">{passwordError}</p>
               )}
             </div>
-
+            <Link
+              href="/authentification/reset"
+              className="text-blue-500 hover:underline"
+            >
+              Mot de passe oublié ?
+            </Link>
             <button
               type="submit"
               className="inline-block w-full mt-1 py-4 px-6 mb-6 text-center text-lg leading-6 transition duration-200 text-white font-extrabold  bg-gray-500 rounded-lg focus:shadow-outline hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -130,8 +134,6 @@ export function CredentialsForm({
             >
               {isLoading ? "Logging in..." : "Log in"}
             </button>
-
-            <SignUpButton />
           </form>
         </div>
       </div>

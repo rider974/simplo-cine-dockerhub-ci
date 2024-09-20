@@ -25,9 +25,12 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 p-4 shadow-sm flex items-center justify-between">
       <div className="flex items-center">
-        <FaHome />
-        <Link href="/" className="ml-2 text-white hover:underline">
-          Accueil
+        <Link
+          href="/"
+          className="flex items-center ml-2 text-white hover:underline"
+        >
+          <FaHome className="text-white" />
+          <span className="ml-2">Accueil</span>
         </Link>
       </div>
 
@@ -48,12 +51,12 @@ export default function Navbar() {
 
       <div className="hidden md:flex space-x-4 text-white">
         <div className="flex items-center">
-          <FaSignInAlt />
           <Link
             href="/authentification/signin"
-            className="ml-2 hover:underline"
+            className="flex items-center text-white hover:underline"
           >
-            Admin
+            <FaSignInAlt className="text-white" />
+            <span className="ml-2">Admin</span>
           </Link>
         </div>
       </div>
