@@ -7,7 +7,7 @@ export const createRoom = async (req: Request, res: Response) => {
     // Validation et sanitation des champs
     await Promise.all([
         check('name').not().isEmpty().withMessage('Name is required').run(req),
-        check('capacity').isInt({ gt: 0 }).withMessage('Capacity must be a positive integer').run(req),
+        check('seatsNumber').isInt({ gt: 0 }).withMessage('Capacity must be a positive integer').run(req),
     ]);
 
     const errors = validationResult(req);
