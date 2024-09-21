@@ -42,64 +42,27 @@ export default function AdminDashboard() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchMovies = async () => {
-  //     try {
-  //       const response = await fetch("/api/movies");
-  //       if (!response.ok) {
-  //         throw new Error("Erreur lors du fetch des films");
-  //       }
-  //       const data = await response.json();
-  //       setMovies(data);
-  //     } catch (err) {
-  //       if (err instanceof Error) {
-  //         setError(err.message);
-  //       } else {
-  //         setError("Une erreur inconnue est survenue");
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchMovies();
-  // }, []);
-
   useEffect(() => {
-    // Données en dur pour tester le calendrier, avec des dates au format `Date` au lieu de `string`
-    const hardCodedMovies: MovieAttributes[] = [
-      {
-        id: 1,
-        title: "Inception",
-        description:
-          "Dom Cobb est un voleur expérimenté dans l'art périlleux de l'extraction : sa spécialité consiste à s'approprier les secrets les plus précieux d'un individu...",
-        release_date: new Date("2024-09-22T06:00:00Z"),
-        duration: 180,
-        created_at: new Date("2024-09-20T00:00:00Z"),
-        updated_at: new Date("2024-09-20T00:00:00Z"),
-      },
-      {
-        id: 2,
-        title: "Flight to Paris",
-        description: "Vol de JFK à CDG",
-        release_date: new Date("2024-09-22T07:30:00Z"),
-        duration: 120,
-        created_at: new Date("2024-09-20T00:00:00Z"),
-        updated_at: new Date("2024-09-20T00:00:00Z"),
-      },
-      {
-        id: 3,
-        title: "Sightseeing",
-        description: "Visite de la Tour Eiffel",
-        release_date: new Date("2024-09-22T11:00:00Z"),
-        duration: 90,
-        created_at: new Date("2024-09-20T00:00:00Z"),
-        updated_at: new Date("2024-09-20T00:00:00Z"),
-      },
-    ];
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch("/api/movies");
+        if (!response.ok) {
+          throw new Error("Erreur lors du fetch des films");
+        }
+        const data = await response.json();
+        setMovies(data);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          // setError(err.message);
+        } else {
+          // setError("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setMovies(hardCodedMovies);
-    setLoading(false);
+    fetchMovies();
   }, []);
 
   const events = movies.map((movie) => ({

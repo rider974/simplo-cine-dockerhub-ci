@@ -107,7 +107,7 @@ export default function Navbar() {
           isAdmin && (
             <div className="flex items-center">
               <Link
-                href="/authentification/signup"
+                href="/authentification/register"
                 className="flex items-center text-white hover:underline"
               >
                 <FaUserPlus className="text-white" />
@@ -153,7 +153,7 @@ export default function Navbar() {
                 <span className="ml-2">Administrateur</span>
               </Link>
             ) : (
-              // Affichage du lien Signup si l'utilisateur est connecté et admin
+              // Affichage du lien Register si l'utilisateur est connecté et admin
               isAdmin && (
                 <Link
                   href="/authentification/register"
