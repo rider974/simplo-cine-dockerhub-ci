@@ -43,9 +43,7 @@ Room.init({
   sequelize, // Instance sequelize
   modelName: 'room',
   underscored: true,
-  timestamps: true,
-  createdAt: 'created_at', // Nom de la colonne dans la base de données
-  updatedAt: 'updated_at'  // Nom de la colonne dans la base de données
+  timestamps: true, 
 
 });
 

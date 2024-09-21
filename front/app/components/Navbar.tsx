@@ -1,5 +1,7 @@
 "use client";
 
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -13,11 +15,34 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 
-const useAuth = () => {
-  const [isAuthenticated] = useState(true); // Change à true si l'utilisateur est connecté
-  const [isAdmin] = useState(true); // Change à true si l'utilisateur est admin
+// Interface pour le token décodé
+interface DecodedToken {
+  role: string;
+}
 
-  // Ici, tu peux utiliser un hook réel ou une API pour récupérer ces informations
+// Hook d'authentification pour vérifier l'état de l'utilisateur
+const useAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  React.useEffect(() => {
+    // Récupérer le token depuis les cookies
+    const token = Cookies.get("authToken");
+    if (token) {
+      try {
+        // Décoder le token pour récupérer le rôle
+        const decodedToken: DecodedToken = jwtDecode(token);
+        console.log("Decoded Token:", decodedToken); // Débogage du token
+        setIsAuthenticated(true);
+        if (decodedToken.role === "admin") {
+          setIsAdmin(true);
+        }
+      } catch (error) {
+        console.error("Invalid token format", error);
+      }
+    }
+  }, []);
+
   return { isAuthenticated, isAdmin };
 };
 
@@ -66,15 +91,31 @@ export default function Navbar() {
       </div>
 
       <div className="hidden md:flex space-x-4 text-white">
-        <div className="flex items-center">
-          <Link
-            href="/authentification/signin"
-            className="flex items-center text-white hover:underline"
-          >
-            <FaSignInAlt className="text-white" />
-            <span className="ml-2">Admin</span>
-          </Link>
-        </div>
+        {!isAuthenticated ? (
+          // Lien de connexion si l'utilisateur n'est pas connecté
+          <div className="flex items-center">
+            <Link
+              href="/authentification/signin"
+              className="flex items-center text-white hover:underline"
+            >
+              <FaSignInAlt className="text-white" />
+              <span className="ml-2">Administrateur</span>
+            </Link>
+          </div>
+        ) : (
+          // Affichage du bouton "Register" si l'utilisateur est connecté et est admin
+          isAdmin && (
+            <div className="flex items-center">
+              <Link
+                href="/authentification/signup"
+                className="flex items-center text-white hover:underline"
+              >
+                <FaUserPlus className="text-white" />
+                <span className="ml-2">Nouvel admin</span>
+              </Link>
+            </div>
+          )
+        )}
       </div>
 
       <div className="md:hidden flex items-center">
@@ -102,22 +143,26 @@ export default function Navbar() {
           </form>
 
           <div className="flex flex-col items-start space-y-4 px-4 mt-4">
-            <Link
-              href="/authentification/signin"
-              className="flex items-center hover:underline"
-            >
-              <FaSignInAlt />
-              <span className="ml-2">Admin</span>
-            </Link>
-            {/* Affichage du lien Signup dans le menu mobile */}
-            {isAuthenticated && isAdmin && (
+            {!isAuthenticated ? (
+              // Lien de connexion dans le menu mobile
               <Link
-                href="/authentification/signup"
+                href="/authentification/signin"
                 className="flex items-center hover:underline"
               >
-                <FaUserPlus />
-                <span className="ml-2">Signup</span>
+                <FaSignInAlt />
+                <span className="ml-2">Administrateur</span>
               </Link>
+            ) : (
+              // Affichage du lien Signup si l'utilisateur est connecté et admin
+              isAdmin && (
+                <Link
+                  href="/authentification/signup"
+                  className="flex items-center hover:underline"
+                >
+                  <FaUserPlus />
+                  <span className="ml-2">Nouvel admin</span>
+                </Link>
+              )
             )}
           </div>
         </div>

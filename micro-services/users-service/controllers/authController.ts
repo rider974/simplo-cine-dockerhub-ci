@@ -42,7 +42,10 @@ export class AuthController {
 
     try {
       const { token, user } = await authService.login(email, password);
-      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600; SameSite=Lax`);
+      res.setHeader(
+        "Set-Cookie",
+        `authToken=${token}; Path=/; Max-Age=3600; SameSite=Lax`
+      );
       return res.status(200).json({ token, user });
     } catch (error) {
       const err = error as Error;
