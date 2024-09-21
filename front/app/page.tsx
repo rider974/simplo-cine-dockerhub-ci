@@ -29,7 +29,8 @@ export default function Home() {
         }
         const data = await response.json();
         setMovies(data);
-      } catch (err: any) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err:any) {
         setError(err.message);
       } finally {
         setLoading(false);

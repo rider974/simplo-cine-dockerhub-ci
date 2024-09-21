@@ -103,7 +103,7 @@ const Card: React.FC<CardProps> = ({
 
             <Dialog header="" visible={visible} style={{ width: '50vw', background: 'white', padding: 20 }} onHide={() => { if (!visible) return; setVisible(false); setIsEditModalOpen(false); }}>
                 <input type="text" value={title} disabled={isEditModalOpen ? false : true} />
-                <img src={image} />
+                <img src={image} alt="image"/>
                 <input type="text" value={description} width={"500"} disabled={isEditModalOpen ? false : true} />
                 <div>
                     <input type="text" value={type} disabled={isEditModalOpen ? false : true} />
