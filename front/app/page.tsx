@@ -90,7 +90,7 @@ export default function Home() {
   return (
     <div>
       <div className="flex justify-center bg-black">
-        <Image src="/AccueilSimplo.png" alt="Cinema" style={{ width: "auto", height: "200" }} />
+        <img src="/AccueilSimplo.png" alt="Cinema" style={{ width: "auto", height: "200" }} />
       </div>
       {loading && <p>Loading movies...</p>}
       {error && <p>Error: {error}</p>}
