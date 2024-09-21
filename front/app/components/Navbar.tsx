@@ -156,7 +156,7 @@ export default function Navbar() {
               // Affichage du lien Signup si l'utilisateur est connecté et admin
               isAdmin && (
                 <Link
-                  href="/authentification/signup"
+                  href="/authentification/register"
                   className="flex items-center hover:underline"
                 >
                   <FaUserPlus />
