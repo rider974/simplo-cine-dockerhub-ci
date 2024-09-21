@@ -34,4 +34,4 @@ RUN npm ci --only=production --ignore-scripts
 EXPOSE 3000
 
 # Commande pour démarrer l'application en production
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npm install && npm run dev"]
