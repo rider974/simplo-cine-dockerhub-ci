@@ -25,6 +25,7 @@ interface CardProps {
     duration?: number;
     created_at: string;
     updated_at: string;
+    isAdmin: () => boolean
     onModify: (updatedMovie: MovieAttributes) => Promise<void>;
     onDelete: (movieId: number) => void;
 }
@@ -38,6 +39,7 @@ const Card: React.FC<CardProps> = ({
     duration,
     created_at,
     updated_at,
+    isAdmin,
     onModify,
     onDelete
 }) => {
@@ -111,16 +113,25 @@ const Card: React.FC<CardProps> = ({
                 <div className="card-body p-4 h-72">
                     <div className="movie-info">
                         <h3 className="text-xl text-gray-700 font-bold mb-2">{decodeHtmlEntities(title.toUpperCase())}</h3>
-                        <h4 className="text-gray-700 text-base font-semibold mb-2">Description</h4>
-                        {description && <p className="text-gray-700 text-base">{decodeHtmlEntities(description)}</p>}
+                        {isAdmin() && (
+                            <>
+                                <h4 className="text-gray-700 text-base font-semibold mb-2">Description</h4>
+                                {description && <p className="text-gray-700 text-base">{decodeHtmlEntities(description)}</p>}
+                            </>
+                        )}
+
                         <h4 className="text-gray-700 text-base font-semibold mb-2">Date de sortie</h4>
-                        {release_date && <p className="text-gray-700 text-base">{release_date.toString()}</p>}
+                        <p className="text-gray-700 text-base">{release_date ? new Date(release_date).toLocaleDateString() : 'Date non disponible'}</p>
                         <h4 className="text-gray-700 text-base font-semibold mb-2">Durée</h4>
                         {duration !== undefined && <p className="text-gray-700 text-base">{duration} min</p>}
 
+                        {isAdmin() && (
+                            <>
+                                <p className="text-gray-700 text-base">{new Date(created_at).toLocaleDateString()}</p>
+                                <p className="text-gray-700 text-base">{new Date(updated_at).toLocaleDateString()}</p>
+                            </>
+                        )}
 
-                        <p className="text-gray-700 text-base">{new Date(created_at).toLocaleDateString()}</p>
-                        <p className="text-gray-700 text-base">{new Date(updated_at).toLocaleDateString()}</p>
                     </div>
                 </div>
                 <div className="card-footer p-4 flex justify-end">
@@ -138,6 +149,7 @@ const Card: React.FC<CardProps> = ({
                     onModify={handleModifyMovie}
                     onArchive={handleArchiveMovie}
                     availableHalls={[]}
+                    isAdmin={isAdmin}
                 />
             )}
         </>

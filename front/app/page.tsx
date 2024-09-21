@@ -1,9 +1,13 @@
 "use client";
+import { Message } from 'primereact/message';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import * as React from "react";
 import { useEffect, useState } from "react";
 
 import Card from './components/Card';
 import { MovieAttributes } from "./types/types";
+
+
 
 interface Movie {
   id: number;
@@ -17,6 +21,8 @@ export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -40,6 +46,40 @@ export default function Home() {
 
     fetchMovies();
   }, []);
+
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const response = await fetch("/api/userRole");
+        if (!response.ok) {
+          throw new Error("Erreur lors du fetch du rôle utilisateur");
+        }
+        const data = await response.json();
+        setUserRole(data.role);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
+  const isUserLoggedIn = (): boolean => {
+    return userRole !== null;
+  };
+
+  const isAdmin = (): boolean => {
+    return userRole === 'admin';
+  };
+
+  console.log('userRole', userRole);
+  console.log('isUserLoggedIn', isUserLoggedIn());
+  console.log('isAdmin', isAdmin());
 
   const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
     try {
@@ -107,8 +147,12 @@ export default function Home() {
       <div className="flex justify-center bg-black">
         <img src="/AccueilSimplo.png" alt="Cinema" style={{ width: "auto", height: "200" }} />
       </div>
-      {loading && <p>Loading movies...</p>}
-      {error && <p>Error: {error}</p>}
+      {loading && <div className="card flex justify-content-center">
+        <ProgressSpinner />
+      </div>}
+      {error && <Message severity="error" text={`Error: ${error}`} />}
+
+      <h2 className="text-2xl font-bold text-center my-4">À la Une</h2>
 
       <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {movies.map((movie) => (
@@ -122,6 +166,7 @@ export default function Home() {
             duration={movie.duration}
             created_at={new Date().toISOString()}
             updated_at={new Date().toISOString()}
+            isAdmin={isAdmin}
             onModify={handleUpdateMovie}
             onDelete={handleDeleteMovie}
           />

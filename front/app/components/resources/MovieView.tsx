@@ -21,6 +21,7 @@ interface MovieViewProps {
   onModify: (updatedMovie: MovieAttributes) => void;
   onArchive: () => void;
   availableHalls: HallAttributes[]; // Nouvelle prop pour les salles disponibles
+  isAdmin: () => boolean;
 }
 
 export const MovieView: React.FC<MovieViewProps> = ({
@@ -30,6 +31,7 @@ export const MovieView: React.FC<MovieViewProps> = ({
   onModify,
   onArchive,
   availableHalls = [],
+  isAdmin,
 }) => {
   const [title, setTitle] = useState(movie.title);
   const [description, setDescription] = useState(movie.description || "");
@@ -135,29 +137,36 @@ export const MovieView: React.FC<MovieViewProps> = ({
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse">
-          {isEditing ? (
-            <button
-              onClick={handleModify}
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Valider la modification
-            </button>
-          ) : (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="w-full flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm items-center"
-            >
-              <FaEdit className="mr-2 text-white" />
-              Modifier
-            </button>
+          {isAdmin() && (
+            <>
+              {isEditing ? (
+                <button
+                  onClick={handleModify}
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Valider la modification
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="w-full flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm items-center"
+                >
+                  <FaEdit className="mr-2 text-white" />
+                  Modifier
+                </button>
+
+
+              )}
+              <button
+                onClick={onArchive}
+                className="w-full flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:ml-3 sm:w-auto sm:text-sm items-center"
+              >
+                <FaArchive className="mr-2 text-white" />
+                Archiver
+              </button>
+            </>
           )}
-          <button
-            onClick={onArchive}
-            className="w-full flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:ml-3 sm:w-auto sm:text-sm items-center"
-          >
-            <FaArchive className="mr-2 text-white" />
-            Archiver
-          </button>
+
           <button
             onClick={onClose}
             className="mt-3 w-full flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm items-center"
@@ -165,6 +174,7 @@ export const MovieView: React.FC<MovieViewProps> = ({
             <FaTimes className="mr-2 text-gray-600" />
             Annuler
           </button>
+
         </div>
       </div>
     </div>
