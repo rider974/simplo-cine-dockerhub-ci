@@ -14,9 +14,6 @@ interface MovieAttributes {
     description?: string;
     release_date?: Date;
     duration?: number;
-    created_at?: Date;
-    updated_at?: Date;
-    poster?: File | null;
 }
 
 interface CardProps {
@@ -29,6 +26,8 @@ interface CardProps {
     duration?: number;
     created_at: string;
     updated_at: string;
+    onModify: (updatedMovie: MovieAttributes) => Promise<void>;
+    onDelete: (movieId: number) => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -40,78 +39,28 @@ const Card: React.FC<CardProps> = ({
     release_date,
     duration,
     created_at,
-    updated_at
+    updated_at,
+    onModify,
+    onDelete
 }) => {
-    const [movies, setMovies] = useState<MovieAttributes[]>([
-        {
-            id,
-            title,
-            description,
-            release_date: release_date ? new Date(release_date) : undefined,
-            duration,
-            created_at: new Date(created_at),
-            updated_at: new Date(updated_at),
-            poster: null
-        }
-    ]);
-
-    const [error, setError] = useState<string | null>(null);
-
-    const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
-        try {
-            const response = await fetch(`/api/movies/${updatedMovie.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedMovie),
-            });
-            if (!response.ok) {
-                throw new Error("Erreur lors de la mise à jour du film");
-            }
-            const updatedMovieData = await response.json();
-            setMovies(
-                movies.map((movie) =>
-                    movie.id === updatedMovieData.id ? updatedMovieData : movie
-                )
-            );
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message ?? `${error}` + "An unknown error occurred");
-            } else {
-                setError("An unknown error occurred");
-            }
-        }
-    };
-
-    const handleDeleteMovie = async (movieId: number) => {
-        try {
-            const response = await fetch(`/api/movies/${movieId}`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) {
-                throw new Error("Erreur lors de la suppression du film");
-            }
-            setMovies(movies.filter((movie) => movie.id !== movieId));
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message ?? `${error}` + "An unknown error occurred");
-            } else {
-                setError("An unknown error occurred");
-            }
-        }
-    };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(null);
 
     const handleSelectEvent = () => {
-        console.log('handleSelectEvent');
-        const movie = movies.find((m) => m.id === id);
-        if (movie) {
-            setSelectedMovie(movie);
-            setIsModalOpen(true);
-        }
+        const movie = {
+            id,
+            title,
+            description,
+            type,
+            release_date: release_date ? new Date(release_date) : undefined,
+            duration,
+            created_at: new Date(created_at),
+            updated_at: new Date(updated_at),
+            poster: null
+        };
+        setSelectedMovie(movie);
+        setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
@@ -120,15 +69,13 @@ const Card: React.FC<CardProps> = ({
     };
 
     const handleModifyMovie = (updatedMovie: MovieAttributes) => {
-        if (selectedMovie) {
-            handleUpdateMovie(updatedMovie);
-            handleCloseModal();
-        }
+        onModify(updatedMovie);
+        handleCloseModal();
     };
 
     const handleArchiveMovie = () => {
         if (selectedMovie) {
-            handleDeleteMovie(selectedMovie.id);
+            onDelete(selectedMovie.id);
             handleCloseModal();
         }
     };
