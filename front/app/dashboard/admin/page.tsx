@@ -83,8 +83,31 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleAddMovie = (newMovie: MovieAttributes) => {
-    setMovies([...movies, newMovie]); // Met à jour la liste des films
+  const handleAddMovie = async (newMovie: MovieAttributes) => {
+    try {
+      // Faire un appel POST à l'API pour ajouter le film à la base de données
+      const response = await fetch("/api/movies", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMovie),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'ajout du film à la base de données.");
+      }
+
+      // Obtenir le film ajouté avec l'ID généré par la base de données
+      const addedMovie = await response.json();
+
+      // Mettre à jour l'état avec le film ajouté
+      setMovies([...movies, addedMovie]);
+      console.log("Film ajouté avec succès :", addedMovie);
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du film :", err);
+      setError("An unknown error occurred");
+    }
   };
 
   const handleAddHall = (newHall: HallAttributes) => {
