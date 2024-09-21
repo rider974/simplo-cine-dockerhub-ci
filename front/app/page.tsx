@@ -92,23 +92,6 @@ export default function Home() {
     return types[randomIndex];
   };
 
-  const assignImageByType = (type: string): string => {
-    switch (type) {
-      case "Romance":
-        return "/romance.png";
-      case "Comédie":
-        return "/comedie.png";
-      case "Horreur":
-        return "/horreur.png";
-      case "Science-fiction":
-        return "/scienceFiction.png";
-      default:
-        return "/images/default.png";
-    }
-  };
-
-
-
   return (
     <div>
       <div className="flex justify-center bg-black">
@@ -124,7 +107,6 @@ export default function Home() {
             id={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
-            image={assignImageByType(assignRandomType())}
             type={assignRandomType}
             release_date={movie.release_date}
             duration={movie.duration}

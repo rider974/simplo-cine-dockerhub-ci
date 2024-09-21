@@ -20,7 +20,6 @@ interface CardProps {
     id: number;
     title: string;
     description?: string;
-    image: string;
     type: () => string;
     release_date?: string;
     duration?: number;
@@ -34,7 +33,6 @@ const Card: React.FC<CardProps> = ({
     id,
     title,
     description,
-    image,
     type,
     release_date,
     duration,
@@ -80,21 +78,41 @@ const Card: React.FC<CardProps> = ({
         }
     };
 
+    const assignImageByType = (type: string): string => {
+        switch (type) {
+            case "Romance":
+                return "/romance.png";
+            case "Comédie":
+                return "/comedie.png";
+            case "Horreur":
+                return "/horreur.png";
+            case "Science-fiction":
+                return "/scienceFiction.png";
+            default:
+                return "testMovieImage.png";
+        }
+    };
+
     return (
         <>
             <div className={`card max-w-sm rounded overflow-hidden shadow-lg ${isModalOpen ? 'hidden' : ''}`}>
                 <div className="card-header">
-                    <MovieImage src={image} alt={`${title} poster`} />
+                    <MovieImage className="w-auto max-h-7" src={assignImageByType(type())} alt={`${title} poster`} />
                 </div>
                 <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
                     <button className="inline-block" onClick={handleSelectEvent}>{<FaEye />}</button>
                 </div>
                 <div className="card-body p-4 h-72">
                     <div className="movie-info">
-                        <h3 className="text-xl text-gray-700 font-bold mb-2">{title}</h3>
+                        <h3 className="text-xl text-gray-700 font-bold mb-2">{title.toUpperCase()}</h3>
+                        <h4 className="text-gray-700 text-base font-semibold mb-2">Description</h4>
                         {description && <p className="text-gray-700 text-base">{description}</p>}
-                        {release_date && <p className="text-gray-700 text-base">{release_date}</p>}
+                        <h4 className="text-gray-700 text-base font-semibold mb-2">Date de sortie</h4>
+                        {release_date && <p className="text-gray-700 text-base">{release_date.toString()}</p>}
+                        <h4 className="text-gray-700 text-base font-semibold mb-2">Durée</h4>
                         {duration !== undefined && <p className="text-gray-700 text-base">{duration} min</p>}
+
+
                         <p className="text-gray-700 text-base">{new Date(created_at).toLocaleDateString()}</p>
                         <p className="text-gray-700 text-base">{new Date(updated_at).toLocaleDateString()}</p>
                     </div>
