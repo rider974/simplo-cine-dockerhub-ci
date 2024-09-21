@@ -55,6 +55,26 @@ const Card: React.FC<CardProps> = ({
         }
     ]);
 
+    const [error, setError] = useState<string | null>(null);
+
+    const handleDeleteMovie = async (movieId: number) => {
+        try {
+            const response = await fetch(`/api/movies/${movieId}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error("Erreur lors de la suppression du film");
+            }
+            setMovies(movies.filter((movie) => movie.id !== movieId));
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message ?? `${error}` + "An unknown error occurred");
+            } else {
+                setError("An unknown error occurred");
+            }
+        }
+    };
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(null);
 
@@ -82,7 +102,7 @@ const Card: React.FC<CardProps> = ({
 
     const handleArchiveMovie = () => {
         if (selectedMovie) {
-            setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+            handleDeleteMovie(selectedMovie.id);
             handleCloseModal();
         }
     };

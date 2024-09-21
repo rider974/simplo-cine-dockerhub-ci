@@ -92,7 +92,9 @@ export default function Home() {
 
   return (
     <div>
-      <img src="/testMovieImage.jpg" alt="Cinema" style={{ width: "100%" }} />
+      <div className="flex justify-center bg-black">
+        <img src="/testMovieImage.jpg" alt="Cinema" style={{ width: "auto", height: "200" }} />
+      </div>
       <h1 style={{ fontSize: "3rem", fontWeight: "bold", textAlign: "center" }}>Bienvenue sur Simplon Cine</h1>
       {loading && <p>Loading movies...</p>}
       {error && <p>Error: {error}</p>}
