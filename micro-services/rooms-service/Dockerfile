@@ -1,20 +1,20 @@
-# Utiliser l'image Node.js
-FROM node:18
+# Utilisation une image légère de Node.js basée sur Alpine
+FROM node:18-alpine
 
-# Créer le répertoire de l'application
+# Crée le répertoire de travail pour l'application
 WORKDIR /usr/src/app
 
-# Copier les fichiers package.json et package-lock.json
+# Copie uniquement les fichiers package.json et package-lock.json pour optimiser le cache Docker
 COPY package*.json ./
 
-# Installer les dépendances
-RUN npm install
+# Installe les dépendances en utilisant 'npm ci' pour une installation plus rapide et fiable
+RUN npm ci --only=production
 
-# Copier le reste des fichiers
+# Copie le reste des fichiers de l'application
 COPY . .
 
-# Exposer le port de l'application
+# Expose le port de l'application
 EXPOSE 3004
 
-# Démarrer l'application
+# Démarre l'application
 CMD ["npm", "run", "start"]
