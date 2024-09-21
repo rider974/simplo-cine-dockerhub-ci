@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installe uniquement les dépendances nécessaires pour la production (éviter devDependencies)
-RUN npm install --production
+RUN npm install --production --ignore-scripts
 
 # Copie tout le code source dans le conteneur
 COPY . .
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY --from=build /app .
 
 # Installe les modules de production 
-RUN npm ci --only=production
+RUN npm ci --only=production --ignore-scripts
 
 # Expose le port utilisé par l'application
 EXPOSE 3000
