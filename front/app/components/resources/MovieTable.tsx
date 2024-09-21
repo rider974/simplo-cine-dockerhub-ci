@@ -17,7 +17,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
           </p>
           <p className="text-gray-600 mt-4">
             <span className="font-semibold">Date de sortie : </span>
-            {/* Convertir en Date avant d'appeler toLocaleDateString */}
             {movie.release_date
               ? new Date(movie.release_date).toLocaleDateString()
               : "Inconnue"}
@@ -28,14 +27,12 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Créé le : </span>
-            {/* Convertir en Date avant d'appeler toLocaleDateString */}
             {movie.created_at
               ? new Date(movie.created_at).toLocaleDateString()
               : "Inconnue"}
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Mis à jour le : </span>
-            {/* Convertir en Date avant d'appeler toLocaleDateString */}
             {movie.updated_at
               ? new Date(movie.updated_at).toLocaleDateString()
               : "Inconnue"}
