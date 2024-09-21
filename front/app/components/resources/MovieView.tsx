@@ -13,7 +13,6 @@ import {
 
 import { HallAttributes, MovieAttributes } from "../../types/types";
 
-
 interface MovieViewProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,9 +32,14 @@ export const MovieView: React.FC<MovieViewProps> = ({
 }) => {
   const [title, setTitle] = useState(movie.title);
   const [description, setDescription] = useState(movie.description || "");
+
+  // Vérifier et convertir la date de sortie en objet Date valide
   const [releaseDate, setReleaseDate] = useState(
-    movie.release_date?.toISOString().substring(0, 10) || ""
+    movie.release_date
+      ? new Date(movie.release_date).toISOString().substring(0, 10)
+      : "" // Défaut à une chaîne vide si release_date est null ou invalide
   );
+
   const [duration, setDuration] = useState(movie.duration || 0);
   const [selectedHall, setSelectedHall] = useState<number | null>(
     movie.hall?.id || null

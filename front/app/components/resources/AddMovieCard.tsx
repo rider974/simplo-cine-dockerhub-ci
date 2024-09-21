@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import {
   FaAlignLeft,
   FaCalendarAlt,
@@ -87,6 +88,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
           placeholder="Description du film"
         ></textarea>
       </div>
+
       <div className="mb-4">
         <label className="text-gray-900 flex items-center">
           <FaCalendarAlt className="text-yellow-500 mr-2" /> Date de sortie
