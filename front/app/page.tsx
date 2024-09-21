@@ -19,6 +19,7 @@ export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // const [error] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -29,9 +30,17 @@ export default function Home() {
         }
         const data = await response.json();
         setMovies(data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err:any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("An unknown error occurred");
+          }
+        } else {
+          setError("An unknown error occurred");
+        }
+
       } finally {
         setLoading(false);
       }
@@ -83,10 +92,11 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Welcome to Simplon Cine</h1>
-      <h2>Discover our movies</h2>
+      <img src="/testMovieImage.jpg" alt="Cinema" style={{ width: "100%" }} />
+      <h1 style={{ fontSize: "3rem", fontWeight: "bold", textAlign: "center" }}>Bienvenue sur Simplon Cine</h1>
       {loading && <p>Loading movies...</p>}
       {error && <p>Error: {error}</p>}
+
       <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {movies.map((movie) => (
           <Card
@@ -98,8 +108,7 @@ export default function Home() {
             release_date={movie.release_date}
             duration={movie.duration}
             created_at={movie.created_at}
-            updated_at={movie.updated_at}
-          />
+            updated_at={movie.updated_at} id={0} />
         ))}
       </div>
     </div>

@@ -3,15 +3,15 @@
 "use client";
 
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 
-import { AddHallCard } from "@/app/components/resources/AddHallCard";
-import { AddMovieCard } from "@/app/components/resources/AddMovieCard";
-import { MovieView } from "@/app/components/resources/MovieView";
-import { ScheduleScreeningForm } from "@/app/components/resources/ScheduleScreeningForm";
-
+import { AddHallCard } from "../../components/resources/AddHallCard";
+import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
+import { MovieView } from "../../components/resources/MovieView";
+import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
 
 interface MovieAttributes {
   id: number;

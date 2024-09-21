@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState } from "react";
 import {
   FaArchive,
@@ -11,6 +12,7 @@ import {
 } from "react-icons/fa";
 
 import { HallAttributes, MovieAttributes } from "../../types/types";
+
 
 interface MovieViewProps {
   isOpen: boolean;
