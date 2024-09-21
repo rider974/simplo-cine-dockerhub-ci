@@ -86,10 +86,20 @@ export default function Home() {
     }
   };
 
-  const assignRandomType = (): string => {
+  const assignRandomType = (movieId: number): string => {
     const types = ["Romance", "Comédie", "Horreur", "Science-fiction"];
+    const storedTypes = JSON.parse(localStorage.getItem('movieTypes') || '{}');
+
+    if (storedTypes[movieId]) {
+      return storedTypes[movieId];
+    }
+
     const randomIndex = Math.floor(Math.random() * types.length);
-    return types[randomIndex];
+    const assignedType = types[randomIndex];
+    storedTypes[movieId] = assignedType;
+    localStorage.setItem('movieTypes', JSON.stringify(storedTypes));
+
+    return assignedType;
   };
 
   return (
@@ -107,7 +117,7 @@ export default function Home() {
             id={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
-            type={assignRandomType}
+            type={assignRandomType(movie.id)}
             release_date={movie.release_date}
             duration={movie.duration}
             created_at={new Date().toISOString()}

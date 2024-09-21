@@ -20,7 +20,7 @@ interface CardProps {
     id: number;
     title: string;
     description?: string;
-    type: () => string;
+    type: string;
     release_date?: string;
     duration?: number;
     created_at: string;
@@ -44,6 +44,12 @@ const Card: React.FC<CardProps> = ({
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(null);
+
+    const decodeHtmlEntities = (text: string): string => {
+        const textArea = document.createElement('textarea');
+        textArea.innerHTML = text;
+        return textArea.value;
+    };
 
     const handleSelectEvent = () => {
         const movie = {
@@ -97,16 +103,16 @@ const Card: React.FC<CardProps> = ({
         <>
             <div className={`card max-w-sm rounded overflow-hidden shadow-lg ${isModalOpen ? 'hidden' : ''}`}>
                 <div className="card-header">
-                    <MovieImage className="w-auto max-h-7" src={assignImageByType(type())} alt={`${title} poster`} />
+                    <MovieImage className="w-auto h-80" src={assignImageByType(type)} alt={`${title} poster`} />
                 </div>
                 <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
                     <button className="inline-block" onClick={handleSelectEvent}>{<FaEye />}</button>
                 </div>
                 <div className="card-body p-4 h-72">
                     <div className="movie-info">
-                        <h3 className="text-xl text-gray-700 font-bold mb-2">{title.toUpperCase()}</h3>
+                        <h3 className="text-xl text-gray-700 font-bold mb-2">{decodeHtmlEntities(title.toUpperCase())}</h3>
                         <h4 className="text-gray-700 text-base font-semibold mb-2">Description</h4>
-                        {description && <p className="text-gray-700 text-base">{description}</p>}
+                        {description && <p className="text-gray-700 text-base">{decodeHtmlEntities(description)}</p>}
                         <h4 className="text-gray-700 text-base font-semibold mb-2">Date de sortie</h4>
                         {release_date && <p className="text-gray-700 text-base">{release_date.toString()}</p>}
                         <h4 className="text-gray-700 text-base font-semibold mb-2">Durée</h4>
@@ -119,7 +125,7 @@ const Card: React.FC<CardProps> = ({
                 </div>
                 <div className="card-footer p-4 flex justify-end">
                     <span className="flex bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                        <SlTag />{type()}
+                        <SlTag />{type}
                     </span>
                 </div>
             </div>
