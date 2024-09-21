@@ -57,6 +57,33 @@ const Card: React.FC<CardProps> = ({
 
     const [error, setError] = useState<string | null>(null);
 
+    const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
+        try {
+            const response = await fetch(`/api/movies/${updatedMovie.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedMovie),
+            });
+            if (!response.ok) {
+                throw new Error("Erreur lors de la mise à jour du film");
+            }
+            const updatedMovieData = await response.json();
+            setMovies(
+                movies.map((movie) =>
+                    movie.id === updatedMovieData.id ? updatedMovieData : movie
+                )
+            );
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message ?? `${error}` + "An unknown error occurred");
+            } else {
+                setError("An unknown error occurred");
+            }
+        }
+    };
+
     const handleDeleteMovie = async (movieId: number) => {
         try {
             const response = await fetch(`/api/movies/${movieId}`, {
@@ -93,11 +120,10 @@ const Card: React.FC<CardProps> = ({
     };
 
     const handleModifyMovie = (updatedMovie: MovieAttributes) => {
-        setMovies(
-            movies.map((movie) =>
-                movie.id === updatedMovie.id ? updatedMovie : movie
-            )
-        );
+        if (selectedMovie) {
+            handleUpdateMovie(updatedMovie);
+            handleCloseModal();
+        }
     };
 
     const handleArchiveMovie = () => {
