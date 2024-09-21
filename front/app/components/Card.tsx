@@ -1,13 +1,26 @@
 "use client";
 
-import { Dialog } from 'primereact/dialog';
 import * as React from "react";
 import { useState } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { SlTag } from 'react-icons/sl';
 
 import MovieImage from './MovieImage';
+import { MovieView } from './resources/MovieView';
+
+interface MovieAttributes {
+    id: number;
+    title: string;
+    description?: string;
+    release_date?: Date;
+    duration?: number;
+    created_at?: Date;
+    updated_at?: Date;
+    poster?: File | null;
+}
+
 interface CardProps {
+    id: number;
     title: string;
     description?: string;
     image: string;
@@ -19,6 +32,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({
+    id,
     title,
     description,
     image,
@@ -28,48 +42,50 @@ const Card: React.FC<CardProps> = ({
     created_at,
     updated_at
 }) => {
+    const [movies, setMovies] = useState<MovieAttributes[]>([
+        {
+            id,
+            title,
+            description,
+            release_date: release_date ? new Date(release_date) : undefined,
+            duration,
+            created_at: new Date(created_at),
+            updated_at: new Date(updated_at),
+            poster: null
+        }
+    ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(null);
 
-    const icons = [
-        { name: 'view', component: FaEye },
-        { name: 'edit', component: FaEdit },
-        { name: 'delete', component: FaTrash }
-    ];
-
-    const renderIcon = (icon: { name: string, component: React.ComponentType }) => {
-        const IconComponent = icon.component;
-        return <IconComponent />;
+    const handleSelectEvent = () => {
+        console.log('handleSelectEvent');
+        const movie = movies.find((m) => m.id === id);
+        if (movie) {
+            setSelectedMovie(movie);
+            setIsModalOpen(true);
+        }
     };
 
-    const openModal = () => {
-        setIsModalOpen(true);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedMovie(null);
     };
 
-    const actionIconOnClick = (icon: { name: string }, e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const handleModifyMovie = (updatedMovie: MovieAttributes) => {
+        setMovies(
+            movies.map((movie) =>
+                movie.id === updatedMovie.id ? updatedMovie : movie
+            )
+        );
+    };
 
-        if (icon.name === 'view') {
-            setVisible(true)
+    const handleArchiveMovie = () => {
+        if (selectedMovie) {
+            setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+            handleCloseModal();
         }
-
-        if (icon.name === 'edit') {
-            setVisible(true)
-            setIsEditModalOpen(true);
-
-            console.log(`Edit movie: ${title}`);
-            // Add your edit logic here
-        }
-        if (icon.name === 'delete') {
-            setVisible(true)
-
-        }
-    }
-
-    console.log(isModalOpen)
-
-    const [visible, setVisible] = useState(false);
+    };
 
     return (
         <>
@@ -78,11 +94,9 @@ const Card: React.FC<CardProps> = ({
                     <MovieImage src={image} alt={`${title} poster`} />
                 </div>
                 <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
-                    {icons.map((icon, index) => (
-                        <button key={index} className="inline-block" onClick={(e) => actionIconOnClick(icon, e)}>{renderIcon(icon)}</button>
-                    ))}
+                    <button className="inline-block" onClick={handleSelectEvent}>{<FaEye />}</button>
                 </div>
-                <div className="card-body p-4 h-72" onClick={openModal}>
+                <div className="card-body p-4 h-72">
                     <div className="movie-info">
                         <h3 className="text-xl text-gray-700 font-bold mb-2">{title}</h3>
                         {description && <p className="text-gray-700 text-base">{description}</p>}
@@ -99,18 +113,16 @@ const Card: React.FC<CardProps> = ({
                 </div>
             </div>
 
-
-
-            <Dialog header="" visible={visible} style={{ width: '50vw', background: 'white', padding: 20 }} onHide={() => { if (!visible) return; setVisible(false); setIsEditModalOpen(false); }}>
-                <input type="text" value={title} disabled={isEditModalOpen ? false : true} />
-                <img src={image} />
-                <input type="text" value={description} width={"500"} disabled={isEditModalOpen ? false : true} />
-                <div>
-                    <input type="text" value={type} disabled={isEditModalOpen ? false : true} />
-                    <input type="text" value={release_date} disabled={isEditModalOpen ? false : true} />
-                    <input type="text" value={duration} disabled={isEditModalOpen ? false : true} />
-                </div>
-            </Dialog >
+            {selectedMovie && (
+                <MovieView
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    movie={selectedMovie}
+                    onModify={handleModifyMovie}
+                    onArchive={handleArchiveMovie}
+                    availableHalls={[]}
+                />
+            )}
         </>
     );
 };
