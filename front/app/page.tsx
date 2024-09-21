@@ -95,7 +95,6 @@ export default function Home() {
       <div className="flex justify-center bg-black">
         <img src="/AccueilSimplo.png" alt="Cinema" style={{ width: "auto", height: "200" }} />
       </div>
-      <h1 style={{ fontSize: "3rem", fontWeight: "bold", textAlign: "center" }}>Bienvenue sur Simplon Cine</h1>
       {loading && <p>Loading movies...</p>}
       {error && <p>Error: {error}</p>}
 
@@ -103,6 +102,7 @@ export default function Home() {
         {movies.map((movie) => (
           <Card
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             description={movie.description || 'No description available'}
             image={'/testMovieImage.jpg'}
@@ -110,7 +110,8 @@ export default function Home() {
             release_date={movie.release_date}
             duration={movie.duration}
             created_at={movie.created_at}
-            updated_at={movie.updated_at} id={0} />
+            updated_at={movie.updated_at}
+          />
         ))}
       </div>
     </div>
