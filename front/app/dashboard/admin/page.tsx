@@ -1,5 +1,3 @@
-// /* eslint-disable @typescript-eslint/no-unused-vars */
-
 "use client";
 
 import moment from "moment";
@@ -12,23 +10,7 @@ import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
 import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
-
-interface MovieAttributes {
-  id: number;
-  title: string;
-  description?: string;
-  release_date?: Date;
-  duration?: number;
-  created_at?: Date;
-  updated_at?: Date;
-  poster?: File | null;
-}
-
-interface HallAttributes {
-  id: number;
-  name: string;
-  capacity: number;
-}
+import { MovieAttributes, HallAttributes } from "../../types/types";
 
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
@@ -36,12 +18,16 @@ export default function AdminDashboard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [screenings, setScreenings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // État pour les événements du calendrier
+  const [events, setEvents] = useState<any[]>([]);
+
+  // Fetch initial pour récupérer les films
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -53,9 +39,9 @@ export default function AdminDashboard() {
         setMovies(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          // setError(err.message);
+          setError(err.message);
         } else {
-          // setError("An unknown error occurred");
+          setError("An unknown error occurred");
         }
       } finally {
         setLoading(false);
@@ -65,18 +51,30 @@ export default function AdminDashboard() {
     fetchMovies();
   }, []);
 
-  const events = movies.map((movie) => ({
-    id: movie.id,
-    title: movie.title,
-    start: new Date(movie.release_date || movie.created_at || ""),
-    end: new Date(
-      moment(movie.release_date || movie.created_at)
-        .add(movie.duration || 120, "minutes")
-        .toDate()
-    ),
-    desc: movie.description || "",
-  }));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // Met à jour les événements du calendrier à chaque modification des films
+  useEffect(() => {
+    const updatedEvents = movies.map((movie) => {
+      const releaseDate = new Date(movie.release_date || "");
+      const createdAt = new Date(movie.created_at || "");
+      const start = isNaN(releaseDate.getTime()) ? createdAt : releaseDate;
+
+      return {
+        id: movie.id,
+        title: movie.title,
+        start: start,
+        end: new Date(
+          moment(start)
+            .add(movie.duration || 120, "minutes")
+            .toDate()
+        ),
+        desc: movie.description || "",
+      };
+    });
+
+    setEvents(updatedEvents);
+  }, [movies]);
+
+  // Gestion de la sélection d'un événement dans le calendrier
   const handleSelectEvent = (event: any) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
@@ -86,7 +84,7 @@ export default function AdminDashboard() {
   };
 
   const handleAddMovie = (newMovie: MovieAttributes) => {
-    setMovies([...movies, newMovie]);
+    setMovies([...movies, newMovie]); // Met à jour la liste des films
   };
 
   const handleAddHall = (newHall: HallAttributes) => {
