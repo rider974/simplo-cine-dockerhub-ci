@@ -1,19 +1,19 @@
-# Utilise une image de base légère de Node.js basée sur Alpine pour réduire la taille de l'image
+# Utiliser une image de base légère de Node.js
 FROM node:18-alpine
 
-# Définie le répertoire de travail
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
 
-# Copie uniquement package.json et package-lock.json pour permettre l'utilisation du cache Docker
+# Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
 
-# Installe les dépendances de production uniquement pour minimiser la taille
-RUN npm ci --only=production
+# Installer les dépendances
+RUN npm install
 
-# Copie le reste des fichiers du projet
+# Copier tout le code source dans le conteneur
 COPY . .
 
-# Expose le port utilisé par le service
+# Exposer le port utilisé par le service
 EXPOSE 3007
 
 # Commande pour démarrer l'application

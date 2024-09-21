@@ -1,37 +1,20 @@
-# Étape 1 : Builder
-# Utilisation d'une image légère de Node.js pour builder l'application
-FROM node:18-alpine AS build
-
-# Définition le répertoire de travail dans le conteneur
-WORKDIR /app
-
-# Copie des fichiers package.json et package-lock.json uniquement
-COPY package*.json ./
-
-# Installe uniquement les dépendances nécessaires pour la production (éviter devDependencies)
-RUN npm install --production --ignore-scripts
-
-# Copie tout le code source dans le conteneur
-COPY . .
-
-# Construit l'application Next.js pour la production
-RUN npm run build
-
-# Étape 2 : Production
-# Utilisation une image encore plus légère pour servir l'application
+# Utiliser une image de base légère de Node.js
 FROM node:18-alpine
 
-# Création un répertoire de travail
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copie uniquement les fichiers nécessaires pour exécuter l'application
-COPY --from=build /app .
+# Copier les fichiers package.json et package-lock.json
+COPY package*.json ./
 
-# Installe les modules de production 
-RUN npm ci --only=production --ignore-scripts
+# Installer les dépendances
+RUN npm install
 
-# Expose le port utilisé par l'application
+# Copier tout le code source dans le conteneur
+COPY . .
+
+# Exposer le port utilisé par le frontend
 EXPOSE 3000
 
-# Commande pour démarrer l'application en production
+# Commande pour démarrer le serveur de développement Next.js
 CMD ["sh", "-c", "npm install && npm run dev"]

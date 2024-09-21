@@ -1,20 +1,20 @@
-# Utilise une image légère de Node.js basée sur Alpine pour réduire la taille de l'image
-FROM node:18-alpine
+# Utiliser l'image Node.js
+FROM node:18
 
-# Défini le répertoire de travail
+# Créer le répertoire de l'application
 WORKDIR /usr/src/app
 
-# Copie uniquement package.json et package-lock.json pour optimiser le cache des dépendances
+# Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
 
-# Installe les dépendances en utilisant npm ci pour une installation plus rapide et fiable
-RUN npm ci --only=production
+# Installer les dépendances
+RUN npm install
 
-# Copie le reste du code source
+# Copier le reste des fichiers
 COPY . .
 
-# Expose le port de l'application
+# Exposer le port de l'application
 EXPOSE 3006
 
-# Démarre l'application
+# Démarrer l'application
 CMD ["npm", "run", "start"]
