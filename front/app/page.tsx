@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import * as React from "react";
 import { useEffect, useState } from "react";
 
@@ -87,6 +86,12 @@ export default function Home() {
     }
   };
 
+  const assignRandomType = (): string => {
+    const types = ["Action", "Comédie", "Drame", "Horreur", "Science-fiction"];
+    const randomIndex = Math.floor(Math.random() * types.length);
+    return types[randomIndex];
+  };
+
   return (
     <div>
       <div className="flex justify-center bg-black">
@@ -103,7 +108,7 @@ export default function Home() {
             title={movie.title}
             description={movie.description || 'No description available'}
             image={'/testMovieImage.jpg'}
-            type={'Unknown type'}
+            type={assignRandomType}
             release_date={movie.release_date}
             duration={movie.duration}
             created_at={new Date().toISOString()}

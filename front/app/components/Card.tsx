@@ -21,7 +21,7 @@ interface CardProps {
     title: string;
     description?: string;
     image: string;
-    type: string;
+    type: () => string;
     release_date?: string;
     duration?: number;
     created_at: string;
@@ -101,7 +101,7 @@ const Card: React.FC<CardProps> = ({
                 </div>
                 <div className="card-footer p-4 flex justify-end">
                     <span className="flex bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                        <SlTag />{type}
+                        <SlTag />{type()}
                     </span>
                 </div>
             </div>
