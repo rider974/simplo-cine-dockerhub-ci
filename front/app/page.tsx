@@ -235,23 +235,25 @@ export default function Home() {
         <p>Aucun film trouvé pour cette date.</p>
       ) : (
         <div>
-          <h2>Films pour le {selectedDate}</h2>
-          {moviesWithDate.map((movie) => (
-            <Card
-              key={movie.id}
-              id={movie.id}
-              title={movie.title}
-              description={movie.description || 'No description available'}
-              type={assignRandomType(movie.id)}
-              release_date={movie.release_date}
-              duration={movie.duration}
-              created_at={new Date().toISOString()}
-              updated_at={new Date().toISOString()}
-              isAdmin={isAdmin}
-              onModify={handleUpdateMovie}
-              onDelete={handleDeleteMovie}
-            />
-          ))}
+          <h2>Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
+          <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+            {moviesWithDate.map((movie) => (
+              <Card
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                description={movie.description || 'No description available'}
+                type={assignRandomType(movie.id)}
+                release_date={movie.release_date}
+                duration={movie.duration}
+                created_at={new Date().toISOString()}
+                updated_at={new Date().toISOString()}
+                isAdmin={isAdmin}
+                onModify={handleUpdateMovie}
+                onDelete={handleDeleteMovie}
+              />
+            ))}
+          </div>
         </div>
       )}
 

@@ -105,12 +105,12 @@ const Card: React.FC<CardProps> = ({
         <>
             <div className={`card max-w-sm rounded overflow-hidden shadow-lg ${isModalOpen ? 'hidden' : ''}`}>
                 <div className="card-header">
-                    <MovieImage className="w-auto h-80" src={assignImageByType(type)} alt={`${title} poster`} />
+                    <MovieImage className="w-auto h-60" src={assignImageByType(type)} alt={`${title} poster`} />
                 </div>
                 <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
                     <button className="inline-block" onClick={handleSelectEvent}>{<FaEye />}</button>
                 </div>
-                <div className="card-body p-4 h-72">
+                <div className="card-body p-4">
                     <div className="movie-info">
 
                         <h3 className="text-xl text-gray-700 font-bold mb-2">{decodeHtmlEntities(title.toUpperCase())}</h3>
@@ -122,10 +122,16 @@ const Card: React.FC<CardProps> = ({
                             </>
                         )}
 
-                        <h4 className="text-gray-700 text-base font-semibold mb-2">Date de sortie</h4>
-                        <p className="text-gray-700 text-base">{release_date ? new Date(release_date).toLocaleDateString() : 'Date non disponible'}</p>
-                        <h4 className="text-gray-700 text-base font-semibold mb-2">Durée</h4>
-                        {duration !== undefined && <p className="text-gray-700 text-base">{duration} min</p>}
+                        <div className="flex flex-wrap">
+                            <div className="w-1/2">
+                                <h4 className="text-gray-700 text-base font-semibold mb-2">Date de sortie</h4>
+                                <p className="text-gray-700 text-base">{release_date ? new Date(release_date).toLocaleDateString() : 'Date non disponible'}</p>
+                            </div>
+                            <div className="w-1/2">
+                                <h4 className="text-gray-700 text-base font-semibold mb-2">Durée</h4>
+                                {duration !== undefined && <p className="text-gray-700 text-base">{duration} min</p>}
+                            </div>
+                        </div>
 
                         {isAdmin() && (
                             <>
@@ -137,7 +143,7 @@ const Card: React.FC<CardProps> = ({
                     </div>
                 </div>
                 <div className="card-footer p-4 flex justify-end">
-                    <span className="flex bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                    <span className="flex bg-gray-200 rounded-l-full rounded-r-none px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                         <SlTag />{type}
                     </span>
                 </div>
