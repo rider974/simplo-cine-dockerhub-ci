@@ -9,6 +9,7 @@ import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
+import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
 import { Spinner } from "../../components/resources/Spinner";
 import { MovieAttributes, HallAttributes, MovieEvent } from "../../types/types";
 
@@ -187,6 +188,17 @@ export default function AdminDashboard() {
             </div>
             <div className="rounded-lg shadow-md">
               <AddHallCard onAddHall={handleAddHall} halls={halls} />
+              {/* Ajout du composant ScheduleScreeningForm ici */}
+              <div className="rounded-lg shadow-md">
+                <ScheduleScreeningForm
+                  movies={movies}
+                  halls={halls}
+                  onSchedule={() => {
+                    // Ne fait rien pour le moment
+                    alert("Formulaire de planification de séance affiché !");
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
