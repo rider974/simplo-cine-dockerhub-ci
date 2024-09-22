@@ -25,7 +25,6 @@ interface DecodedToken {
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true); // Ajout de l'état loading
 
   useEffect(() => {
     // Récupérer le token depuis les cookies
@@ -42,26 +41,27 @@ const useAuth = () => {
           console.warn("Token expired");
           setIsAuthenticated(false);
           setIsAdmin(false);
-          setLoading(false);
           return;
         }
 
         setIsAuthenticated(true);
         if (decodedToken.role === "admin") {
           setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error("Invalid token format", error);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
       }
     } else {
       setIsAuthenticated(false);
       setIsAdmin(false);
     }
-
-    setLoading(false); // Authentification vérifiée
   }, []);
 
-  return { isAuthenticated, isAdmin, loading };
+  return { isAuthenticated, isAdmin };
 };
 
 export default function Navbar() {
@@ -69,7 +69,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isAdmin, loading } = useAuth(); // Inclure loading
+  const { isAuthenticated, isAdmin } = useAuth();
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -81,11 +81,6 @@ export default function Navbar() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
-  if (loading) {
-    // Afficher un loader ou rien tant que l'état de l'authentification n'est pas vérifié
-    return <div>Loading...</div>;
-  }
 
   return (
     <nav className="bg-gray-800 p-4 shadow-sm flex items-center justify-between">
@@ -127,7 +122,7 @@ export default function Navbar() {
             </Link>
           </div>
         ) : (
-          // Affichage du bouton "Register" si l'utilisateur est connecté et est admin
+          // Affichage du bouton "Ajout nouvel admin" si l'utilisateur est connecté, est admin et est sur le dashboard admin
           isAdmin &&
           pathname === "/dashboard/admin" && (
             <div className="flex items-center">
@@ -178,7 +173,7 @@ export default function Navbar() {
                 <span className="ml-2">Administrateur</span>
               </Link>
             ) : (
-              // Affichage du lien Register si l'utilisateur est connecté et admin sur le dashboard admin
+              // Affichage du lien Register si l'utilisateur est connecté, est admin et est sur le dashboard admin
               isAdmin &&
               pathname === "/dashboard/admin" && (
                 <Link
