@@ -194,6 +194,7 @@ export default function AdminDashboard() {
           onModify={handleModifyMovie}
           onArchive={handleArchiveMovie}
           availableHalls={[]}
+          isAdmin={() => true} // Assuming isAdmin always returns true for this example
         />
       )}
     </div>
