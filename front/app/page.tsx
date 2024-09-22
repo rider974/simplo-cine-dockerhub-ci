@@ -129,7 +129,8 @@ export default function Home() {
       const selectedDate = dateInput.value;
       if (selectedDate) {
         try {
-          const response = await fetch(`/api/sessions?date=${selectedDate}`);
+          // Remplacer la requête query string par un paramètre d'URL
+          const response = await fetch(`/api/sessions/date/${selectedDate}`);
           if (!response.ok) {
             throw new Error("Erreur lors de la recherche des films par date");
           }
@@ -144,7 +145,8 @@ export default function Home() {
         }
       }
     }
-  }
+  };
+
 
   const assignRandomType = (movieId: number): string => {
     const types = ["Romance", "Comédie", "Horreur", "Science-fiction"];
