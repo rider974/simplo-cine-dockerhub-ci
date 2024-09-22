@@ -34,36 +34,15 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
     fetchHalls();
   }, []);
 
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (name && capacity) {
       const newHall: HallAttributes = {
-        id: Math.random(), // Remplacer par un ID généré par l'API.
+        id: Math.random(), // Vous devriez remplacer cela par un ID généré par l'API.
         name,
         capacity,
       };
-
-      try {
-        const response = await fetch("/api/rooms-service", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newHall),
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            "Erreur lors de l'ajout de la salle à la base de données."
-          );
-        }
-
-        const addedHall = await response.json();
-        setHalls([...halls, addedHall]);
-        onAddHall(addedHall);
-      } catch (err) {
-        setError("Erreur lors de l'ajout de la salle.");
-      }
-
+      setHalls([...halls, newHall]);
+      onAddHall(newHall);
       setName("");
       setCapacity(null);
     } else {
