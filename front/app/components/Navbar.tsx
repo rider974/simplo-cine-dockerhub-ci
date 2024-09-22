@@ -3,7 +3,7 @@
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import * as React from "react";
 import { useState, FormEvent } from "react";
 import {
@@ -50,6 +50,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, isAdmin } = useAuth();
 
   const handleSearch = (e: FormEvent) => {
@@ -99,7 +100,9 @@ export default function Navbar() {
               className="flex items-center text-white hover:underline"
             >
               <FaSignInAlt className="text-white" />
-              <span className="ml-2">Administrateur</span>
+              <span className="ml-2">
+                {"/dashboard/admin" ? "Ajout nouvel admin" : "Administrateur"}
+              </span>
             </Link>
           </div>
         ) : (
@@ -150,7 +153,11 @@ export default function Navbar() {
                 className="flex items-center hover:underline"
               >
                 <FaSignInAlt />
-                <span className="ml-2">Administrateur</span>
+                <span className="ml-2">
+                  {pathname === "/dashboard/admin"
+                    ? "Ajouter nouvel admin"
+                    : "Administrateur"}
+                </span>
               </Link>
             ) : (
               // Affichage du lien Register si l'utilisateur est connecté et admin
