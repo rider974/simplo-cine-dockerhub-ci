@@ -1,8 +1,11 @@
 "use client";
+
 import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { FaCalendarAlt } from 'react-icons/fa';
+
 
 import Card from './components/Card';
 import { MovieAttributes } from "./types/types";
@@ -21,7 +24,7 @@ export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userRole] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -48,37 +51,31 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      try {
-        const response = await fetch("/api/userRole");
-        if (!response.ok) {
-          throw new Error("Erreur lors du fetch du rôle utilisateur");
-        }
-        const data = await response.json();
-        setUserRole(data.role);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserRole = async () => {
+  //     try {
+  //       const response = await fetch("/api/userRole");
+  //       if (!response.ok) {
+  //         throw new Error("Erreur lors du fetch du rôle utilisateur");
+  //       }
+  //       const data = await response.json();
+  //       setUserRole(data.role);
+  //     } catch (err: unknown) {
+  //       if (err instanceof Error) {
+  //         setError(err.message);
+  //       } else {
+  //         setError("An unknown error occurred");
+  //       }
+  //     }
+  //   };
 
-    fetchUserRole();
-  }, []);
-
-  const isUserLoggedIn = (): boolean => {
-    return userRole !== null;
-  };
+  //   fetchUserRole();
+  // }, []);
 
   const isAdmin = (): boolean => {
     return userRole === 'admin';
   };
 
-  console.log('userRole', userRole);
-  console.log('isUserLoggedIn', isUserLoggedIn());
   console.log('isAdmin', isAdmin());
 
   const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
@@ -126,6 +123,29 @@ export default function Home() {
     }
   };
 
+  const handleDateInputChange = async () => {
+    const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
+    if (dateInput) {
+      const selectedDate = dateInput.value;
+      if (selectedDate) {
+        try {
+          const response = await fetch(`/api/sessions?date=${selectedDate}`);
+          if (!response.ok) {
+            throw new Error("Erreur lors de la recherche des films par date");
+          }
+          const data = await response.json();
+          setMovies(data);
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("An unknown error occurred");
+          }
+        }
+      }
+    }
+  }
+
   const assignRandomType = (movieId: number): string => {
     const types = ["Romance", "Comédie", "Horreur", "Science-fiction"];
     const storedTypes = JSON.parse(localStorage.getItem('movieTypes') || '{}');
@@ -152,7 +172,41 @@ export default function Home() {
       </div>}
       {error && <Message severity="error" text={`Error: ${error}`} />}
 
-      <h2 className="text-2xl font-bold text-center my-4">À la Une</h2>
+      {/* Section de recherche par date */}
+      <div className="flex flex-col items-center mb-5">
+        <h2 className="text-2xl font-bold text-center mt-5 mb-10">Recherchez une séance par date pour voir les films disponibles</h2>
+        <div className="flex justify-center w-full">
+          <div className="w-full max-w-2xl flex items-center justify-between space-x-4">
+            <div className="w-1/2 flex flex-col items-start space-y-4">
+              <label className="block text-gray-900 mt-4">
+                <FaCalendarAlt className="mr-2 inline-block text-red-600" /> Date de séance
+              </label>
+              <input
+                type="date"
+                onChange={(e) => e.target.value}
+                className="w-full px-3 py-2 border rounded-md text-gray-900"
+              />
+            </div>
+            <div className="w-1/2 flex justify-end">
+              <button
+                onClick={() => { handleDateInputChange() }}
+                className="inline-flex justify-center rounded-md border border-transparent mt-14 shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+      <h2 className="text-2xl font-bold text-center my-36">À la Une</h2>
 
       <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {movies.map((movie) => (

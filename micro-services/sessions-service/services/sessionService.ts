@@ -21,7 +21,7 @@ export const createSession = async (data: SessionCreationAttributes): Promise<Se
     }
 };
 
-// Obtenir toutes les sessions avec les relations 'movie' et 'room'
+// Obtenir toutes les sessions
 export const getSessions = async (): Promise<SessionAttributes[]> => {
     try {
         return await Session.findAll();
@@ -68,5 +68,19 @@ export const deleteSession = async (id: number): Promise<boolean> => {
     } catch (err) {
         handleError('deleting session', err);
         return false; // Ensure a return value in case of an error
+    }
+};
+
+// Obtenir les sessions par date
+export const getSessionsByDate = async (date: string): Promise<SessionAttributes[]> => {
+    try {
+        return await Session.findAll({
+            where: {
+                date: date
+            }
+        });
+    } catch (err) {
+        handleError('fetching sessions by date', err);
+        return []; // Return an empty array in case of an error
     }
 };
