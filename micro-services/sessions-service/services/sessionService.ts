@@ -6,11 +6,12 @@ import { Op } from 'sequelize';
 // Fonction de gestion des erreurs
 const handleError = (operation: string, err: unknown) => {
     if (err instanceof Error) {
-        throw new Error(`${operation}: ${err.message}`);
+        console.error(`${operation}: ${err.message}`);
     } else {
-        throw new Error(`Unknown error during ${operation}`);
+        console.error(`Unknown error during ${operation}`);
     }
 };
+
 
 // Créer une session
 export const createSession = async (data: SessionCreationAttributes): Promise<SessionAttributes | undefined> => {
@@ -29,7 +30,7 @@ export const getSessions = async (): Promise<SessionAttributes[]> => {
         return await Session.findAll();
     } catch (err) {
         handleError('fetching sessions', err);
-        return []; // Return an empty array in case of an error
+        return []; // Retourne un tableau vide en cas d'erreur
     }
 };
 
@@ -39,7 +40,7 @@ export const getSessionById = async (id: number): Promise<SessionAttributes | nu
         return await Session.findByPk(id); // Inclure les relations si nécessaire
     } catch (err) {
         handleError('fetching session by ID', err);
-        return null; // Ensure a return value in case of an error
+        return null; // Assurer une valeur de retour en cas d'erreur
     }
 };
 
@@ -54,7 +55,7 @@ export const updateSession = async (id: number, data: Partial<SessionCreationAtt
         return session;
     } catch (err) {
         handleError('updating session', err);
-        return null; // Ensure a return value in case of an error
+        return null; // Assurer une valeur de retour en cas d'erreur
     }
 };
 
@@ -69,30 +70,62 @@ export const deleteSession = async (id: number): Promise<boolean> => {
         return true;
     } catch (err) {
         handleError('deleting session', err);
-        return false; // Ensure a return value in case of an error
+        return false; // Assurer une valeur de retour en cas d'erreur
     }
 };
 
-// Obtenir les sessions par date
-// Obtenir les sessions par date
-export const getSessionsByDate = async (date: string): Promise<SessionAttributes[]> => {
+
+// Fonction pour récupérer les informations d'un film par son ID
+const fetchMovieById = async (movieId: number) => {
     try {
-        // Fixe l'heure à minuit pour les comparaisons
+        const response = await fetch(`http://movie-service/movies/${movieId}`);
+        if (!response.ok) throw new Error('Failed to fetch movie');
+        return await response.json(); // Retourne les détails du film
+    } catch (error) {
+        console.error(error);
+        return null; // Gérer l'erreur selon ton besoin
+    }
+};
+
+// Obtenir les sessions par date et récupérer les films
+export const getSessionsWithMoviesByDate = async (date: string): Promise<unknown[]> => {
+    try {
         const startOfDay = new Date(date);
-        startOfDay.setHours(0, 0, 0, 0); // Définit l'heure à 00:00:00
+        startOfDay.setHours(0, 0, 0, 0);
 
         const endOfDay = new Date(date);
-        endOfDay.setHours(23, 59, 59, 999); // Définit l'heure à 23:59:59 pour inclure toute la journée
+        endOfDay.setHours(23, 59, 59, 999);
 
-        return await Session.findAll({
+        // Récupérer les sessions par date
+        const sessions = await Session.findAll({
             where: {
                 date: {
-                    [Op.between]: [startOfDay, endOfDay] // Requête entre le début et la fin de la journée
+                    [Op.between]: [startOfDay, endOfDay]
                 }
             }
         });
+
+        // Extraire tous les movie_id uniques
+        const movieIds = [...new Set(sessions.map(session => session.movie_id))];
+
+        // Récupérer les infos des films pour chaque movie_id
+        const movies = await Promise.all(movieIds.map(movieId => fetchMovieById(movieId)));
+
+        // Combiner les sessions avec les films correspondants
+        const sessionsWithMovies = sessions.map(session => {
+            const movie = movies.find(m => m.id === session.movie_id) || null;
+
+            return {
+                ...session.get(), // Utiliser .get() pour obtenir les attributs de session
+                movie // Ajouter les informations du film
+            };
+        });
+
+        return sessionsWithMovies; // Retourner les sessions avec les infos des films
     } catch (err) {
-        handleError('fetching sessions by date', err);
-        return []; // Retourne un tableau vide en cas d'erreur
+        console.error('Error fetching sessions with movies:', err);
+        return []; // Retourner un tableau vide en cas d'erreur
     }
 };
+
+
