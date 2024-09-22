@@ -10,6 +10,7 @@ import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
 import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
+import { Spinner } from "../../components/resources/Spinner";
 import { MovieAttributes, HallAttributes } from "../../types/types";
 
 export default function AdminDashboard() {
@@ -163,7 +164,7 @@ export default function AdminDashboard() {
         Gestion des Séances de Films
       </h1>
 
-      {loading && <p>Chargement des films...</p>}
+      {loading && <Spinner />}
       {error && <p className="text-red-500">Erreur : {error}</p>}
 
       {!loading && !error && (
