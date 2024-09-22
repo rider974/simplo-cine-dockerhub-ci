@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchHalls = async () => {
       try {
-        const response = await fetch("/api/sessions-service");
+        const response = await fetch("/api/rooms");
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des salles.");
         }
