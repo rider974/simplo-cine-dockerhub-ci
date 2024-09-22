@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import * as React from "react";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   FaHome,
   FaSignInAlt,
@@ -18,21 +18,34 @@ import {
 // Interface pour le token décodé
 interface DecodedToken {
   role: string;
+  exp: number;
 }
 
 // Hook d'authentification pour vérifier l'état de l'utilisateur
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true); // Ajout de l'état loading
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Récupérer le token depuis les cookies
     const token = Cookies.get("authToken");
+    console.log("Token:", token); // Débogage du token
+
     if (token) {
       try {
         // Décoder le token pour récupérer le rôle
         const decodedToken: DecodedToken = jwtDecode(token);
-        console.log("Decoded Token:", decodedToken); // Débogage du token
+        console.log("Decoded Token:", decodedToken); // Débogage du token décodé
+
+        if (Date.now() >= decodedToken.exp * 1000) {
+          console.warn("Token expired");
+          setIsAuthenticated(false);
+          setIsAdmin(false);
+          setLoading(false);
+          return;
+        }
+
         setIsAuthenticated(true);
         if (decodedToken.role === "admin") {
           setIsAdmin(true);
@@ -40,10 +53,15 @@ const useAuth = () => {
       } catch (error) {
         console.error("Invalid token format", error);
       }
+    } else {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
     }
+
+    setLoading(false); // Authentification vérifiée
   }, []);
 
-  return { isAuthenticated, isAdmin };
+  return { isAuthenticated, isAdmin, loading };
 };
 
 export default function Navbar() {
@@ -51,7 +69,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, loading } = useAuth(); // Inclure loading
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -63,6 +81,11 @@ export default function Navbar() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  if (loading) {
+    // Afficher un loader ou rien tant que l'état de l'authentification n'est pas vérifié
+    return <div>Loading...</div>;
+  }
 
   return (
     <nav className="bg-gray-800 p-4 shadow-sm flex items-center justify-between">
