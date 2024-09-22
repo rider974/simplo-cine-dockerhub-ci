@@ -145,6 +145,8 @@ export default function Home() {
             setMoviesWhitDate([]); // Réinitialiser l'état des films
             setError("Aucune session trouvée pour cette date."); // Message d'absence de sessions
             return; // Sortir de la fonction
+          } else {
+            setError(null); // Réinitialiser l'erreur
           }
 
           // Extraire les movie_id des sessions
@@ -244,8 +246,8 @@ export default function Home() {
         <p>Aucun film trouvé pour cette date.</p>
       ) : (
         <div>
-          <h2>Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
           <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+            <h2>Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
             {moviesWithDate.map((movie) => (
               <Card
                 key={movie.id}
