@@ -40,11 +40,12 @@ const useAuth = () => {
           console.warn("Token expired");
           setIsAuthenticated(false);
           setIsAdmin(false);
-        } else {
-          // Mise à jour de l'état d'authentification
-          setIsAuthenticated(true);
-          setIsAdmin(decodedToken.role === "admin");
+          return;
         }
+
+        // Mise à jour de l'état d'authentification
+        setIsAuthenticated(true);
+        setIsAdmin(decodedToken.role === "admin");
       } catch (error) {
         console.error("Invalid token format", error);
         setIsAuthenticated(false);
