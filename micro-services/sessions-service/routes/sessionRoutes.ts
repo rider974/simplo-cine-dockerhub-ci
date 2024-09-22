@@ -153,7 +153,7 @@ router.delete('/:id', deleteSession);
 
 /**
  * @swagger
- * /sessions/{date}:
+ * /sessions/date/:date:
  *   get:
  *     summary: Récupère les sessions par date
  *     tags: [Sessions]
@@ -188,6 +188,6 @@ router.delete('/:id', deleteSession);
  *         description: Aucune session trouvée pour la date spécifiée
  */
 
-router.get('/:date', getSessionsByDate);
+router.get('/date/:date', getSessionsByDate);
 
 export default router;
