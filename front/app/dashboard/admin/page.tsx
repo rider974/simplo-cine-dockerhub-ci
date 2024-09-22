@@ -9,15 +9,14 @@ import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
-
 import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
 import { Spinner } from "../../components/resources/Spinner";
 import { MovieAttributes, HallAttributes } from "../../types/types";
 
-
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
   const [halls, setHalls] = useState<HallAttributes[]>([]);
+  const [screenings, setScreenings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<MovieAttributes | null>(
@@ -26,7 +25,7 @@ export default function AdminDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // État pour les événements du calendrier
-  const [events, setEvents] = useState<MovieEvent[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
 
   // Fetch initial pour récupérer les films
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function AdminDashboard() {
         if (!response.ok) {
           throw new Error("Erreur lors du fetch des films");
         }
-        const data: MovieAttributes[] = await response.json();
+        const data = await response.json();
         setMovies(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -60,8 +59,8 @@ export default function AdminDashboard() {
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des salles.");
         }
-        const data: HallAttributes[] = await response.json();
-        setHalls(data);
+        const data = await response.json();
+        setHalls(data); // Stockez les salles récupérées dans l'état
       } catch (err) {
         if (err instanceof Error) {
           setError(`Erreur lors de la récupération des salles: ${err.message}`);
@@ -76,27 +75,32 @@ export default function AdminDashboard() {
 
   // Met à jour les événements du calendrier à chaque modification des films
   useEffect(() => {
-    const updatedEvents: MovieEvent[] = movies.map((movie) => {
-      const releaseDate = new Date(movie.release_date || "");
-      const start = isNaN(releaseDate.getTime()) ? new Date() : releaseDate;
+    const updatedEvents = screenings
+      .map((screening) => {
+        const movie = movies.find((m) => m.id === screening.movie_id);
+        const hall = halls.find((h) => h.id === screening.hall_id);
+        if (!movie || !hall) return null;
 
-      return {
-        id: movie.id,
-        title: movie.title,
-        start: start,
-        end: new Date(
-          moment(start)
-            .add(movie.duration || 120, "minutes")
-            .toDate()
-        ),
-        desc: movie.description || "",
-      };
-    });
+        const start = new Date(screening.start_time);
 
-    setEvents(updatedEvents);
-  }, [movies]);
+        return {
+          id: movie.id,
+          title: `${movie.title} - ${hall.name}`,
+          start: start,
+          end: new Date(
+            moment(start)
+              .add(movie.duration || 120, "minutes")
+              .toDate()
+          ),
+          desc: movie.description || "",
+        };
+      })
+      .filter((event) => event !== null);
 
-  const handleSelectEvent = (event: MovieEvent) => {
+    setEvents(updatedEvents as any[]);
+  }, [movies, screenings, halls]);
+
+  const handleSelectEvent = (event: any) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
       setSelectedMovie(movie);
@@ -130,6 +134,10 @@ export default function AdminDashboard() {
     setHalls([...halls, newHall]);
   };
 
+  const handleScheduleScreening = (newScreening: any) => {
+    setScreenings([...screenings, newScreening]);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedMovie(null);
@@ -153,7 +161,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-6 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-6 text-gray-900">
-        Gestion des Films et des Salles
+        Gestion des Séances de Films
       </h1>
 
       {loading && <Spinner />}
@@ -164,7 +172,7 @@ export default function AdminDashboard() {
           {/* Colonne 1: Calendrier et Liste des Films */}
           <div className="lg:col-span-2 space-y-6 relative">
             <h2 className="text-xl pl-6 font-medium text-gray-900 py-2">
-              Calendrier des Films
+              Calendrier des Séances
             </h2>
             <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
             <MovieCalendar events={events} onSelectEvent={handleSelectEvent} />
@@ -184,8 +192,14 @@ export default function AdminDashboard() {
               <AddMovieCard onAddMovie={handleAddMovie} />
             </div>
             <div className="rounded-lg shadow-md">
-              <AddHallCard onAddHall={handleAddHall} halls={halls} />{" "}
-              {/* Ajoutez halls ici */}
+              <AddHallCard onAddHall={handleAddHall} halls={halls} />
+            </div>
+            <div className="rounded-lg shadow-md">
+              <ScheduleScreeningForm
+                movies={movies}
+                halls={halls}
+                onSchedule={handleScheduleScreening}
+              />
             </div>
           </div>
         </div>
