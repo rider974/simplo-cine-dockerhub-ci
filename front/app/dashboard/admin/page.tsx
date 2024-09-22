@@ -9,7 +9,11 @@ import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
 import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
-import { MovieAttributes, HallAttributes, MovieEvent } from "../../types/types";
+
+import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
+import { Spinner } from "../../components/resources/Spinner";
+import { MovieAttributes, HallAttributes } from "../../types/types";
+
 
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
@@ -152,7 +156,7 @@ export default function AdminDashboard() {
         Gestion des Films et des Salles
       </h1>
 
-      {loading && <p>Chargement des films...</p>}
+      {loading && <Spinner />}
       {error && <p className="text-red-500">Erreur : {error}</p>}
 
       {!loading && !error && (
