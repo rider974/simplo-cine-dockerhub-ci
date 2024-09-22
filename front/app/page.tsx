@@ -9,7 +9,7 @@ import { FaCalendarAlt } from 'react-icons/fa';
 
 
 import Card from './components/Card';
-import { MovieAttributes } from './types/types';
+// import { MovieAttributes } from './types/types';
 
 
 
@@ -74,56 +74,72 @@ export default function Home() {
   //   fetchUserRole();
   // }, []);
 
+  // useEffect(() => {
+  //   const sampleMovies: Movie[] = [
+  //     { id: 1, title: "Inception", description: "A thief who steals corporate secrets through the use of dream-sharing technology.", release_date: "2010-07-16", duration: 148 },
+  //     { id: 2, title: "The Matrix", description: "A computer hacker learns about the true nature of reality and his role in the war against its controllers.", release_date: "1999-03-31", duration: 136 },
+  //     { id: 3, title: "Interstellar", description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", release_date: "2014-11-07", duration: 169 },
+  //     { id: 4, title: "The Dark Knight", description: "When the menace known as the Joker emerges, he wreaks havoc and chaos on the people of Gotham.", release_date: "2008-07-18", duration: 152 },
+  //     { id: 5, title: "Fight Club", description: "An insomniac office worker and a devil-may-care soap maker form an underground fight club.", release_date: "1999-10-15", duration: 139 },
+  //     { id: 6, title: "Pulp Fiction", description: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine.", release_date: "1994-10-14", duration: 154 },
+  //     { id: 7, title: "Forrest Gump", description: "The presidencies of Kennedy and Johnson, the Vietnam War, and more through the eyes of an Alabama man.", release_date: "1994-07-06", duration: 142 },
+  //     { id: 8, title: "The Shawshank Redemption", description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption.", release_date: "1994-09-23", duration: 142 },
+  //   ];
+
+  //   setMovies(sampleMovies);
+  //   setLoading(false);
+  // }, []);
+
   const isAdmin = (): boolean => {
     return userRole === 'admin';
   };
 
   console.log('isAdmin', isAdmin());
 
-  const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
-    try {
-      const response = await fetch(`/api/movies/${updatedMovie.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedMovie),
-      });
-      if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour du film");
-      }
-      const updatedMovieData = await response.json();
-      setMovies(
-        movies.map((movie) =>
-          movie.id === updatedMovieData.id ? updatedMovieData : movie
-        )
-      );
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message ?? `${error}` + "An unknown error occurred");
-      } else {
-        setError("An unknown error occurred");
-      }
-    }
-  };
+  // const handleUpdateMovie = async (updatedMovie: MovieAttributes) => {
+  //   try {
+  //     const response = await fetch(`/api/movies/${updatedMovie.id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(updatedMovie),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Erreur lors de la mise à jour du film");
+  //     }
+  //     const updatedMovieData = await response.json();
+  //     setMovies(
+  //       movies.map((movie) =>
+  //         movie.id === updatedMovieData.id ? updatedMovieData : movie
+  //       )
+  //     );
+  //   } catch (err: unknown) {
+  //     if (err instanceof Error) {
+  //       setError(err.message ?? `${error}` + "An unknown error occurred");
+  //     } else {
+  //       setError("An unknown error occurred");
+  //     }
+  //   }
+  // };
 
-  const handleDeleteMovie = async (movieId: number) => {
-    try {
-      const response = await fetch(`/api/movies/${movieId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error("Erreur lors de la suppression du film");
-      }
-      setMovies(movies.filter((movie) => movie.id !== movieId));
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message ?? `${error}` + "An unknown error occurred");
-      } else {
-        setError("An unknown error occurred");
-      }
-    }
-  };
+  // const handleDeleteMovie = async (movieId: number) => {
+  //   try {
+  //     const response = await fetch(`/api/movies/${movieId}`, {
+  //       method: 'DELETE',
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Erreur lors de la suppression du film");
+  //     }
+  //     setMovies(movies.filter((movie) => movie.id !== movieId));
+  //   } catch (err: unknown) {
+  //     if (err instanceof Error) {
+  //       setError(err.message ?? `${error}` + "An unknown error occurred");
+  //     } else {
+  //       setError("An unknown error occurred");
+  //     }
+  //   }
+  // };
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const handleDateInputChange = async () => {
@@ -204,12 +220,12 @@ export default function Home() {
   const responsiveOptions: CarouselResponsiveOption[] = [
     {
       breakpoint: '1400px',
-      numVisible: 2,
+      numVisible: 4,
       numScroll: 1
     },
     {
       breakpoint: '1199px',
-      numVisible: 3,
+      numVisible: 4,
       numScroll: 1
     },
     {
@@ -237,8 +253,6 @@ export default function Home() {
         created_at={new Date().toISOString()}
         updated_at={new Date().toISOString()}
         isAdmin={isAdmin}
-        onModify={handleUpdateMovie}
-        onDelete={handleDeleteMovie}
       />
     );
   };
@@ -302,37 +316,31 @@ export default function Home() {
                 created_at={new Date().toISOString()}
                 updated_at={new Date().toISOString()}
                 isAdmin={isAdmin}
-                onModify={handleUpdateMovie}
-                onDelete={handleDeleteMovie}
               />
             ))}
           </div>
         </div>
       )}
 
-      <h2 className="text-2xl font-bold text-center my-36">À la Une</h2>
+      <h2 className="text-2xl font-bold text-center mb-20 mt-36">À la Une</h2>
 
-      <div className="card">
-        <Carousel value={movies} numScroll={1} numVisible={3} responsiveOptions={responsiveOptions} itemTemplate={moviesTemplate} />
+      <div className="card mx-8">
+        <Carousel value={movies} numScroll={1} numVisible={4} responsiveOptions={responsiveOptions} itemTemplate={moviesTemplate} />
       </div>
 
-      <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {movies.map((movie) => (
-          <Card
-            key={movie.id}
-            id={movie.id}
-            title={movie.title}
-            description={movie.description || 'No description available'}
-            type={assignRandomType(movie.id)}
-            release_date={movie.release_date}
-            duration={movie.duration}
-            created_at={new Date().toISOString()}
-            updated_at={new Date().toISOString()}
-            isAdmin={isAdmin}
-            onModify={handleUpdateMovie}
-            onDelete={handleDeleteMovie}
-          />
-        ))}
+      <h2 className="text-2xl font-bold text-center mb-20 mt-36">Catégories</h2>
+      <div className="flex justify-center gap-8 flex-wrap">
+        {["Romance", "Comédie", "Horreur", "Science-fiction"].map((type) => {
+          const filteredMovies = movies.filter((movie) => assignRandomType(movie.id) === type);
+          return (
+            <div key={type} className="flex flex-col items-center mb-8 w-1/4">
+              <h2 className="text-2xl font-bold text-center my-4">{type}</h2>
+              <div className="card flex justify-content-center">
+                <Carousel value={filteredMovies} numVisible={1} numScroll={1} orientation="vertical" verticalViewPortHeight="540px" itemTemplate={moviesTemplate} />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

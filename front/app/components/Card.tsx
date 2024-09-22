@@ -26,8 +26,8 @@ interface CardProps {
     created_at: string;
     updated_at: string;
     isAdmin: () => boolean
-    onModify: (updatedMovie: MovieAttributes) => Promise<void>;
-    onDelete: (movieId: number) => void;
+    onModify?: (updatedMovie: MovieAttributes) => Promise<void>;
+    onDelete?: (movieId: number) => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -75,13 +75,17 @@ const Card: React.FC<CardProps> = ({
     };
 
     const handleModifyMovie = (updatedMovie: MovieAttributes) => {
-        onModify(updatedMovie);
+        if (onModify) {
+            onModify(updatedMovie);
+        }
         handleCloseModal();
     };
 
     const handleArchiveMovie = () => {
         if (selectedMovie) {
-            onDelete(selectedMovie.id);
+            if (onDelete) {
+                onDelete(selectedMovie.id);
+            }
             handleCloseModal();
         }
     };
@@ -105,7 +109,7 @@ const Card: React.FC<CardProps> = ({
         <>
             <div className={`card max-w-sm rounded overflow-hidden shadow-lg ${isModalOpen ? 'hidden' : ''}`}>
                 <div className="card-header">
-                    <MovieImage className="w-auto h-60" src={assignImageByType(type)} alt={`${title} poster`} />
+                    <MovieImage className="w-auto h-80" src={assignImageByType(type)} alt={`${title} poster`} />
                 </div>
                 <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
                     <button className="inline-block" onClick={handleSelectEvent}>{<FaEye />}</button>
