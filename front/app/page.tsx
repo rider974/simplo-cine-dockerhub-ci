@@ -1,5 +1,6 @@
 "use client";
 
+import { Carousel, CarouselResponsiveOption } from 'primereact/carousel';
 import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import * as React from "react";
@@ -8,7 +9,7 @@ import { FaCalendarAlt } from 'react-icons/fa';
 
 
 import Card from './components/Card';
-import { MovieAttributes } from "./types/types";
+import { MovieAttributes } from './types/types';
 
 
 
@@ -143,7 +144,6 @@ export default function Home() {
           // Vérifier s'il y a des sessions
           if (sessionsData.length === 0) {
             setMoviesWhitDate([]); // Réinitialiser l'état des films
-            setError("Aucune session trouvée pour cette date."); // Message d'absence de sessions
             return; // Sortir de la fonction
           } else {
             setError(null); // Réinitialiser l'erreur
@@ -201,6 +201,48 @@ export default function Home() {
     return assignedType;
   };
 
+  const responsiveOptions: CarouselResponsiveOption[] = [
+    {
+      breakpoint: '1400px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1199px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '767px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '575px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
+
+  const moviesTemplate = (movie: Movie) => {
+    return (
+      <Card
+        key={movie.id}
+        id={movie.id}
+        title={movie.title}
+        description={movie.description || 'No description available'}
+        type={assignRandomType(movie.id)}
+        release_date={movie.release_date}
+        duration={movie.duration}
+        created_at={new Date().toISOString()}
+        updated_at={new Date().toISOString()}
+        isAdmin={isAdmin}
+        onModify={handleUpdateMovie}
+        onDelete={handleDeleteMovie}
+      />
+    );
+  };
+
   return (
     <div>
       <div className="flex justify-center bg-black">
@@ -246,8 +288,8 @@ export default function Home() {
         <p>Aucun film trouvé pour cette date.</p>
       ) : (
         <div>
+          <h2 className="text-2xl font-bold text-center mt-5 mb-10">Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
           <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            <h2>Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
             {moviesWithDate.map((movie) => (
               <Card
                 key={movie.id}
@@ -269,6 +311,10 @@ export default function Home() {
       )}
 
       <h2 className="text-2xl font-bold text-center my-36">À la Une</h2>
+
+      <div className="card">
+        <Carousel value={movies} numScroll={1} numVisible={3} responsiveOptions={responsiveOptions} itemTemplate={moviesTemplate} />
+      </div>
 
       <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {movies.map((movie) => (
