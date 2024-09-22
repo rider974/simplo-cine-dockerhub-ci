@@ -29,7 +29,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
   const [selectedHallId, setSelectedHallId] = useState<number | null>(null);
 
   const handleAdd = () => {
-    if (title && releaseDate && duration) {
+    if (title && releaseDate && duration && selectedHallId) {
       const newMovie: MovieAttributes = {
         id: Math.floor(Math.random() * 10000),
         title,
@@ -39,6 +39,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
         created_at: new Date(),
         updated_at: new Date(),
         poster,
+        hall_id: selectedHallId,
       };
       onAddMovie(newMovie);
       setTitle("");
@@ -46,6 +47,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
       setReleaseDate(null);
       setDuration(null);
       setPoster(null);
+      setSelectedHallId(null); // Réinitialise la sélection de salle
     } else {
       alert("Veuillez remplir tous les champs requis.");
     }
