@@ -74,21 +74,21 @@ export default function Home() {
   //   fetchUserRole();
   // }, []);
 
-  // useEffect(() => {
-  //   const sampleMovies: Movie[] = [
-  //     { id: 1, title: "Inception", description: "A thief who steals corporate secrets through the use of dream-sharing technology.", release_date: "2010-07-16", duration: 148 },
-  //     { id: 2, title: "The Matrix", description: "A computer hacker learns about the true nature of reality and his role in the war against its controllers.", release_date: "1999-03-31", duration: 136 },
-  //     { id: 3, title: "Interstellar", description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", release_date: "2014-11-07", duration: 169 },
-  //     { id: 4, title: "The Dark Knight", description: "When the menace known as the Joker emerges, he wreaks havoc and chaos on the people of Gotham.", release_date: "2008-07-18", duration: 152 },
-  //     { id: 5, title: "Fight Club", description: "An insomniac office worker and a devil-may-care soap maker form an underground fight club.", release_date: "1999-10-15", duration: 139 },
-  //     { id: 6, title: "Pulp Fiction", description: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine.", release_date: "1994-10-14", duration: 154 },
-  //     { id: 7, title: "Forrest Gump", description: "The presidencies of Kennedy and Johnson, the Vietnam War, and more through the eyes of an Alabama man.", release_date: "1994-07-06", duration: 142 },
-  //     { id: 8, title: "The Shawshank Redemption", description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption.", release_date: "1994-09-23", duration: 142 },
-  //   ];
+  useEffect(() => {
+    const sampleMovies: Movie[] = [
+      { id: 1, title: "Inception", description: "A thief who steals corporate secrets through the use of dream-sharing technology.", release_date: "2010-07-16", duration: 148 },
+      { id: 2, title: "The Matrix", description: "A computer hacker learns about the true nature of reality and his role in the war against its controllers.", release_date: "1999-03-31", duration: 136 },
+      { id: 3, title: "Interstellar", description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", release_date: "2014-11-07", duration: 169 },
+      { id: 4, title: "The Dark Knight", description: "When the menace known as the Joker emerges, he wreaks havoc and chaos on the people of Gotham.", release_date: "2008-07-18", duration: 152 },
+      { id: 5, title: "Fight Club", description: "An insomniac office worker and a devil-may-care soap maker form an underground fight club.", release_date: "1999-10-15", duration: 139 },
+      { id: 6, title: "Pulp Fiction", description: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine.", release_date: "1994-10-14", duration: 154 },
+      { id: 7, title: "Forrest Gump", description: "The presidencies of Kennedy and Johnson, the Vietnam War, and more through the eyes of an Alabama man.", release_date: "1994-07-06", duration: 142 },
+      { id: 8, title: "The Shawshank Redemption", description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption.", release_date: "1994-09-23", duration: 142 },
+    ];
 
-  //   setMovies(sampleMovies);
-  //   setLoading(false);
-  // }, []);
+    setMovies(sampleMovies);
+    setLoading(false);
+  }, []);
 
   const isAdmin = (): boolean => {
     return userRole === 'admin';
@@ -333,15 +333,16 @@ export default function Home() {
         {["Romance", "Comédie", "Horreur", "Science-fiction"].map((type) => {
           const filteredMovies = movies.filter((movie) => assignRandomType(movie.id) === type);
           return (
-            <div key={type} className="flex flex-col items-center mb-8 w-1/4">
+            <div key={type} className="flex flex-col items-center mb-8 w-1/5 min-w-[100px]">
               <h2 className="text-2xl font-bold text-center my-4">{type}</h2>
               <div className="card flex justify-content-center">
-                <Carousel value={filteredMovies} numVisible={1} numScroll={1} orientation="vertical" verticalViewPortHeight="540px" itemTemplate={moviesTemplate} />
+                <Carousel value={filteredMovies} numVisible={1} numScroll={1} orientation="vertical" itemTemplate={moviesTemplate} verticalViewPortHeight='550px' />
               </div>
             </div>
           );
         })}
       </div>
+
     </div>
   );
 }
