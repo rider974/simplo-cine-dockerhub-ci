@@ -22,6 +22,7 @@ export interface MovieAttributes extends BaseAttributes {
   release_date?: Date;
   duration?: number;
   poster?: File | null;
+  hall_id?: number;
   hall?: HallAttributes;
 }
 

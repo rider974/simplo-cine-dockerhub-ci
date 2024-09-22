@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdPeople, MdRoom } from "react-icons/md";
 
 import { HallAttributes } from "../../types/types";
@@ -10,24 +10,60 @@ interface AddHallCardProps {
 export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
   const [name, setName] = useState("");
   const [capacity, setCapacity] = useState<number | null>(null);
+  const [halls, setHalls] = useState<HallAttributes[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Deux salles créées en dur
-  const initialHalls: HallAttributes[] = [
-    { id: 1, name: "Salle 1 - IMAX", capacity: 150 },
-    { id: 2, name: "Salle 2 - 4DX", capacity: 100 },
-  ];
+  // Fetch des salles depuis l'API
+  useEffect(() => {
+    const fetchHalls = async () => {
+      try {
+        const response = await fetch("/api/rooms-service");
+        if (!response.ok) {
+          throw new Error("Erreur lors du fetch des salles.");
+        }
+        const data = await response.json();
+        setHalls(data);
+      } catch (err) {
+        setError("Erreur lors de la récupération des salles.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const [halls, setHalls] = useState<HallAttributes[]>(initialHalls);
+    fetchHalls();
+  }, []);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (name && capacity) {
       const newHall: HallAttributes = {
-        id: Math.random(),
+        id: Math.random(), // Remplacer par un ID généré par l'API.
         name,
         capacity,
       };
-      setHalls([...halls, newHall]);
-      onAddHall(newHall);
+
+      try {
+        const response = await fetch("/api/rooms-service", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newHall),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            "Erreur lors de l'ajout de la salle à la base de données."
+          );
+        }
+
+        const addedHall = await response.json();
+        setHalls([...halls, addedHall]);
+        onAddHall(addedHall);
+      } catch (err) {
+        setError("Erreur lors de l'ajout de la salle.");
+      }
+
       setName("");
       setCapacity(null);
     } else {
@@ -61,7 +97,7 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
         </label>
         <input
           type="number"
-          className="w-full text-gray-900  px-3 py-2 border rounded-md"
+          className="w-full text-gray-900 px-3 py-2 border rounded-md"
           value={capacity !== null ? capacity : ""}
           onChange={(e) => setCapacity(Number(e.target.value))}
           placeholder="Capacité"
@@ -79,13 +115,17 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({ onAddHall }) => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Salles existantes
         </h3>
-        <ul>
-          {halls.map((hall) => (
-            <li key={hall.id} className="mb-2">
-              <strong>{hall.name}</strong> - Capacité : {hall.capacity} places
-            </li>
-          ))}
-        </ul>
+        {loading && <p>Chargement des salles...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        {!loading && !error && (
+          <ul>
+            {halls.map((hall) => (
+              <li key={hall.id} className="mb-2">
+                <strong>{hall.name}</strong> - Capacité : {hall.capacity} places
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
