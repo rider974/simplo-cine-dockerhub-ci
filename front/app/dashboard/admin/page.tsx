@@ -15,7 +15,6 @@ import { MovieAttributes, HallAttributes } from "../../types/types";
 export default function AdminDashboard() {
   const [movies, setMovies] = useState<MovieAttributes[]>([]);
   const [halls, setHalls] = useState<HallAttributes[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [screenings, setScreenings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,30 +50,55 @@ export default function AdminDashboard() {
     fetchMovies();
   }, []);
 
+  // Fetch initial pour récupérer les salles
+  useEffect(() => {
+    const fetchHalls = async () => {
+      try {
+        const response = await fetch("/api/sessions-service");
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des salles.");
+        }
+        const data = await response.json();
+        setHalls(data); // Stockez les salles récupérées dans l'état
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(`Erreur lors de la récupération des salles: ${err.message}`);
+        } else {
+          setError("Erreur inconnue lors de la récupération des salles.");
+        }
+      }
+    };
+
+    fetchHalls();
+  }, []);
+
   // Met à jour les événements du calendrier à chaque modification des films
   useEffect(() => {
-    const updatedEvents = movies.map((movie) => {
-      const releaseDate = new Date(movie.release_date || "");
-      const createdAt = new Date(movie.created_at || "");
-      const start = isNaN(releaseDate.getTime()) ? createdAt : releaseDate;
+    const updatedEvents = screenings
+      .map((screening) => {
+        const movie = movies.find((m) => m.id === screening.movie_id);
+        const hall = halls.find((h) => h.id === screening.hall_id);
+        if (!movie || !hall) return null;
 
-      return {
-        id: movie.id,
-        title: movie.title,
-        start: start,
-        end: new Date(
-          moment(start)
-            .add(movie.duration || 120, "minutes")
-            .toDate()
-        ),
-        desc: movie.description || "",
-      };
-    });
+        const start = new Date(screening.start_time);
 
-    setEvents(updatedEvents);
-  }, [movies]);
+        return {
+          id: movie.id,
+          title: `${movie.title} - ${hall.name}`,
+          start: start,
+          end: new Date(
+            moment(start)
+              .add(movie.duration || 120, "minutes")
+              .toDate()
+          ),
+          desc: movie.description || "",
+        };
+      })
+      .filter((event) => event !== null);
 
-  // Gestion de la sélection d'un événement dans le calendrier
+    setEvents(updatedEvents as any[]);
+  }, [movies, screenings, halls]);
+
   const handleSelectEvent = (event: any) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
@@ -85,7 +109,6 @@ export default function AdminDashboard() {
 
   const handleAddMovie = async (newMovie: MovieAttributes) => {
     try {
-      // Faire un appel POST à l'API pour ajouter le film à la base de données
       const response = await fetch("/api/movies", {
         method: "POST",
         headers: {
@@ -98,12 +121,8 @@ export default function AdminDashboard() {
         throw new Error("Erreur lors de l'ajout du film à la base de données.");
       }
 
-      // Obtenir le film ajouté avec l'ID généré par la base de données
       const addedMovie = await response.json();
-
-      // Mettre à jour l'état avec le film ajouté
       setMovies([...movies, addedMovie]);
-      console.log("Film ajouté avec succès :", addedMovie);
     } catch (err) {
       console.error("Erreur lors de l'ajout du film :", err);
       setError("An unknown error occurred");
@@ -113,7 +132,7 @@ export default function AdminDashboard() {
   const handleAddHall = (newHall: HallAttributes) => {
     setHalls([...halls, newHall]);
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const handleScheduleScreening = (newScreening: any) => {
     setScreenings([...screenings, newScreening]);
   };
@@ -169,10 +188,10 @@ export default function AdminDashboard() {
           {/* Colonne 2: Formulaires à droite */}
           <div className="space-y-6">
             <div className="rounded-lg shadow-md">
-              <AddMovieCard onAddMovie={handleAddMovie} halls={[]} />
+              <AddMovieCard onAddMovie={handleAddMovie} halls={halls} />
             </div>
             <div className="rounded-lg shadow-md">
-              <AddHallCard onAddHall={handleAddHall} />
+              <AddHallCard onAddHall={handleAddHall} halls={halls} />
             </div>
             <div className="rounded-lg shadow-md">
               <ScheduleScreeningForm
@@ -193,7 +212,7 @@ export default function AdminDashboard() {
           movie={selectedMovie}
           onModify={handleModifyMovie}
           onArchive={handleArchiveMovie}
-          availableHalls={[]}
+          availableHalls={halls}
           isAdmin={() => true}
         />
       )}
