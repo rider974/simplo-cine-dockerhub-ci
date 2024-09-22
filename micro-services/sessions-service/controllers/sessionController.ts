@@ -136,11 +136,11 @@ export const deleteSession = async (req: Request, res: Response) => {
 };
 
 // Obtenir les sessions par date
-export const getSessionsWithMoviesByDate = async (req: Request, res: Response) => {
+export const getSessionsByDate = async (req: Request, res: Response) => {
     const { date } = req.params;
 
     try {
-        const sessions = await sessionsService.getSessionsWithMoviesByDate(date);
+        const sessions = await sessionsService.getSessionsByDate(date);
         res.status(200).json(sessions);
     } catch (err: unknown) {
         const error = err as Error;

@@ -75,20 +75,8 @@ export const deleteSession = async (id: number): Promise<boolean> => {
 };
 
 
-// Fonction pour récupérer les informations d'un film par son ID
-const fetchMovieById = async (movieId: number) => {
-    try {
-        const response = await fetch(`http://movie-service/movies/${movieId}`);
-        if (!response.ok) throw new Error('Failed to fetch movie');
-        return await response.json(); // Retourne les détails du film
-    } catch (error) {
-        console.error(error);
-        return null; // Gérer l'erreur selon ton besoin
-    }
-};
-
-// Obtenir les sessions par date et récupérer les films
-export const getSessionsWithMoviesByDate = async (date: string): Promise<unknown[]> => {
+// Obtenir les sessions par date
+export const getSessionsByDate = async (date: string): Promise<SessionAttributes[]> => {
     try {
         const startOfDay = new Date(date);
         startOfDay.setHours(0, 0, 0, 0);
@@ -105,27 +93,9 @@ export const getSessionsWithMoviesByDate = async (date: string): Promise<unknown
             }
         });
 
-        // Extraire tous les movie_id uniques
-        const movieIds = [...new Set(sessions.map(session => session.movie_id))];
-
-        // Récupérer les infos des films pour chaque movie_id
-        const movies = await Promise.all(movieIds.map(movieId => fetchMovieById(movieId)));
-
-        // Combiner les sessions avec les films correspondants
-        const sessionsWithMovies = sessions.map(session => {
-            const movie = movies.find(m => m.id === session.movie_id) || null;
-
-            return {
-                ...session.get(), // Utiliser .get() pour obtenir les attributs de session
-                movie // Ajouter les informations du film
-            };
-        });
-
-        return sessionsWithMovies; // Retourner les sessions avec les infos des films
+        return sessions; // Retourner uniquement les sessions
     } catch (err) {
-        console.error('Error fetching sessions with movies:', err);
+        console.error('Error fetching sessions by date:', err);
         return []; // Retourner un tableau vide en cas d'erreur
     }
 };
-
-

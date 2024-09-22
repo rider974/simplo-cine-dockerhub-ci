@@ -124,18 +124,42 @@ export default function Home() {
     }
   };
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
   const handleDateInputChange = async () => {
     const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
     if (dateInput) {
-      setSelectedDate(dateInput.value);
+      const selectedDate = dateInput.value; // Déplace la déclaration ici
+      setSelectedDate(selectedDate);
+
       if (selectedDate) {
         try {
-          const response = await fetch(`/api/sessions/date/${selectedDate}`);
-          if (!response.ok) {
-            throw new Error("Erreur lors de la recherche des films par date");
+          // Appel au service session pour récupérer les sessions par date
+          const sessionResponse = await fetch(`/api/sessions/date/${selectedDate}`);
+          if (!sessionResponse.ok) {
+            throw new Error("Erreur lors de la recherche des sessions par date");
           }
-          const data = await response.json();
-          setMoviesWhitDate(data); // Stocke les films récupérés dans l'état
+          const sessionsData = await sessionResponse.json();
+
+          // Extraire les movie_id des sessions
+          const movieIds = sessionsData.map((session: { movie_id: number }) => session.movie_id); // Assure-toi que le champ est correct
+
+          if (movieIds.length > 0) {
+            // Appel au service movie pour récupérer les films par IDs
+            const movieResponses = await Promise.all(movieIds.map((movieId: number) =>
+              fetch(`/api/movies/${movieId}`)
+            ));
+
+            const moviesData = await Promise.all(movieResponses.map(res => {
+              if (!res.ok) {
+                throw new Error("Erreur lors de la récupération des films");
+              }
+              return res.json();
+            }));
+
+            setMoviesWhitDate(moviesData); // Stocke les films récupérés dans l'état
+          } else {
+            setMoviesWhitDate([]); // Aucun film à afficher si pas de movie_id
+          }
         } catch (err: unknown) {
           if (err instanceof Error) {
             setError(err.message);
@@ -145,7 +169,8 @@ export default function Home() {
         }
       }
     }
-  }
+  };
+
 
 
 
