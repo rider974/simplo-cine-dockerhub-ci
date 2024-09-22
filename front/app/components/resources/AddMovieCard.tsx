@@ -30,7 +30,6 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
 
   const handleAdd = () => {
     if (title && releaseDate && duration && selectedHallId) {
-      const selectedHall = halls.find((hall) => hall.id === selectedHallId);
       const newMovie: MovieAttributes = {
         id: Math.floor(Math.random() * 10000),
         title,
@@ -40,7 +39,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
         created_at: new Date(),
         updated_at: new Date(),
         poster,
-        hall: selectedHall, // Ajoute la salle sélectionnée au film
+        hall_id: selectedHallId, // Utilise l'ID de la salle
       };
       onAddMovie(newMovie);
       setTitle("");
@@ -48,7 +47,7 @@ export const AddMovieCard: React.FC<AddMovieCardProps> = ({
       setReleaseDate(null);
       setDuration(null);
       setPoster(null);
-      setSelectedHallId(null); // Réinitialise la sélection de salle
+      setSelectedHallId(null); // Réinitialiser la sélection de salle
     } else {
       alert("Veuillez remplir tous les champs requis.");
     }
