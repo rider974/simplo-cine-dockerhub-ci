@@ -128,7 +128,7 @@ export default function Home() {
   const handleDateInputChange = async () => {
     const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
     if (dateInput) {
-      const selectedDate = dateInput.value; // Déplace la déclaration ici
+      const selectedDate = dateInput.value;
       setSelectedDate(selectedDate);
 
       if (selectedDate) {
@@ -140,8 +140,15 @@ export default function Home() {
           }
           const sessionsData = await sessionResponse.json();
 
+          // Vérifier s'il y a des sessions
+          if (sessionsData.length === 0) {
+            setMoviesWhitDate([]); // Réinitialiser l'état des films
+            setError("Aucune session trouvée pour cette date."); // Message d'absence de sessions
+            return; // Sortir de la fonction
+          }
+
           // Extraire les movie_id des sessions
-          const movieIds = sessionsData.map((session: { movie_id: number }) => session.movie_id); // Assure-toi que le champ est correct
+          const movieIds = sessionsData.map((session: { movie_id: number }) => session.movie_id);
 
           if (movieIds.length > 0) {
             // Appel au service movie pour récupérer les films par IDs
@@ -156,6 +163,8 @@ export default function Home() {
               return res.json();
             }));
 
+
+            console.log("Films récupérés :", moviesData);
             setMoviesWhitDate(moviesData); // Stocke les films récupérés dans l'état
           } else {
             setMoviesWhitDate([]); // Aucun film à afficher si pas de movie_id
