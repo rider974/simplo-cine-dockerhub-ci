@@ -212,6 +212,7 @@ export default function AdminDashboard() {
           onArchive={handleArchiveMovie}
           availableHalls={halls}
           isAdmin={() => true}
+
         />
       )}
     </div>
