@@ -22,6 +22,7 @@ interface Movie {
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [moviesWithDate, setMoviesWhitDate] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userRole] = useState<string | null>(null);
@@ -122,20 +123,19 @@ export default function Home() {
       }
     }
   };
-
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const handleDateInputChange = async () => {
     const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
     if (dateInput) {
-      const selectedDate = dateInput.value;
+      setSelectedDate(dateInput.value);
       if (selectedDate) {
         try {
-          // Remplacer la requête query string par un paramètre d'URL
           const response = await fetch(`/api/sessions/date/${selectedDate}`);
           if (!response.ok) {
             throw new Error("Erreur lors de la recherche des films par date");
           }
           const data = await response.json();
-          setMovies(data);
+          setMoviesWhitDate(data); // Stocke les films récupérés dans l'état
         } catch (err: unknown) {
           if (err instanceof Error) {
             setError(err.message);
@@ -145,7 +145,8 @@ export default function Home() {
         }
       }
     }
-  };
+  }
+
 
 
   const assignRandomType = (movieId: number): string => {
@@ -202,11 +203,32 @@ export default function Home() {
 
       </div>
 
-
-
-
-
-
+      {/* Affiche les films ou un message d'erreur */}
+      {error ? (
+        <p>{error}</p>
+      ) : movies.length === 0 ? (
+        <p>Aucun film trouvé pour cette date.</p>
+      ) : (
+        <div>
+          <h2>Films pour le {selectedDate}</h2>
+          {moviesWithDate.map((movie) => (
+            <Card
+              key={movie.id}
+              id={movie.id}
+              title={movie.title}
+              description={movie.description || 'No description available'}
+              type={assignRandomType(movie.id)}
+              release_date={movie.release_date}
+              duration={movie.duration}
+              created_at={new Date().toISOString()}
+              updated_at={new Date().toISOString()}
+              isAdmin={isAdmin}
+              onModify={handleUpdateMovie}
+              onDelete={handleDeleteMovie}
+            />
+          ))}
+        </div>
+      )}
 
       <h2 className="text-2xl font-bold text-center my-36">À la Une</h2>
 

@@ -112,7 +112,9 @@ const Card: React.FC<CardProps> = ({
                 </div>
                 <div className="card-body p-4 h-72">
                     <div className="movie-info">
+
                         <h3 className="text-xl text-gray-700 font-bold mb-2">{decodeHtmlEntities(title.toUpperCase())}</h3>
+
                         {isAdmin() && (
                             <>
                                 <h4 className="text-gray-700 text-base font-semibold mb-2">Description</h4>
