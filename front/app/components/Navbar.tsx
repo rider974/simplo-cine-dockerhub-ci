@@ -29,14 +29,13 @@ const useAuth = () => {
   useEffect(() => {
     // Récupérer le token depuis les cookies
     const token = Cookies.get("authToken");
-    console.log("Token:", token); // Débogage du token
 
     if (token) {
       try {
         // Décoder le token pour récupérer le rôle
         const decodedToken: DecodedToken = jwtDecode(token);
-        console.log("Decoded Token:", decodedToken); // Débogage du token décodé
 
+        // Vérification de l'expiration du token
         if (Date.now() >= decodedToken.exp * 1000) {
           console.warn("Token expired");
           setIsAuthenticated(false);
@@ -44,18 +43,16 @@ const useAuth = () => {
           return;
         }
 
+        // Mise à jour de l'état d'authentification
         setIsAuthenticated(true);
-        if (decodedToken.role === "admin") {
-          setIsAdmin(true);
-        } else {
-          setIsAdmin(false);
-        }
+        setIsAdmin(decodedToken.role === "admin");
       } catch (error) {
         console.error("Invalid token format", error);
         setIsAuthenticated(false);
         setIsAdmin(false);
       }
     } else {
+      // Aucun token n'est présent, mettre à jour les états
       setIsAuthenticated(false);
       setIsAdmin(false);
     }
