@@ -93,6 +93,23 @@ export default function AdminDashboard() {
     setEvents(updatedEvents);
   }, [movies]);
 
+  // Fonction assignRandomType utilisant localStorage pour stocker le type de chaque film
+  const assignRandomType = (movieId: number): string => {
+    const types = ["Romance", "Comédie", "Horreur", "Science-fiction"];
+    const storedTypes = JSON.parse(localStorage.getItem("movieTypes") || "{}");
+
+    if (storedTypes[movieId]) {
+      return storedTypes[movieId];
+    }
+
+    const randomIndex = Math.floor(Math.random() * types.length);
+    const assignedType = types[randomIndex];
+    storedTypes[movieId] = assignedType;
+    localStorage.setItem("movieTypes", JSON.stringify(storedTypes));
+
+    return assignedType;
+  };
+
   const handleSelectEvent = (event: MovieEvent) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
@@ -154,12 +171,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Fonction pour assigner un type aléatoire à chaque film
-  const assignRandomType = (id: number): string => {
-    const types = ["Action", "Drama", "Comedy", "Thriller"];
-    return types[id % types.length];
-  };
-
   return (
     <div className="min-h-screen p-6 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-6 text-gray-900">
@@ -191,7 +202,7 @@ export default function AdminDashboard() {
                     id={movie.id}
                     title={movie.title}
                     description={movie.description}
-                    type={assignRandomType(movie.id)}
+                    type={assignRandomType(movie.id)} // Utilisation de la fonction assignRandomType pour définir le type
                     release_date={movie.release_date?.toString()}
                     duration={movie.duration}
                     created_at={new Date().toISOString()}
