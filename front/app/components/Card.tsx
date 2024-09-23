@@ -84,7 +84,7 @@ const Card: React.FC<CardProps> = ({
     handleCloseModal();
   };
 
-  const handleArchiveMovie = () => {
+  const handleDeleteMovie = () => {
     if (selectedMovie) {
       if (onDelete) {
         onDelete(selectedMovie.id);
@@ -203,7 +203,7 @@ const Card: React.FC<CardProps> = ({
           onClose={handleCloseModal}
           movie={selectedMovie}
           onModify={handleModifyMovie}
-          onArchive={handleArchiveMovie}
+          onDelete={handleDeleteMovie}
           availableHalls={[]}
           isAdmin={isAdmin}
         />
