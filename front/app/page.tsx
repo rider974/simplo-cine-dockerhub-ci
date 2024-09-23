@@ -163,8 +163,6 @@ export default function Home() {
             setMoviesWhitDate([]); // Réinitialiser l'état des films
             setError("Aucune séance ce jour là"); // Réinitialiser l'erreur
             return; // Sortir de la fonction
-          } else {
-            setError(""); // Réinitialiser l'erreur
           }
 
           // Extraire les movie_id des sessions
