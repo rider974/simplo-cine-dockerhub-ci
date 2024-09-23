@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { MdPeople, MdRoom } from "react-icons/md";
 
-import { HallAttributes } from "../../types/types";
+// Utilisation de l'interface correspondant aux attributs du modèle `Room`
+interface RoomAttributes {
+  room_id?: number; // Peut être optionnel car il est généré par la BDD
+  name: string;
+  seatsNumber: number;
+  available?: boolean;
+}
 
 interface AddHallCardProps {
-  onAddHall: (newHall: HallAttributes) => void;
-  halls: HallAttributes[]; // Récupérez les salles depuis la prop
+  onAddHall: (newHall: RoomAttributes) => void;
+  halls: RoomAttributes[];
 }
 
 export const AddHallCard: React.FC<AddHallCardProps> = ({
@@ -17,11 +23,10 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
 
   const handleAdd = async () => {
     if (name && capacity !== null) {
-      // Vérifie que les champs requis sont remplis
-      const newHall: HallAttributes = {
-        id: Math.random(), // ID temporaire, remplacé par l'API
+      const newHall: RoomAttributes = {
         name,
         seatsNumber: capacity,
+        available: true,
       };
 
       try {
@@ -40,13 +45,12 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
         }
 
         const addedHall = await response.json();
-        onAddHall(addedHall);
+        onAddHall(addedHall); // Mise à jour de l'état local avec la salle ajoutée
         console.log("Salle ajoutée avec succès:", addedHall);
       } catch (err) {
         console.error("Erreur lors de l'ajout de la salle :", err);
       }
 
-      // Réinitialise les champs du formulaire
       setName("");
       setCapacity(null);
     } else {
@@ -100,7 +104,7 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
         </h3>
         <ul>
           {halls.map((hall) => (
-            <li key={hall.id} className="mb-2">
+            <li key={hall.room_id} className="mb-2">
               <strong>{hall.name}</strong> - Capacité : {hall.seatsNumber}{" "}
               places
             </li>
