@@ -2,12 +2,12 @@
 
 import moment from "moment";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
+import Card from "../../components/Card";
 import { AddHallCard } from "../../components/resources/AddHallCard";
 import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
-import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
 import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
 import { Spinner } from "../../components/resources/Spinner";
@@ -138,7 +138,9 @@ export default function AdminDashboard() {
     setSelectedMovie(null);
   };
 
-  const handleModifyMovie = (updatedMovie: MovieAttributes) => {
+  const handleModifyMovie = async (
+    updatedMovie: MovieAttributes
+  ): Promise<void> => {
     setMovies(
       movies.map((movie) =>
         movie.id === updatedMovie.id ? updatedMovie : movie
@@ -151,6 +153,12 @@ export default function AdminDashboard() {
       setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
       handleCloseModal();
     }
+  };
+
+  // Fonction pour assigner un type aléatoire à chaque film
+  const assignRandomType = (id: number): string => {
+    const types = ["Action", "Drama", "Comedy", "Thriller"];
+    return types[id % types.length];
   };
 
   return (
@@ -177,7 +185,26 @@ export default function AdminDashboard() {
                 Liste des Films
               </h2>
               <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
-              <MovieCard movies={movies} />
+              <div className="movie-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                {movies.map((movie) => (
+                  <Card
+                    key={movie.id}
+                    id={movie.id}
+                    title={movie.title}
+                    description={movie.description}
+                    type={assignRandomType(movie.id)}
+                    release_date={movie.release_date?.toString()}
+                    duration={movie.duration}
+                    created_at={new Date().toISOString()}
+                    updated_at={new Date().toISOString()}
+                    isAdmin={() => true}
+                    onModify={handleModifyMovie}
+                    onDelete={(movieId) =>
+                      setMovies(movies.filter((movie) => movie.id !== movieId))
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
