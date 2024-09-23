@@ -16,15 +16,16 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
   const [capacity, setCapacity] = useState<number | null>(null);
 
   const handleAdd = async () => {
-    if (name && capacity) {
+    if (name && capacity !== null) {
+      // Vérifie que les champs requis sont remplis
       const newHall: HallAttributes = {
-        id: Math.random(), // Remplacez cela par un ID généré par l'API si nécessaire
+        id: Math.random(), // ID temporaire, remplacé par l'API
         name,
         seatsNumber: capacity,
       };
 
       try {
-        const response = await fetch("/api/rooms-service", {
+        const response = await fetch("/api/rooms", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -40,15 +41,16 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
 
         const addedHall = await response.json();
         onAddHall(addedHall);
+        console.log("Salle ajoutée avec succès:", addedHall);
       } catch (err) {
         console.error("Erreur lors de l'ajout de la salle :", err);
-        alert("Erreur lors de l'ajout de la salle.");
       }
 
+      // Réinitialise les champs du formulaire
       setName("");
       setCapacity(null);
     } else {
-      alert("Veuillez remplir tous les champs requis.");
+      console.warn("Veuillez remplir tous les champs requis.");
     }
   };
 
