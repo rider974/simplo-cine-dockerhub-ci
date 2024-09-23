@@ -267,7 +267,7 @@ export default function Home() {
       {loading && <div className="card flex justify-content-center">
         <ProgressSpinner />
       </div>}
-      {error && <Message severity="error" text={`Error: ${error}`} />}
+      {error !== "Aucune séance ce jour là" && <Message severity="error" text={`Error: ${error}`} />}
 
       {/* Section de recherche par date */}
       <div className="flex flex-col items-center mb-5">
@@ -299,10 +299,10 @@ export default function Home() {
 
       {/* Affiche les films ou un message d'erreur */}
       {error ? (
-        <p>{error}</p>
+        <h2 className="text-2xl font-bold text-center mt-5 mb-10">{error}</h2>
       ) : movies.length === 0 ? (
-        <p>Aucun film trouvé pour cette date.</p>
-      ) : selectedDate ? (
+        <h2 className="text-2xl font-bold text-center mt-5 mb-10">Aucun film trouvé pour cette date.</h2>
+      ) : selectedDate && (
         <div>
           <h2 className="text-2xl font-bold text-center mt-5 mb-10">Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
           <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
@@ -322,7 +322,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      ) : ""}
+      )}
 
       <h2 className="text-2xl font-bold text-center mb-20 mt-36">À la Une</h2>
 
