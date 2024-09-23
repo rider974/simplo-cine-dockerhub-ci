@@ -190,7 +190,7 @@ export default function AdminDashboard() {
             <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
             <MovieCalendar events={events} onSelectEvent={handleSelectEvent} />
 
-            <div className="rounded-lg bg-gray-300 relative">
+            <div className="rounded-lg relative">
               <h2 className="text-xl pl-6 text-gray-900 font-medium py-2">
                 Liste des Films
               </h2>
