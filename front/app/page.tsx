@@ -265,7 +265,7 @@ export default function Home() {
       {loading && <div className="card flex justify-content-center">
         <ProgressSpinner />
       </div>}
-      {error !== "Aucune séance ce jour là" && <Message severity="error" text={`Error: ${error}`} />}
+      {error !== "null" && <Message severity="error" text={`Error: ${error}`} />}
 
       {/* Section de recherche par date */}
       <div className="flex flex-col items-center mb-5">
@@ -297,7 +297,7 @@ export default function Home() {
 
       {/* Affiche les films ou un message d'erreur */}
       {error ? (
-        <h2 className="text-2xl font-bold text-center mt-5 mb-10">{<BiSolidError values={error} />}</h2>
+        <h2 className="text-2xl font-bold text-center mt-5 mb-10">{error}</h2>
       ) : movies.length === 0 ? (
         <h2 className="text-2xl font-bold text-center mt-5 mb-10">Aucun film trouvé pour cette date.</h2>
       ) : selectedDate && (
