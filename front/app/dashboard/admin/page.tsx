@@ -157,11 +157,31 @@ export default function AdminDashboard() {
   const handleModifyMovie = async (
     updatedMovie: MovieAttributes
   ): Promise<void> => {
-    setMovies(
-      movies.map((movie) =>
-        movie.id === updatedMovie.id ? updatedMovie : movie
-      )
-    );
+    try {
+      // Envoie une requête PUT pour mettre à jour le film dans la base de données
+      const response = await fetch(`/api/movies/${updatedMovie.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMovie),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour du film.");
+      }
+
+      const data = await response.json();
+
+      // Met à jour l'état local avec les données modifiées
+      setMovies(
+        movies.map((movie) => (movie.id === updatedMovie.id ? data : movie))
+      );
+      setIsModalOpen(false); // Ferme le modal après une mise à jour réussie
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du film :", error);
+      setError("Erreur lors de la mise à jour du film."); // Affiche un message d'erreur
+    }
   };
 
   const handleArchiveMovie = () => {
