@@ -21,7 +21,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9039
+          port: 9018
           script: |
             # Arrêter tous les conteneurs s'ils existent
             containers=$(sudo docker ps -q)
@@ -58,7 +58,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9039
+          port: 9018
           script: |
             cd ~/devops/simplo-cine
             sudo docker network rm simplo-cine_simplo-cine-network
@@ -71,7 +71,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9039
+          port: 9018
           script: |
             cd ~/devops/simplo-cine
             sudo docker network rm simplo-cine_simplo-cine-network
