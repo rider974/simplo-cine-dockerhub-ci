@@ -68,12 +68,17 @@ export class AuthController {
 
     try {
       const decoded = authService.verifyToken(token);
-      req.user = decoded;
+      if(!decoded)
+      {
+        return res.status(403).json({ message: 'Accès refusé ' });
+
+      }
+     let tokenDecoded = decoded;
 
       // Vérifier le rôle de l'utilisateur
-      if (roleRequired && req.user.role.role_name !== roleRequired) {
+      if (roleRequired && tokenDecoded?.role?.role_name !== roleRequired) {
         return res.status(403).json({ message: 'Accès refusé : rôle insuffisant' });
-        console.log(req.user.role);
+        console.log(tokenDecoded.role);
       }
       return res.status(200).json({ decoded });
     } catch (error) {
