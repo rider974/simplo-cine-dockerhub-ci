@@ -2,15 +2,14 @@
 
 import moment from "moment";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
+import Card from "../../components/Card";
 import { AddHallCard } from "../../components/resources/AddHallCard";
 import { AddMovieCard } from "../../components/resources/AddMovieCard";
 import { MovieCalendar } from "../../components/resources/MovieCalendar";
-import { MovieCard } from "../../components/resources/MovieTable";
 import { MovieView } from "../../components/resources/MovieView";
 import { ScheduleScreeningForm } from "../../components/resources/ScheduleScreeningForm";
-import { Spinner } from "../../components/resources/Spinner";
 import { MovieAttributes, HallAttributes, MovieEvent } from "../../types/types";
 
 export default function AdminDashboard() {
@@ -94,6 +93,23 @@ export default function AdminDashboard() {
     setEvents(updatedEvents);
   }, [movies]);
 
+  // Fonction assignRandomType utilisant localStorage pour stocker le type de chaque film
+  const assignRandomType = (movieId: number): string => {
+    const types = ["Romance", "Comédie", "Horreur", "Science-fiction"];
+    const storedTypes = JSON.parse(localStorage.getItem("movieTypes") || "{}");
+
+    if (storedTypes[movieId]) {
+      return storedTypes[movieId];
+    }
+
+    const randomIndex = Math.floor(Math.random() * types.length);
+    const assignedType = types[randomIndex];
+    storedTypes[movieId] = assignedType;
+    localStorage.setItem("movieTypes", JSON.stringify(storedTypes));
+
+    return assignedType;
+  };
+
   const handleSelectEvent = (event: MovieEvent) => {
     const movie = movies.find((m) => m.id === event.id);
     if (movie) {
@@ -138,7 +154,9 @@ export default function AdminDashboard() {
     setSelectedMovie(null);
   };
 
-  const handleModifyMovie = (updatedMovie: MovieAttributes) => {
+  const handleModifyMovie = async (
+    updatedMovie: MovieAttributes
+  ): Promise<void> => {
     setMovies(
       movies.map((movie) =>
         movie.id === updatedMovie.id ? updatedMovie : movie
@@ -159,7 +177,7 @@ export default function AdminDashboard() {
         Gestion des Films et des Salles
       </h1>
 
-      {loading && <Spinner />}
+      {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Erreur : {error}</p>}
 
       {!loading && !error && (
@@ -177,7 +195,26 @@ export default function AdminDashboard() {
                 Liste des Films
               </h2>
               <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
-              <MovieCard movies={movies} />
+              <div className="movie-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                {movies.map((movie) => (
+                  <Card
+                    key={movie.id}
+                    id={movie.id}
+                    title={movie.title}
+                    description={movie.description}
+                    type={assignRandomType(movie.id)} // Utilisation de la fonction assignRandomType pour définir le type
+                    release_date={movie.release_date?.toString()}
+                    duration={movie.duration}
+                    created_at={new Date().toISOString()}
+                    updated_at={new Date().toISOString()}
+                    isAdmin={() => true}
+                    onModify={handleModifyMovie}
+                    onDelete={(movieId) =>
+                      setMovies(movies.filter((movie) => movie.id !== movieId))
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
