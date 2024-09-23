@@ -12,7 +12,7 @@ export interface BaseAttributes {
 // Interface pour les salles (Halls)
 export interface HallAttributes extends BaseAttributes {
   name: string;
-  capacity: number;
+  seatsNumber: number;
 }
 
 // Interface pour les films (Movies)
