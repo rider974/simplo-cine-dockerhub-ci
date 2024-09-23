@@ -68,6 +68,14 @@ export default function Navbar() {
   const pathname = usePathname();
   const { isAuthenticated, isAdmin } = useAuth();
 
+  // Utiliser un effet pour surveiller les changements dans isAuthenticated ou isAdmin
+  useEffect(() => {
+    // Redirigez vers la page de connexion si l'utilisateur n'est pas authentifié
+    if (!isAuthenticated && pathname === "/dashboard/admin") {
+      router.push("/authentification/signin");
+    }
+  }, [isAuthenticated, pathname, router]);
+
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (searchQuery) {
