@@ -84,7 +84,7 @@ const Card: React.FC<CardProps> = ({
     handleCloseModal();
   };
 
-  const handleArchiveMovie = () => {
+  const handleDeleteMovie = () => {
     if (selectedMovie) {
       if (onDelete) {
         onDelete(selectedMovie.id);
@@ -111,7 +111,7 @@ const Card: React.FC<CardProps> = ({
   return (
     <>
       <div
-        className={`card max-w-sm rounded overflow-hidden shadow-lg ${isModalOpen ? "hidden" : ""}`}
+        className={`card max-w-sm rounded overflow-hidden shadow-lg relative ${isModalOpen ? "hidden" : ""}`}
       >
         <div className="card-header">
           <MovieImage
@@ -169,8 +169,6 @@ const Card: React.FC<CardProps> = ({
               </div>
             )}
 
-
-
             {isAdmin() && (
               <>
                 <p className="text-gray-700 text-base">
@@ -184,21 +182,11 @@ const Card: React.FC<CardProps> = ({
           </div>
         </div>
 
-        {iconDisabled ? (
-          <div className="absolute top-0 right-0 m-2 flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-            <SlTag />
-            <span>{type}</span>
-          </div>
-        ) : (
-          <div className="card-footer p-4 flex justify-end">
-            <span className="flex bg-gray-200 rounded-l-full rounded-r-none px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-              <SlTag />
-              {type}
-            </span>
-          </div>
-
-        )}
-
+        {/* Footer avec le genre */}
+        <div className="absolute bottom-0 right-0 m-4 flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+          <SlTag />
+          <span>{type}</span>
+        </div>
       </div>
 
       {selectedMovie && (
@@ -207,7 +195,7 @@ const Card: React.FC<CardProps> = ({
           onClose={handleCloseModal}
           movie={selectedMovie}
           onModify={handleModifyMovie}
-          onArchive={handleArchiveMovie}
+          onDelete={handleDeleteMovie}
           availableHalls={[]}
           isAdmin={isAdmin}
         />

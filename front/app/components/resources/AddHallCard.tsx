@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { MdPeople, MdRoom } from "react-icons/md";
 
-import { HallAttributes } from "../../types/types";
+// Utilisation de l'interface correspondant aux attributs du modèle `Room`
+interface RoomAttributes {
+  room_id?: number; // Peut être optionnel car il est généré par la BDD
+  name: string;
+  seatsNumber: number;
+  available?: boolean;
+}
 
 interface AddHallCardProps {
-  onAddHall: (newHall: HallAttributes) => void;
-  halls: HallAttributes[]; // Récupérez les salles depuis la prop
+  onAddHall: (newHall: RoomAttributes) => void;
+  halls: RoomAttributes[];
 }
 
 export const AddHallCard: React.FC<AddHallCardProps> = ({
@@ -16,15 +22,15 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
   const [capacity, setCapacity] = useState<number | null>(null);
 
   const handleAdd = async () => {
-    if (name && capacity) {
-      const newHall: HallAttributes = {
-        id: Math.random(), // Remplacez cela par un ID généré par l'API si nécessaire
+    if (name && capacity !== null) {
+      const newHall: RoomAttributes = {
         name,
-        capacity,
+        seatsNumber: capacity,
+        available: true,
       };
 
       try {
-        const response = await fetch("/api/rooms-service", {
+        const response = await fetch("/api/rooms", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -39,16 +45,16 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
         }
 
         const addedHall = await response.json();
-        onAddHall(addedHall);
+        onAddHall(addedHall); // Mise à jour de l'état local avec la salle ajoutée
+        console.log("Salle ajoutée avec succès:", addedHall);
       } catch (err) {
         console.error("Erreur lors de l'ajout de la salle :", err);
-        alert("Erreur lors de l'ajout de la salle.");
       }
 
       setName("");
       setCapacity(null);
     } else {
-      alert("Veuillez remplir tous les champs requis.");
+      console.warn("Veuillez remplir tous les champs requis.");
     }
   };
 
@@ -98,8 +104,9 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
         </h3>
         <ul>
           {halls.map((hall) => (
-            <li key={hall.id} className="mb-2">
-              <strong>{hall.name}</strong> - Capacité : {hall.capacity} places
+            <li key={hall.room_id} className="mb-2">
+              <strong>{hall.name}</strong> - Capacité : {hall.seatsNumber}{" "}
+              places
             </li>
           ))}
         </ul>

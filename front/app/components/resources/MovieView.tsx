@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import {
-  FaArchive,
   FaEdit,
   FaTimes,
   FaChair,
@@ -9,6 +8,7 @@ import {
   FaCalendarAlt,
   FaInfoCircle,
   FaClock,
+  FaTrash,
 } from "react-icons/fa";
 
 import { HallAttributes, MovieAttributes } from "../../types/types";
@@ -18,7 +18,7 @@ interface MovieViewProps {
   onClose: () => void;
   movie: MovieAttributes;
   onModify: (updatedMovie: MovieAttributes) => void;
-  onArchive: () => void;
+  onDelete: () => void;
   availableHalls: HallAttributes[]; // Nouvelle prop pour les salles disponibles
   isAdmin: () => boolean;
 }
@@ -28,7 +28,7 @@ export const MovieView: React.FC<MovieViewProps> = ({
   onClose,
   movie,
   onModify,
-  onArchive,
+  onDelete,
   availableHalls = [],
   isAdmin,
 }) => {
@@ -158,15 +158,13 @@ export const MovieView: React.FC<MovieViewProps> = ({
                   <FaEdit className="mr-2 text-white" />
                   Modifier
                 </button>
-
-
               )}
               <button
-                onClick={onArchive}
+                onClick={onDelete}
                 className="w-full flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:ml-3 sm:w-auto sm:text-sm items-center"
               >
-                <FaArchive className="mr-2 text-white" />
-                Archiver
+                <FaTrash className="mr-2 text-white" />
+                Supprimer
               </button>
             </>
           )}
@@ -178,7 +176,6 @@ export const MovieView: React.FC<MovieViewProps> = ({
             <FaTimes className="mr-2 text-gray-600" />
             Annuler
           </button>
-
         </div>
       </div>
     </div>

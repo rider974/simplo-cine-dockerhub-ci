@@ -157,17 +157,55 @@ export default function AdminDashboard() {
   const handleModifyMovie = async (
     updatedMovie: MovieAttributes
   ): Promise<void> => {
-    setMovies(
-      movies.map((movie) =>
-        movie.id === updatedMovie.id ? updatedMovie : movie
-      )
-    );
+    try {
+      // Envoie une requête PUT pour mettre à jour le film dans la base de données
+      const response = await fetch(`/api/movies/${updatedMovie.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMovie),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour du film.");
+      }
+
+      const data = await response.json();
+
+      // Met à jour l'état local avec les données modifiées
+      setMovies(
+        movies.map((movie) => (movie.id === updatedMovie.id ? data : movie))
+      );
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du film :", error);
+      setError("Erreur lors de la mise à jour du film.");
+    }
   };
 
-  const handleArchiveMovie = () => {
+  const handleDeleteMovie = async () => {
     if (selectedMovie) {
-      setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
-      handleCloseModal();
+      try {
+        // Effectuer une requête DELETE pour supprimer le film de la base de données
+        const response = await fetch(`/api/movies/${selectedMovie.id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression du film.");
+        }
+
+        // Supprimer le film de l'état local après une suppression réussie dans la base de données
+        setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+
+        handleCloseModal();
+
+        alert("Le film a été supprimé avec succès.");
+      } catch (error) {
+        console.error("Erreur lors de la suppression du film :", error);
+        setError("Erreur lors de la suppression du film.");
+      }
     }
   };
 
@@ -190,7 +228,7 @@ export default function AdminDashboard() {
             <div className="bg-orange-500 absolute top-9 left-2 w-[calc(20%)] h-2"></div>
             <MovieCalendar events={events} onSelectEvent={handleSelectEvent} />
 
-            <div className="rounded-lg bg-gray-300 relative">
+            <div className="rounded-lg relative">
               <h2 className="text-xl pl-6 text-gray-900 font-medium py-2">
                 Liste des Films
               </h2>
@@ -248,7 +286,7 @@ export default function AdminDashboard() {
           onClose={handleCloseModal}
           movie={selectedMovie}
           onModify={handleModifyMovie}
-          onArchive={handleArchiveMovie}
+          onDelete={handleDeleteMovie}
           availableHalls={halls}
           isAdmin={() => true}
         />
