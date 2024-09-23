@@ -60,7 +60,7 @@ export class AuthController {
   }
 
   // Vérification d'un token JWT
-  public async verifyToken(req: Request, res: Response): Promise<Response> {
+  public async verifyToken(req: Request, res: Response, roleRequired = 'admin'): Promise<Response> {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "Token non fourni" });
@@ -68,6 +68,13 @@ export class AuthController {
 
     try {
       const decoded = authService.verifyToken(token);
+      req.user = decoded;
+
+      // Vérifier le rôle de l'utilisateur
+      if (roleRequired && req.user.role.role_name !== roleRequired) {
+        return res.status(403).json({ message: 'Accès refusé : rôle insuffisant' });
+        console.log(req.user.role);
+      }
       return res.status(200).json({ decoded });
     } catch (error) {
       return res.status(401).json({ message: (error as Error).message });
