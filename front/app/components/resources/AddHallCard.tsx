@@ -20,7 +20,7 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
       const newHall: HallAttributes = {
         id: Math.random(), // Remplacez cela par un ID généré par l'API si nécessaire
         name,
-        capacity,
+        seatsNumber: capacity,
       };
 
       try {
@@ -99,7 +99,8 @@ export const AddHallCard: React.FC<AddHallCardProps> = ({
         <ul>
           {halls.map((hall) => (
             <li key={hall.id} className="mb-2">
-              <strong>{hall.name}</strong> - Capacité : {hall.capacity} places
+              <strong>{hall.name}</strong> - Capacité : {hall.seatsNumber}{" "}
+              places
             </li>
           ))}
         </ul>
