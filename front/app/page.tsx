@@ -29,28 +29,28 @@ export default function Home() {
   const [userRole] = useState<string | null>(null);
 
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch("/api/movies");
-        if (!response.ok) {
-          throw new Error("Erreur lors du fetch des films");
-        }
-        const data = await response.json();
-        setMovies(data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMovies = async () => {
+  //     try {
+  //       const response = await fetch("/api/movies");
+  //       if (!response.ok) {
+  //         throw new Error("Erreur lors du fetch des films");
+  //       }
+  //       const data = await response.json();
+  //       setMovies(data);
+  //     } catch (err: unknown) {
+  //       if (err instanceof Error) {
+  //         setError(err.message);
+  //       } else {
+  //         setError("An unknown error occurred");
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchMovies();
-  }, []);
+  //   fetchMovies();
+  // }, []);
 
 
   // useEffect(() => {
@@ -160,6 +160,8 @@ export default function Home() {
           // Vérifier s'il y a des sessions
           if (sessionsData.length === 0) {
             setMoviesWhitDate([]); // Réinitialiser l'état des films
+            setError("Aucune séance ce jour là"); // Réinitialiser l'erreur
+
             return; // Sortir de la fonction
           } else {
             setError(null); // Réinitialiser l'erreur
@@ -300,7 +302,7 @@ export default function Home() {
         <p>{error}</p>
       ) : movies.length === 0 ? (
         <p>Aucun film trouvé pour cette date.</p>
-      ) : (
+      ) : selectedDate ? (
         <div>
           <h2 className="text-2xl font-bold text-center mt-5 mb-10">Film du {selectedDate ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''}</h2>
           <div className="movie-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
@@ -320,7 +322,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      )}
+      ) : ""}
 
       <h2 className="text-2xl font-bold text-center mb-20 mt-36">À la Une</h2>
 
