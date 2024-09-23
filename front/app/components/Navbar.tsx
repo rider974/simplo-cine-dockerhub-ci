@@ -1,11 +1,9 @@
 "use client";
 
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import {
   FaHome,
   FaSignInAlt,
@@ -15,66 +13,13 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 
-// Interface pour le token décodé
-interface DecodedToken {
-  role: string;
-  exp: number;
-}
-
-// Hook d'authentification pour vérifier l'état de l'utilisateur
-const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    // Récupérer le token depuis les cookies
-    const token = Cookies.get("authToken");
-
-    if (token) {
-      try {
-        // Décoder le token pour récupérer le rôle
-        const decodedToken: DecodedToken = jwtDecode(token);
-
-        // Vérification de l'expiration du token
-        if (Date.now() >= decodedToken.exp * 1000) {
-          console.warn("Token expired");
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-          return;
-        }
-
-        // Mise à jour de l'état d'authentification
-        setIsAuthenticated(true);
-        setIsAdmin(decodedToken.role === "admin");
-      } catch (error) {
-        console.error("Invalid token format", error);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-      }
-    } else {
-      // Aucun token n'est présent, mettre à jour les états
-      setIsAuthenticated(false);
-      setIsAdmin(false);
-    }
-  }, []);
-
-  return { isAuthenticated, isAdmin };
-};
+import { useAuth } from "../utils/authContext";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
-  const { isAuthenticated, isAdmin } = useAuth();
-
-  // Utiliser un effet pour surveiller les changements dans isAuthenticated ou isAdmin
-  useEffect(() => {
-    // Redirigez vers la page de connexion si l'utilisateur n'est pas authentifié
-    if (!isAuthenticated && pathname === "/dashboard/admin") {
-      router.push("/authentification/signin");
-    }
-  }, [isAuthenticated, pathname, router]);
+  const { isAuthenticated } = useAuth(); // Utiliser le contexte d'authentification
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -85,6 +30,16 @@ export default function Navbar() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleAdminClick = () => {
+    if (!isAuthenticated) {
+      // Rediriger vers la page de connexion si non authentifié
+      router.push("/authentification/signin");
+    } else {
+      // Rediriger vers la page d'ajout d'admin si authentifié
+      router.push("/authentification/register");
+    }
   };
 
   return (
@@ -115,32 +70,24 @@ export default function Navbar() {
       </div>
 
       <div className="hidden md:flex space-x-4 text-white">
-        {!isAuthenticated ? (
-          // Lien de connexion si l'utilisateur n'est pas connecté
-          <div className="flex items-center">
-            <Link
-              href="/authentification/signin"
-              className="flex items-center text-white hover:underline"
-            >
-              <FaSignInAlt className="text-white" />
-              <span className="ml-2">Administrateur</span>
-            </Link>
-          </div>
-        ) : (
-          // Affichage du bouton "Ajout nouvel admin" si l'utilisateur est connecté, est admin et est sur le dashboard admin
-          isAdmin &&
-          pathname === "/dashboard/admin" && (
-            <div className="flex items-center">
-              <Link
-                href="/authentification/register"
-                className="flex items-center text-white hover:underline"
-              >
+        <div className="flex items-center">
+          <button
+            onClick={handleAdminClick}
+            className="flex items-center text-white hover:underline"
+          >
+            {!isAuthenticated ? (
+              <>
+                <FaSignInAlt className="text-white" />
+                <span className="ml-2">Administration</span>
+              </>
+            ) : (
+              <>
                 <FaUserPlus className="text-white" />
                 <span className="ml-2">Ajout nouvel admin</span>
-              </Link>
-            </div>
-          )
-        )}
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="md:hidden flex items-center">
@@ -168,28 +115,22 @@ export default function Navbar() {
           </form>
 
           <div className="flex flex-col items-start space-y-4 px-4 mt-4">
-            {!isAuthenticated ? (
-              // Lien de connexion dans le menu mobile
-              <Link
-                href="/authentification/signin"
-                className="flex items-center hover:underline"
-              >
-                <FaSignInAlt />
-                <span className="ml-2">Administrateur</span>
-              </Link>
-            ) : (
-              // Affichage du lien Register si l'utilisateur est connecté, est admin et est sur le dashboard admin
-              isAdmin &&
-              pathname === "/dashboard/admin" && (
-                <Link
-                  href="/authentification/register"
-                  className="flex items-center hover:underline"
-                >
+            <button
+              onClick={handleAdminClick}
+              className="flex items-center hover:underline text-white"
+            >
+              {!isAuthenticated ? (
+                <>
+                  <FaSignInAlt />
+                  <span className="ml-2">Administration</span>
+                </>
+              ) : (
+                <>
                   <FaUserPlus />
                   <span className="ml-2">Ajout nouvel admin</span>
-                </Link>
-              )
-            )}
+                </>
+              )}
+            </button>
           </div>
         </div>
       )}
