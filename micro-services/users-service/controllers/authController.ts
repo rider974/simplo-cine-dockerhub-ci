@@ -78,7 +78,6 @@ export class AuthController {
       // Vérifier le rôle de l'utilisateur
       if (tokenDecoded?.role?.role_name !== "admin") {
         return res.status(403).json({ message: 'Accès refusé : rôle insuffisant' });
-        console.log(tokenDecoded.role);
       }
       return res.status(200).json({ decoded });
     } catch (error) {
