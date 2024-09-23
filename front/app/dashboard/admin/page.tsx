@@ -177,17 +177,35 @@ export default function AdminDashboard() {
       setMovies(
         movies.map((movie) => (movie.id === updatedMovie.id ? data : movie))
       );
-      setIsModalOpen(false); // Ferme le modal après une mise à jour réussie
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la mise à jour du film :", error);
-      setError("Erreur lors de la mise à jour du film."); // Affiche un message d'erreur
+      setError("Erreur lors de la mise à jour du film.");
     }
   };
 
-  const handleArchiveMovie = () => {
+  const handleDeleteMovie = async () => {
     if (selectedMovie) {
-      setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
-      handleCloseModal();
+      try {
+        // Effectuer une requête DELETE pour supprimer le film de la base de données
+        const response = await fetch(`/api/movies/${selectedMovie.id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression du film.");
+        }
+
+        // Supprimer le film de l'état local après une suppression réussie dans la base de données
+        setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+
+        handleCloseModal();
+
+        alert("Le film a été supprimé avec succès.");
+      } catch (error) {
+        console.error("Erreur lors de la suppression du film :", error);
+        setError("Erreur lors de la suppression du film.");
+      }
     }
   };
 
@@ -268,7 +286,7 @@ export default function AdminDashboard() {
           onClose={handleCloseModal}
           movie={selectedMovie}
           onModify={handleModifyMovie}
-          onArchive={handleArchiveMovie}
+          onDelete={handleDeleteMovie}
           availableHalls={halls}
           isAdmin={() => true}
         />
