@@ -5,6 +5,7 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { BiSolidError } from "react-icons/bi";
 import { FaCalendarAlt } from 'react-icons/fa';
 
 
@@ -161,10 +162,9 @@ export default function Home() {
           if (sessionsData.length === 0) {
             setMoviesWhitDate([]); // Réinitialiser l'état des films
             setError("Aucune séance ce jour là"); // Réinitialiser l'erreur
-
             return; // Sortir de la fonction
           } else {
-            setError(null); // Réinitialiser l'erreur
+            setError(""); // Réinitialiser l'erreur
           }
 
           // Extraire les movie_id des sessions
@@ -299,7 +299,7 @@ export default function Home() {
 
       {/* Affiche les films ou un message d'erreur */}
       {error ? (
-        <h2 className="text-2xl font-bold text-center mt-5 mb-10">{error}</h2>
+        <h2 className="text-2xl font-bold text-center mt-5 mb-10">{<BiSolidError values={error} />}</h2>
       ) : movies.length === 0 ? (
         <h2 className="text-2xl font-bold text-center mt-5 mb-10">Aucun film trouvé pour cette date.</h2>
       ) : selectedDate && (
