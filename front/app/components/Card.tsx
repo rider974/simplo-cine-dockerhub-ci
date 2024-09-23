@@ -182,9 +182,8 @@ const Card: React.FC<CardProps> = ({
           </div>
         </div>
 
-        <div
-          className={`absolute bottom-0 right-0 m-4 flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 ${iconDisabled ? "hidden" : ""}`}
-        >
+        {/* Type en bas à droite */}
+        <div className="absolute bottom-0 right-0 m-4 flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
           <SlTag />
           <span>{type}</span>
         </div>
