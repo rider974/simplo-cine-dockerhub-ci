@@ -25,6 +25,7 @@ interface CardProps {
   duration?: number;
   created_at: string;
   updated_at: string;
+  iconDisabled?: boolean;
   isAdmin: () => boolean;
   onModify?: (updatedMovie: MovieAttributes) => Promise<void>;
   onDelete?: (movieId: number) => void;
@@ -39,6 +40,7 @@ const Card: React.FC<CardProps> = ({
   duration,
   created_at,
   updated_at,
+  iconDisabled,
   isAdmin,
   onModify,
   onDelete,
@@ -119,9 +121,11 @@ const Card: React.FC<CardProps> = ({
           />
         </div>
         <div className="icons text-gray-700 flex justify-end space-x-2 p-2">
-          <button className="inline-block" onClick={handleSelectEvent}>
-            {<FaEye />}
-          </button>
+          {!iconDisabled && (
+            <button className="inline-block" onClick={handleSelectEvent}>
+              <FaEye />
+            </button>
+          )}
         </div>
         <div className="card-body p-4">
           <div className="movie-info">
@@ -142,26 +146,30 @@ const Card: React.FC<CardProps> = ({
               </>
             )}
 
-            <div className="flex flex-wrap">
-              <div className="w-1/2">
-                <h4 className="text-gray-700 text-base font-semibold mb-2">
-                  Date de sortie
-                </h4>
-                <p className="text-gray-700 text-base">
-                  {release_date
-                    ? new Date(release_date).toLocaleDateString()
-                    : "Date non disponible"}
-                </p>
+            {!iconDisabled && (
+              <div className="flex flex-wrap">
+                <div className="w-1/2">
+                  <h4 className="text-gray-700 text-base font-semibold mb-2">
+                    Date de sortie
+                  </h4>
+                  <p className="text-gray-700 text-base">
+                    {release_date
+                      ? new Date(release_date).toLocaleDateString()
+                      : "Date non disponible"}
+                  </p>
+                </div>
+                <div className="w-1/2">
+                  <h4 className="text-gray-700 text-base font-semibold mb-2">
+                    Durée
+                  </h4>
+                  {duration !== undefined && (
+                    <p className="text-gray-700 text-base">{duration} min</p>
+                  )}
+                </div>
               </div>
-              <div className="w-1/2">
-                <h4 className="text-gray-700 text-base font-semibold mb-2">
-                  Durée
-                </h4>
-                {duration !== undefined && (
-                  <p className="text-gray-700 text-base">{duration} min</p>
-                )}
-              </div>
-            </div>
+            )}
+
+
 
             {isAdmin() && (
               <>
@@ -175,12 +183,22 @@ const Card: React.FC<CardProps> = ({
             )}
           </div>
         </div>
-        <div className="card-footer p-4 flex justify-end">
-          <span className="flex bg-gray-200 rounded-l-full rounded-r-none px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+
+        {iconDisabled ? (
+          <div className="absolute top-0 right-0 m-2 flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
             <SlTag />
-            {type}
-          </span>
-        </div>
+            <span>{type}</span>
+          </div>
+        ) : (
+          <div className="card-footer p-4 flex justify-end">
+            <span className="flex bg-gray-200 rounded-l-full rounded-r-none px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+              <SlTag />
+              {type}
+            </span>
+          </div>
+
+        )}
+
       </div>
 
       {selectedMovie && (

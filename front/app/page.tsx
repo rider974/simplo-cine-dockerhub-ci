@@ -5,7 +5,6 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { BiSolidError } from "react-icons/bi";
 import { FaCalendarAlt } from 'react-icons/fa';
 
 
@@ -240,7 +239,9 @@ export default function Home() {
     }
   ];
 
+  const [iconDisabled, setIconDisabled] = useState(false);
   const moviesTemplate = (movie: Movie) => {
+    setIconDisabled(true);
     return (
       <Card
         key={movie.id}
@@ -253,6 +254,7 @@ export default function Home() {
         created_at={new Date().toISOString()}
         updated_at={new Date().toISOString()}
         isAdmin={isAdmin}
+        iconDisabled={iconDisabled}
       />
     );
   };
