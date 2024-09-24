@@ -26,6 +26,7 @@ jobs:
       run: |
         for dir in ./micro-services/*; do
           if [ -d "$dir" ]; then
+            service_name=$(basename "$dir")
             image_name="${{ secrets.DOCKER_USERNAME }}/$service_name:1.0.0"
             echo $image_name
             docker build -t $image_name "./micro-services/$dir"
