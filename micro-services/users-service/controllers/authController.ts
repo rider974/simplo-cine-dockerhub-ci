@@ -42,7 +42,10 @@ export class AuthController {
 
     try {
       const { token, user } = await authService.login(email, password);
-      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600; SameSite=Lax`);
+      res.setHeader(
+        "Set-Cookie",
+        `authToken=${token}; Path=/; Max-Age=3600; SameSite=Lax`
+      );
       return res.status(200).json({ token, user });
     } catch (error) {
       const err = error as Error;
@@ -65,6 +68,18 @@ export class AuthController {
 
     try {
       const decoded = authService.verifyToken(token);
+      if(!decoded)
+      {
+        return res.status(403).json({ message: 'Accès refusé ' });
+
+      }
+     let tokenDecoded = decoded;
+
+      // Vérifier le rôle de l'utilisateur
+      if (typeof tokenDecoded !== "string" && tokenDecoded?.role?.role_name !== "admin") {
+        console.log(tokenDecoded);
+        return res.status(403).json({ message: tokenDecoded});
+      }
       return res.status(200).json({ decoded });
     } catch (error) {
       return res.status(401).json({ message: (error as Error).message });

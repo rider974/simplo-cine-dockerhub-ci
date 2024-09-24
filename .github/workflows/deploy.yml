@@ -6,6 +6,8 @@ on:
       - develop
 
 jobs:
+
+          
   deploy-on-vps:
     runs-on: ubuntu-latest
 
@@ -19,7 +21,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9049
+          port: 9038
           script: |
             # Arrêter tous les conteneurs s'ils existent
             containers=$(sudo docker ps -q)
@@ -38,7 +40,7 @@ jobs:
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/devops/simplo-cine ]; then
               mkdir -p ~/devops
-              git clone --branch develop https://github.com/Florence-Martin/simplo-cine ~/devops/simplo-cine
+              git clone --branch develop https://github.com/rider974/simplo-cine-dockerhub-ci ~/devops/simplo-cine
             else
               cd ~/devops/simplo-cine
               # Réinitialiser les changements locaux à l'état de la branche distante
@@ -56,7 +58,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9049
+          port: 9038
           script: |
             cd ~/devops/simplo-cine
             sudo docker network rm simplo-cine_simplo-cine-network
@@ -69,7 +71,7 @@ jobs:
           host: 45.81.84.133
           username: "adminlocal"
           password: "cdadevops2024"
-          port: 9049
+          port: 9038
           script: |
             cd ~/devops/simplo-cine
             sudo docker network rm simplo-cine_simplo-cine-network

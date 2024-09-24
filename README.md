@@ -1,4 +1,4 @@
-# Simplo-Ciné
+# Simplo-Ciné  
 
 Simplo-Ciné est une application de gestion de séances de cinéma, développée en architecture micro-services. Elle permet au gérant de planifier les séances de films dans deux salles de cinéma, en suivant des règles de gestion spécifiques. Cette application comprend également une interface publique pour les visiteurs afin de consulter les séances disponibles.
 

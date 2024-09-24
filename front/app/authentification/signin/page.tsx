@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 
 // Importation des modules absolus
 import { CredentialsForm } from "@/app/components/authentification/CredentialForm";
