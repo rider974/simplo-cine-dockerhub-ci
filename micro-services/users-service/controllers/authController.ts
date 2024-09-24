@@ -76,7 +76,7 @@ export class AuthController {
      let tokenDecoded = decoded;
 
       // Vérifier le rôle de l'utilisateur
-      if (tokenDecoded?.role?.role_name !== "admin") {
+      if (typeof tokenDecoded !== "string" && tokenDecoded?.role?.role_name !== "admin") {
         return res.status(403).json({ message: 'Accès refusé : rôle insuffisant' });
       }
       return res.status(200).json({ decoded });
