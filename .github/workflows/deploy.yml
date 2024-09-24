@@ -24,16 +24,18 @@ jobs:
 
     - name: Build and push microservice images
       run: |
-        for dir in ./micro-services/*; do
-          if [ -d "$dir" ]; then
-            service_name=$(basename "$dir")
-            image_name="${{ secrets.DOCKER_USERNAME }}/$service_name:1.0.0"
-            echo $image_name
-            docker build -t $image_name "./micro-services/$dir"
-            docker push $image_name
-          fi
-        done
-
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/users-service:1.0.0 ./micro-services/users-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:1.0.0 ./micro-services/movies-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/search-service:1.0.0 ./micro-services/search-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:1.0.0 ./micro-services/sessions-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:1.0.0 ./micro-services/rooms-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0 ./micro-services/notifications-service
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0
 
     - name: Build and push nginx image
       run: |
