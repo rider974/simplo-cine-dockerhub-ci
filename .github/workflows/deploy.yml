@@ -31,6 +31,7 @@ jobs:
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:1.0.0 ./micro-services/rooms-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0 ./micro-services/notifications-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-app:1.0.0 ./front
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:1.0.0 ./monitoring/prometheus
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:1.0.0
@@ -38,7 +39,8 @@ jobs:
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-app:1.0.0
-
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:1.0.0
+        
     - name: Build and push nginx image
       run: |
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0 ./api/nginx
