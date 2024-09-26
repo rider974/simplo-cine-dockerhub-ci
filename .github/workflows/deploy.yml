@@ -30,10 +30,10 @@ jobs:
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:"$VERSION" ./micro-services/movies-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/search-service:"$VERSION" ./micro-services/search-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:"$VERSION" ./micro-services/sessions-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:$VERSION" ./micro-services/rooms-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:$VERSION" ./micro-services/notifications-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:"$VERSION" ./micro-services/rooms-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:"$VERSION" ./micro-services/notifications-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-app:"$VERSION" ./front
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:$VERSION" ./monitoring/prometheus
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:"$VERSION" ./monitoring/prometheus
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:"$VERSION"
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:"$VERSION"
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:"$VERSION"
