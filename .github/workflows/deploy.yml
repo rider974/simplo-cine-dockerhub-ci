@@ -24,7 +24,7 @@ jobs:
 
     - name: Build and push microservice images
       run: |
-        VERSION=$(curl -s https://api.github.com/repos/rider974/simplo-cine-dockerhub-ci/tags | grep '"name"' | head -n 1 | sed 's/.*"name": "\(.*\)".*/\1/')
+        VERSION=$(curl -s https://api.github.com/repos/rider974/simplo-cine-dockerhub-ci/tags | grep '"name"' | head -n 1 | sed 's/.*"name": "\(.*\)".*/\1/' | sed 's/^v//')
         echo "$VERSION"
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/users-service:"$VERSION" ./micro-services/users-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:"$VERSION" ./micro-services/movies-service
