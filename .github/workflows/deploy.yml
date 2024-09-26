@@ -24,7 +24,11 @@ jobs:
 
     - name: Build and push microservice images
       run: |
-        VERSION=git describe --tags
+        VERSION=$(git describe --tags)
+        echo $VERSION
+        VERSION_2=$(git tag | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | tail -n 1)
+        echo "version 2"
+        echo VERSION_2
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/users-service:$VERSION ./micro-services/users-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:$VERSION ./micro-services/movies-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/search-service:$VERSION ./micro-services/search-service
