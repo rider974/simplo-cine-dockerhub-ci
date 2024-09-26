@@ -6,14 +6,6 @@ services:
     image: scalp852/nginx:1.0.0
     ports:
       - "8080:8080"
-    depends_on:
-      - front
-      - movies-service
-      - notifications-service
-      - rooms-service
-      - search-service
-      - sessions-service
-      - users-service
     networks:
       - simplo-cine-network
 
