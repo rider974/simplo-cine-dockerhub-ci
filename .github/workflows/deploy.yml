@@ -24,32 +24,29 @@ jobs:
 
     - name: Build and push microservice images
       run: |
-        VERSION=$(git describe --tags)
-        echo $VERSION
-        VERSION_2=$(git tag | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | tail -n 1)
-        echo "version 2"
-        echo VERSION_2
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/users-service:$VERSION ./micro-services/users-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:$VERSION ./micro-services/movies-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/search-service:$VERSION ./micro-services/search-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:$VERSION ./micro-services/sessions-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:$VERSION ./micro-services/rooms-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:$VERSION ./micro-services/notifications-service
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-app:$VERSION ./front
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:$VERSION ./monitoring/prometheus
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-app:$VERSION
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:$VERSION
+        VERSION=$(curl -s https://api.github.com/repos/rider974/simplo-cine-dockerhub-ci/tags | grep '"name"' | head -n 1 | sed 's/.*"name": "\(.*\)".*/\1/')
+        echo "$VERSION"
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/users-service:"$VERSION" ./micro-services/users-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:"$VERSION" ./micro-services/movies-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/search-service:"$VERSION" ./micro-services/search-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:"$VERSION" ./micro-services/sessions-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:$VERSION" ./micro-services/rooms-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:$VERSION" ./micro-services/notifications-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-app:"$VERSION" ./front
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:$VERSION" ./monitoring/prometheus
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-app:"$VERSION"
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:"$VERSION"
 
     - name: Build and push nginx image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0 ./api/nginx
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nginx:"$VERSION" ./api/nginx
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/nginx:"$VERSION"
 
   remove_containers_network_cine_and_create_repo:
       runs-on: ubuntu-latest
