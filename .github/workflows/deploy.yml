@@ -40,7 +40,7 @@ jobs:
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-app:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/prometheus-service:1.0.0
-        
+
     - name: Build and push nginx image
       run: |
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0 ./api/nginx
@@ -75,8 +75,8 @@ jobs:
               fi
 
               # Vérifier si le répertoire existe, sinon le cloner
-              if [ ! -d ~/devops/simplo-cine-dockerhub ]; then
-                mkdir -p ~/devops/simplo-cine-dockerhub
+              if [ ! -d ~/devops/simplo-cine ]; then
+                mkdir -p ~/devops/simplo-cine
               fi
 
   build_app_with_docker_compose_file:
@@ -92,7 +92,7 @@ jobs:
           password: "cdadevops2024"
           port: 9038
           script: |
-            cd ~/devops/simplo-cine-dockerhub
+            cd ~/devops/simplo-cine
             sudo docker-compose down
             sudo docker-compose build --parallel
 
@@ -104,5 +104,5 @@ jobs:
           password: "cdadevops2024"
           port: 9038
           script: |
-            cd ~/devops/simplo-cine-dockerhub
+            cd ~/devops/simplo-cine
             sudo docker-compose up --build -d
