@@ -56,7 +56,7 @@ jobs:
             host: 45.81.84.133
             username: "adminlocal"
             password: "cdadevops2024"
-            port: 9039
+            port: 9038
             script: |
               # Arrêter tous les conteneurs s'ils existent
               containers=$(sudo docker ps -q)
@@ -79,7 +79,7 @@ jobs:
 
   build_app_with_docker_compose_file:
     runs-on: ubuntu-latest
-    needs: deploy-on-vps
+    needs: build_and_push_images_dockerhub
 
     steps:
       - name: Build Docker Containers
