@@ -30,14 +30,77 @@ jobs:
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:1.0.0 ./micro-services/sessions-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:1.0.0 ./micro-services/rooms-service
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0 ./micro-services/notifications-service
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-app:1.0.0 ./front
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/users-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/movies-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/search-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/rooms-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/sessions-service:1.0.0
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/notifications-service:1.0.0
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-app:1.0.0
 
     - name: Build and push nginx image
       run: |
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0 ./api/nginx
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/nginx:1.0.0
+
+  remove_containers_network_cine_and_create_repo:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Deploy to VPS
+          uses: appleboy/ssh-action@v0.1.8
+          with:
+            host: 45.81.84.133
+            username: "adminlocal"
+            password: "cdadevops2024"
+            port: 9039
+            script: |
+              # Arrêter tous les conteneurs s'ils existent
+              containers=$(sudo docker ps -q)
+              if [ -n "$containers" ]; then
+                sudo docker stop $containers
+              fi
+
+              # Supprimer tous les conteneurs + network s'ils existent
+              containers=$(sudo docker ps -a -q)
+              if [ -n "$containers" ]; then
+                sudo docker rm $containers
+                # Supprime le network custom
+                sudo docker network rm simplo-cine_simplo-cine-network
+              fi
+
+              # Vérifier si le répertoire existe, sinon le cloner
+              if [ ! -d ~/devops/simplo-cine-dockerhub ]; then
+                mkdir -p ~/devops/simplo-cine-dockerhub
+              fi
+
+  build_app_with_docker_compose_file:
+    runs-on: ubuntu-latest
+    needs: deploy-on-vps
+
+    steps:
+      - name: Build Docker Containers
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 45.81.84.133
+          username: "adminlocal"
+          password: "cdadevops2024"
+          port: 9038
+          script: |
+            cd ~/devops/simplo-cine-dockerhub
+            sudo docker-compose down
+            sudo docker-compose build --parallel
+
+      - name: Start Docker Containers
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 45.81.84.133
+          username: "adminlocal"
+          password: "cdadevops2024"
+          port: 9038
+          script: |
+            cd ~/devops/simplo-cine-dockerhub
+            sudo docker-compose up --build -d
