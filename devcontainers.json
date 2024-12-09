@@ -1,0 +1,14 @@
+{
+    "name": "Microservices App",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "application-codespaces",
+    "workspaceFolder": "/workspace",
+    "settings": {
+      "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "extensions": [
+      "ms-azuretools.vscode-docker"
+    ],
+    "postCreateCommand": "docker-compose up -d"
+  }
+  
